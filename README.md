@@ -1,2 +1,0 @@
-# contriba-web
-Contriba Website

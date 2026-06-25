@@ -1,280 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Contriba — Rwanda's #1 Contribution Platform</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;color:#111;background:#fff;overflow-x:hidden}
-
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 6%;height:70px;
-  background:rgba(140,0,0,0.25);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  border-bottom:1px solid rgba(255,255,255,0.08);
-}
-.nav-logo{display:flex;align-items:center;text-decoration:none}
-.nav-logo img{height:36px;object-fit:contain}
-.nav-links{display:flex;gap:28px;list-style:none}
-.nav-links a{color:rgba(255,255,255,0.92);text-decoration:none;font-size:14px;font-weight:500}
-.nav-links a:hover{color:#fff}
-.nav-cta{
-  background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,0.7);
-  padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;
-  cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:6px;
-}
-.nav-cta:hover{background:rgba(255,255,255,0.12)}
-
-.hero{
-  min-height:100vh;
-  background:url('auth-bg.png') center/cover no-repeat;
-  display:flex;align-items:center;
-  padding:110px 6% 70px;
-}
-.hero-inner{
-  max-width:1200px;margin:0 auto;width:100%;
-  display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;
-}
-.hero-badge{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(255,255,255,0.15);color:#fff;
-  padding:8px 18px;border-radius:30px;font-size:13px;font-weight:500;
-  margin-bottom:24px;border:1px solid rgba(255,255,255,0.25);
-}
-.hero h1{font-size:clamp(40px,5vw,64px);font-weight:900;color:#fff;line-height:1.05;letter-spacing:-2px;margin-bottom:20px}
-.hero p{font-size:17px;color:rgba(255,255,255,0.88);line-height:1.7;max-width:460px;margin-bottom:36px}
-.hero-btns{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:40px}
-.btn-primary{background:#fff;color:#E50914;border:none;padding:16px 30px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:transform .15s}
-.btn-primary:hover{transform:translateY(-2px)}
-.btn-outline{background:rgba(255,255,255,0.1);color:#fff;border:1.5px solid rgba(255,255,255,0.6);padding:16px 30px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
-.btn-outline:hover{background:rgba(255,255,255,0.18)}
-.social-proof{display:flex;align-items:center;gap:16px}
-.avatars-img{height:52px;object-fit:contain}
-.proof-text{color:rgba(255,255,255,0.92);font-size:14px;line-height:1.4}
-.stars{color:#FFD700;font-size:15px;display:block;margin-bottom:3px}
-.hero-phone img{width:100%;max-width:380px;display:block;margin:0 auto;filter:drop-shadow(0 40px 60px rgba(0,0,0,0.4));animation:float 3.5s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
-
-.partners{background:#fff;padding:28px 6%;border-bottom:1px solid #eee}
-.partners-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px}
-.partners-label{font-size:14px;font-weight:700;color:#111;line-height:1.5}
-.partners-logos{display:flex;align-items:center;gap:40px;flex-wrap:wrap}
-.mtn-badge{border:2.5px solid #111;border-radius:50px;padding:7px 18px;font-size:15px;font-weight:900;color:#111}
-.airtel-badge{font-size:18px;font-weight:800;color:#E50914}
-.bpr-badge{font-size:13px;font-weight:700;color:#003087;border:1.5px solid #003087;padding:5px 10px;border-radius:4px}
-.paypack-badge{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800;color:#111}
-.paypack-dot{width:28px;height:28px;background:#111;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px}
-
-.features{padding:90px 6%;background:#fff}
-.section-inner{max-width:1200px;margin:0 auto}
-.section-eyebrow{text-align:center;font-size:11px;font-weight:800;color:#E50914;text-transform:uppercase;letter-spacing:2px;margin-bottom:14px}
-.section-title{text-align:center;font-size:clamp(26px,3.5vw,40px);font-weight:800;color:#111;letter-spacing:-1px;margin-bottom:10px}
-.section-sub{text-align:center;font-size:16px;color:#777;margin-bottom:56px}
-.features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
-.feature-card{text-align:center;padding:16px}
-.feat-icon{width:76px;height:76px;border-radius:20px;background:rgba(229,9,20,0.07);display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
-.feat-icon svg{width:36px;height:36px;stroke:#E50914;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.feature-card h3{font-size:17px;font-weight:700;color:#111;margin-bottom:10px}
-.feature-card p{font-size:14px;color:#666;line-height:1.75}
-
-.mobile-section{padding:90px 6%;background:#f8f8f8}
-.mobile-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
-.mobile-phone img{width:100%;max-width:300px;display:block;margin:0 auto;filter:drop-shadow(0 30px 50px rgba(0,0,0,0.15))}
-.mobile-text .section-eyebrow,.mobile-text .section-title{text-align:left}
-.mobile-text .section-title{margin-bottom:16px}
-.mobile-text p{font-size:16px;color:#555;line-height:1.75;margin-bottom:30px}
-.store-btns{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
-.store-badge{height:52px;object-fit:contain;cursor:pointer;display:block;transition:transform .15s}
-.store-badge:hover{transform:translateY(-2px)}
-
-.stats{padding:70px 6%;background:#fff}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);max-width:1200px;margin:0 auto;border:1px solid #eee;border-radius:20px;overflow:hidden}
-.stat-item{text-align:center;padding:40px 20px;border-right:1px solid #eee}
-.stat-item:last-child{border-right:none}
-.stat-icon{width:52px;height:52px;background:rgba(229,9,20,0.07);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
-.stat-icon svg{width:26px;height:26px;stroke:#E50914;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.stat-num{font-size:clamp(32px,4vw,48px);font-weight:900;color:#111;letter-spacing:-1.5px;margin-bottom:6px}
-.stat-label{font-size:14px;color:#777;font-weight:500}
-
-.cta-banner{padding:72px 6%;background:#E50914}
-.cta-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap}
-.cta-text h2{font-size:clamp(26px,3.5vw,42px);font-weight:900;color:#fff;letter-spacing:-0.5px;margin-bottom:10px}
-.cta-text p{font-size:16px;color:rgba(255,255,255,0.85)}
-.cta-btns{display:flex;gap:14px;flex-wrap:wrap}
-.cta-btn-white{background:#fff;color:#E50914;border:none;padding:16px 32px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:transform .15s}
-.cta-btn-white:hover{transform:translateY(-2px)}
-.cta-btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,0.5);padding:16px 32px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
-.cta-btn-outline:hover{background:rgba(255,255,255,0.1)}
-
-footer{background:#0a0a0a;color:rgba(255,255,255,0.45);text-align:center;padding:30px 6%;font-size:13px}
-footer a{color:rgba(255,255,255,0.45);text-decoration:none}
-footer a:hover{color:rgba(255,255,255,0.8)}
-
-@media(max-width:900px){.features-grid{grid-template-columns:repeat(2,1fr)}.stats-grid{grid-template-columns:repeat(2,1fr)}.stat-item:nth-child(2){border-right:none}}
-@media(max-width:768px){.hero-inner,.mobile-inner{grid-template-columns:1fr}.hero-phone{margin-top:30px}.nav-links{display:none}.cta-inner{flex-direction:column}.mobile-text .section-eyebrow,.mobile-text .section-title{text-align:center}.store-btns{justify-content:center}.partners-inner{justify-content:center;text-align:center}.partners-logos{justify-content:center}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contriba - Contribution Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-<nav>
-  <a class="nav-logo" href="#"><img src="logo.png" alt="Contriba"/></a>
-  <ul class="nav-links">
-    <li><a href="#">Features</a></li>
-    <li><a href="#">How it Works</a></li>
-    <li><a href="#">For Organizers</a></li>
-    <li><a href="#">For Contributors</a></li>
-    <li><a href="#">About Us</a></li>
-  </ul>
-  <a href="#" class="nav-cta">Download App ↓</a>
-</nav>
-
-<section class="hero">
-  <div class="hero-inner">
-    <div>
-      <div class="hero-badge">✨ Rwanda's #1 Contribution Platform</div>
-      <h1>Together, we<br>achieve more</h1>
-      <p>Contriba helps you create, share and fund events that matter. Every contribution makes a difference.</p>
-      <div class="hero-btns">
-        <a href="#" class="btn-primary">Create an Event →</a>
-        <a href="#" class="btn-outline">▶ Watch how it works</a>
+  <header class="hero" id="home">
+    <nav class="navbar">
+      <a class="brand" href="#home"><img src="assets/logo.png" alt="Contriba logo"></a>
+      <button class="menu-btn" aria-label="Open menu">☰</button>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how">How it Works</a>
+        <a href="#organizers">For Organizers</a>
+        <a href="#contributors">For Contributors</a>
+        <a href="#about">About Us</a>
       </div>
-      <div class="social-proof">
-        <img src="avatars.png" alt="Users" class="avatars-img"/>
-        <div class="proof-text">
-          <span class="stars">★★★★★</span>
-          4.9/5 from 2,000+ users
+      <a class="download-btn" href="#download">Download App <span>↓</span></a>
+    </nav>
+
+    <section class="hero-content">
+      <div class="hero-text">
+        <div class="badge">✨ Rwanda’s #1 Contribution Platform</div>
+        <h1>Together, we<br>achieve more</h1>
+        <p>Contriba helps you create, share and fund events that matter. Every contribution makes a difference.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#create">Create an Event <span>→</span></a>
+          <a class="btn ghost" href="#how"><span class="play">▶</span> Watch how it works</a>
+        </div>
+        <div class="rating-row">
+          <img src="assets/avatars.png" alt="Contriba users">
+          <div><div class="stars">★★★★★</div><span>4.9/5 from 2,000+ users</span></div>
         </div>
       </div>
-    </div>
-    <div class="hero-phone">
-      <img src="homescreen.png" alt="Contriba App"/>
-    </div>
-  </div>
-</section>
+      <div class="hero-phone"><img src="assets/home-phone.png" alt="Contriba app dashboard"></div>
+    </section>
+  </header>
 
-<section class="partners">
-  <div class="partners-inner">
-    <div class="partners-label">Trusted by thousands<br>of Rwandans ❤️</div>
-    <div class="partners-logos">
-      <div class="mtn-badge">MTN</div>
-      <div class="airtel-badge">⊘ airtel</div>
-      <div class="bpr-badge">bpr <span style="font-size:10px;font-weight:400">part of atlasmark</span></div>
-      <div class="paypack-badge"><div class="paypack-dot">⊙</div>PayPack</div>
-    </div>
-  </div>
-</section>
+  <main>
+    <section class="partners">
+      <strong>Trusted by thousands<br>of Rwandans ❤️</strong>
+      <img src="assets/mtn-airtel.png" alt="MTN and Airtel">
+      <span class="partner-text">bpr<br><small>part of atlasmara</small></span>
+      <span class="partner-text paypack">⬢ PayPack</span>
+    </section>
 
-<section class="features">
-  <div class="section-inner">
-    <p class="section-eyebrow">Why choose Contriba</p>
-    <h2 class="section-title">Everything you need to raise and contribute</h2>
-    <p class="section-sub">Simple, secure and transparent</p>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feat-icon">
-          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    <section class="features" id="features">
+      <div class="section-head">
+        <span>WHY CHOOSE CONTRIBA</span>
+        <h2>Everything you need to raise and contribute</h2>
+        <p>Simple, secure and transparent</p>
+      </div>
+      <div class="feature-grid">
+        <article><div class="icon-card"><img src="assets/icon-users.png" alt=""></div><h3>Create Events</h3><p>Create your event in minutes and share with friends, family and communities.</p></article>
+        <article><div class="icon-card"><img src="assets/icon-heart.png" alt=""></div><h3>Receive Contributions</h3><p>Accept secure payments via MTN MoMo, Airtel Money and PayPack.</p></article>
+        <article><div class="icon-card"><img src="assets/icon-shield.png" alt=""></div><h3>Track Progress</h3><p>Real-time updates and transparent tracking of every contribution.</p></article>
+        <article><div class="icon-card"><img src="assets/icon-share.png" alt=""></div><h3>Share & Grow</h3><p>Share easily across social media and reach more supporters.</p></article>
+      </div>
+    </section>
+
+    <section class="app-showcase" id="download">
+      <div class="tilted-phone"><img src="assets/event-phone.png" alt="Contriba event page"></div>
+      <div class="showcase-copy">
+        <span>MOBILE FIRST</span>
+        <h2>A beautiful app<br>built for you</h2>
+        <p>Contriba is designed to make giving and receiving effortless. Manage your events, contributions and payments all in one place.</p>
+        <div class="store-row">
+          <img src="assets/google-play.png" alt="Get it on Google Play">
+          <img src="assets/app-store.svg" alt="Download on the App Store">
         </div>
-        <h3>Create Events</h3>
-        <p>Create your event in minutes and share with friends, family and communities.</p>
       </div>
-      <div class="feature-card">
-        <div class="feat-icon">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        </div>
-        <h3>Receive Contributions</h3>
-        <p>Accept secure payments via MTN MoMo, Airtel Money and PayPack.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feat-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-        </div>
-        <h3>Track Progress</h3>
-        <p>Real-time updates and transparent tracking of every contribution.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feat-icon">
-          <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-        </div>
-        <h3>Share &amp; Grow</h3>
-        <p>Share easily across social media and reach more supporters.</p>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<section class="mobile-section">
-  <div class="mobile-inner">
-    <div class="mobile-phone">
-      <img src="event-phone.png" alt="Contriba Event"/>
-    </div>
-    <div class="mobile-text">
-      <p class="section-eyebrow">Mobile First</p>
-      <h2 class="section-title">A beautiful app<br>built for you</h2>
-      <p>Contriba is designed to make giving and receiving effortless. Manage your events, contributions and payments all in one place.</p>
-      <div class="store-btns">
-        <a href="#"><img src="google-play.png" alt="Get it on Google Play" class="store-badge"/></a>
-        <a href="#"><img src="app-store.svg" alt="Download on the App Store" class="store-badge"/></a>
-      </div>
-    </div>
-  </div>
-</section>
+    <section class="stats">
+      <article><div class="stat-icon"><img src="assets/stat-user.png" alt=""></div><h3>10K+</h3><p>Active Users</p></article>
+      <article><div class="stat-icon"><img src="assets/stat-calendar.png" alt=""></div><h3>2K+</h3><p>Events Created</p></article>
+      <article><div class="stat-icon"><img src="assets/stat-money.png" alt=""></div><h3>50M+</h3><p>RWF Contributed</p></article>
+      <article><div class="stat-icon"><img src="assets/stat-smile.png" alt=""></div><h3>98%</h3><p>User Satisfaction</p></article>
+    </section>
 
-<section class="stats">
-  <div class="stats-grid">
-    <div class="stat-item">
-      <div class="stat-icon">
-        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-      </div>
-      <div class="stat-num">10K+</div>
-      <div class="stat-label">Active Users</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-icon">
-        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      </div>
-      <div class="stat-num">2K+</div>
-      <div class="stat-label">Events Created</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-icon">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/><path d="M12 6v2M12 16v2M6 12h2M16 12h2"/></svg>
-      </div>
-      <div class="stat-num">50M+</div>
-      <div class="stat-label">RWF Contributed</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-icon">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-      </div>
-      <div class="stat-num">98%</div>
-      <div class="stat-label">User Satisfaction</div>
-    </div>
-  </div>
-</section>
+    <section class="cta" id="create">
+      <div><h2>Ready to make<br>an impact together?</h2><p>Join thousands of Rwandans using Contriba to achieve more.</p></div>
+      <div class="cta-actions"><a class="btn primary white" href="#">Create an Event <span>→</span></a><a class="btn ghost white-border" href="#">Download App <span>↓</span></a></div>
+    </section>
+  </main>
 
-<section class="cta-banner">
-  <div class="cta-inner">
-    <div class="cta-text">
-      <h2>Ready to make<br>an impact together?</h2>
-      <p>Join thousands of Rwandans using Contriba to achieve more.</p>
-    </div>
-    <div class="cta-btns">
-      <a href="#" class="cta-btn-white">Create an Event →</a>
-      <a href="#" class="cta-btn-outline">Download App ↓</a>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <p>© 2025 OZIAS UNITED LTD. All rights reserved. &nbsp;|&nbsp;
-  <a href="https://privacy.contriba.online/privacy.html">Privacy Policy</a> &nbsp;|&nbsp;
-  <a href="mailto:support@contriba.online">support@contriba.online</a></p>
-</footer>
-
+  <script src="script.js"></script>
 </body>
 </html>
