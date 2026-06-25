@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Contriba — Rwanda's #1 Contribution Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;color:#111;background:#fff;overflow-x:hidden}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 6%;height:68px;
+  background:rgba(140,0,0,0.25);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.nav-logo{display:flex;align-items:center;text-decoration:none}
+.nav-logo img{height:38px;object-fit:contain}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:rgba(255,255,255,0.9);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:#fff}
+.nav-cta{
+  background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,0.7);
+  padding:9px 22px;border-radius:8px;font-size:14px;font-weight:600;
+  cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:6px;
+  transition:background .2s;
+}
+.nav-cta:hover{background:rgba(255,255,255,0.12)}
+
+/* HERO */
+.hero{
+  min-height:100vh;
+  background:url('auth-bg.png') center/cover no-repeat;
+  display:flex;align-items:center;
+  padding:110px 6% 70px;
+}
+.hero-inner{
+  max-width:1200px;margin:0 auto;width:100%;
+  display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,0.15);color:#fff;
+  padding:7px 16px;border-radius:30px;font-size:13px;font-weight:500;
+  margin-bottom:22px;border:1px solid rgba(255,255,255,0.25);
+}
+.hero h1{
+  font-size:clamp(38px,5vw,62px);font-weight:900;color:#fff;
+  line-height:1.05;letter-spacing:-2px;margin-bottom:18px;
+}
+.hero p{
+  font-size:17px;color:rgba(255,255,255,0.88);line-height:1.7;
+  max-width:440px;margin-bottom:34px;
+}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:36px}
+.btn-primary{
+  background:#fff;color:#E50914;border:none;
+  padding:15px 28px;border-radius:10px;font-size:15px;font-weight:700;
+  cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+  transition:transform .15s,box-shadow .15s;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.25)}
+.btn-outline{
+  background:rgba(255,255,255,0.08);color:#fff;
+  border:1.5px solid rgba(255,255,255,0.55);
+  padding:15px 28px;border-radius:10px;font-size:15px;font-weight:600;
+  cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+  transition:background .2s;
+}
+.btn-outline:hover{background:rgba(255,255,255,0.15)}
+.social-proof{display:flex;align-items:center;gap:14px}
+.avatars-img{height:48px;object-fit:contain}
+.proof-text{color:rgba(255,255,255,0.92);font-size:14px;line-height:1.4}
+.stars{color:#FFD700;font-size:15px;display:block;margin-bottom:2px}
+.phone-mockup-img{
+  width:100%;max-width:340px;
+  display:block;margin:0 auto;
+  filter:drop-shadow(0 40px 60px rgba(0,0,0,0.45));
+  animation:float 3.5s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+
+/* PARTNERS */
+.partners{background:#fff;padding:28px 6%;border-bottom:1px solid #f0f0f0}
+.partners-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px;
+}
+.partners-label{font-size:14px;font-weight:700;color:#111;line-height:1.5}
+.partner-logos-img{height:50px;object-fit:contain}
+.paypack-logo{
+  display:flex;align-items:center;gap:8px;
+  font-size:16px;font-weight:800;color:#111;
+}
+.paypack-icon{
+  width:30px;height:30px;background:#111;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:14px;font-weight:900;
+}
+.bpr-text{
+  font-size:13px;font-weight:700;color:#003087;
+  border:1.5px solid #003087;padding:5px 10px;border-radius:4px;letter-spacing:1px;
+}
+
+/* FEATURES */
+.features{padding:90px 6%;background:#fff}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-eyebrow{
+  text-align:center;font-size:12px;font-weight:700;color:#E50914;
+  text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;
+}
+.section-title{
+  text-align:center;font-size:clamp(26px,3.5vw,40px);font-weight:800;
+  color:#111;letter-spacing:-0.8px;margin-bottom:10px;
+}
+.section-subtitle{text-align:center;font-size:16px;color:#666;margin-bottom:52px}
+.features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+.feature-card{text-align:center;padding:16px}
+.feat-icon-box{
+  width:76px;height:76px;border-radius:20px;
+  background:rgba(229,9,20,0.07);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 18px;overflow:hidden;
+}
+.feat-icon-box img{width:180%;height:180%;object-fit:cover;object-position:var(--pos)}
+.feature-card h3{font-size:17px;font-weight:700;color:#111;margin-bottom:10px}
+.feature-card p{font-size:14px;color:#666;line-height:1.7}
+
+/* MOBILE FIRST */
+.mobile-section{padding:80px 6%;background:#fafafa}
+.mobile-inner{
+  max-width:1200px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;
+}
+.event-phone-img{
+  width:100%;max-width:300px;display:block;margin:0 auto;
+  filter:drop-shadow(0 30px 50px rgba(0,0,0,0.18));
+}
+.mobile-text .section-eyebrow{text-align:left}
+.mobile-text .section-title{text-align:left;margin-bottom:16px}
+.mobile-text p{font-size:16px;color:#555;line-height:1.7;margin-bottom:30px}
+.store-btns{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.store-badge{height:50px;object-fit:contain;cursor:pointer;transition:transform .15s;display:block}
+.store-badge:hover{transform:translateY(-2px)}
+
+/* STATS */
+.stats{padding:70px 6%;background:#fff}
+.stats-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  max-width:1200px;margin:0 auto;
+  border:1px solid #f0f0f0;border-radius:16px;overflow:hidden;
+}
+.stat-item{
+  text-align:center;padding:36px 20px;
+  border-right:1px solid #f0f0f0;
+}
+.stat-item:last-child{border-right:none}
+.stat-icon-wrap{width:40px;height:40px;margin:0 auto 10px;overflow:hidden}
+.stat-icon-wrap img{width:400%;height:100%;object-fit:cover;object-position:var(--pos)}
+.stat-num{font-size:clamp(30px,4vw,46px);font-weight:900;color:#111;letter-spacing:-1.5px;margin-bottom:4px}
+.stat-label{font-size:14px;color:#666;font-weight:500}
+
+/* CTA BANNER */
+.cta-banner{padding:64px 6%;background:#E50914}
+.cta-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap;
+}
+.cta-text h2{font-size:clamp(24px,3.5vw,38px);font-weight:900;color:#fff;letter-spacing:-0.5px;margin-bottom:8px}
+.cta-text p{font-size:16px;color:rgba(255,255,255,0.85)}
+.cta-btns{display:flex;gap:14px;flex-wrap:wrap}
+.cta-btn-white{
+  background:#fff;color:#E50914;border:none;
+  padding:15px 30px;border-radius:10px;font-size:15px;font-weight:700;
+  cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+  transition:transform .15s;
+}
+.cta-btn-white:hover{transform:translateY(-2px)}
+.cta-btn-outline{
+  background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,0.5);
+  padding:15px 30px;border-radius:10px;font-size:15px;font-weight:600;
+  cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+  transition:background .2s;
+}
+.cta-btn-outline:hover{background:rgba(255,255,255,0.1)}
+
+footer{background:#0a0a0a;color:rgba(255,255,255,0.45);text-align:center;padding:28px 6%;font-size:13px}
+footer a{color:rgba(255,255,255,0.45);text-decoration:none}
+footer a:hover{color:rgba(255,255,255,0.7)}
+
+@media(max-width:900px){
+  .features-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:768px){
+  .hero-inner,.mobile-inner{grid-template-columns:1fr}
+  .phone-mockup-img{max-width:260px;margin-top:30px}
+  .nav-links{display:none}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .stat-item:nth-child(2){border-right:none}
+  .cta-inner{flex-direction:column}
+  .mobile-text .section-eyebrow,.mobile-text .section-title{text-align:center}
+  .store-btns{justify-content:center}
+  .partners-inner{justify-content:center;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <img src="logo.png" alt="Contriba"/>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">Features</a></li>
+    <li><a href="#">How it Works</a></li>
+    <li><a href="#">For Organizers</a></li>
+    <li><a href="#">For Contributors</a></li>
+    <li><a href="#">About Us</a></li>
+  </ul>
+  <a href="#" class="nav-cta">Download App ↓</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">✨ Rwanda's #1 Contribution Platform</div>
+      <h1>Together, we<br>achieve more</h1>
+      <p>Contriba helps you create, share and fund events that matter. Every contribution makes a difference.</p>
+      <div class="hero-btns">
+        <a href="#" class="btn-primary">Create an Event →</a>
+        <a href="#" class="btn-outline">▶ Watch how it works</a>
+      </div>
+      <div class="social-proof">
+        <img src="avatars.png" alt="Users" class="avatars-img"/>
+        <div class="proof-text">
+          <span class="stars">★★★★★</span>
+          4.9/5 from 2,000+ users
+        </div>
+      </div>
+    </div>
+    <div>
+      <img src="homescreen.png" alt="Contriba App" class="phone-mockup-img"/>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<section class="partners">
+  <div class="partners-inner">
+    <div class="partners-label">Trusted by thousands<br>of Rwandans ❤️</div>
+    <img src="mtn-airtel.png" alt="MTN and Airtel" class="partner-logos-img"/>
+    <div class="bpr-text">bpr <span style="font-size:10px;font-weight:400;letter-spacing:0">part of atlasmark</span></div>
+    <div class="paypack-logo">
+      <div class="paypack-icon">⊙</div>
+      PayPack
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="section-inner">
+    <p class="section-eyebrow">Why choose Contriba</p>
+    <h2 class="section-title">Everything you need to raise and contribute</h2>
+    <p class="section-subtitle">Simple, secure and transparent</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feat-icon-box">
+          <img src="feature-icons.png" alt="" style="--pos:5% 50%"/>
+        </div>
+        <h3>Create Events</h3>
+        <p>Create your event in minutes and share with friends, family and communities.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon-box">
+          <img src="feature-icons.png" alt="" style="--pos:38% 50%"/>
+        </div>
+        <h3>Receive Contributions</h3>
+        <p>Accept secure payments via MTN MoMo, Airtel Money and PayPack.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon-box">
+          <img src="feature-icons.png" alt="" style="--pos:64% 50%"/>
+        </div>
+        <h3>Track Progress</h3>
+        <p>Real-time updates and transparent tracking of every contribution.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon-box">
+          <img src="feature-icons.png" alt="" style="--pos:97% 50%"/>
+        </div>
+        <h3>Share &amp; Grow</h3>
+        <p>Share easily across social media and reach more supporters.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MOBILE FIRST -->
+<section class="mobile-section">
+  <div class="mobile-inner">
+    <div>
+      <img src="event-phone.png" alt="Contriba Event Page" class="event-phone-img"/>
+    </div>
+    <div class="mobile-text">
+      <p class="section-eyebrow">Mobile First</p>
+      <h2 class="section-title">A beautiful app<br>built for you</h2>
+      <p>Contriba is designed to make giving and receiving effortless. Manage your events, contributions and payments all in one place.</p>
+      <div class="store-btns">
+        <a href="#"><img src="google-play.png" alt="Get it on Google Play" class="store-badge"/></a>
+        <a href="#"><img src="app-store.svg" alt="Download on the App Store" class="store-badge"/></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="stats-grid">
+    <div class="stat-item">
+      <div class="stat-icon-wrap">
+        <img src="stat-icons.png" alt="" style="--pos:5% 50%"/>
+      </div>
+      <div class="stat-num">10K+</div>
+      <div class="stat-label">Active Users</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-icon-wrap">
+        <img src="stat-icons.png" alt="" style="--pos:38% 50%"/>
+      </div>
+      <div class="stat-num">2K+</div>
+      <div class="stat-label">Events Created</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-icon-wrap">
+        <img src="stat-icons.png" alt="" style="--pos:64% 50%"/>
+      </div>
+      <div class="stat-num">50M+</div>
+      <div class="stat-label">RWF Contributed</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-icon-wrap">
+        <img src="stat-icons.png" alt="" style="--pos:97% 50%"/>
+      </div>
+      <div class="stat-num">98%</div>
+      <div class="stat-label">User Satisfaction</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section class="cta-banner">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <h2>Ready to make<br>an impact together?</h2>
+      <p>Join thousands of Rwandans using Contriba to achieve more.</p>
+    </div>
+    <div class="cta-btns">
+      <a href="#" class="cta-btn-white">Create an Event →</a>
+      <a href="#" class="cta-btn-outline">Download App ↓</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 OZIAS UNITED LTD. All rights reserved. &nbsp;|&nbsp;
+  <a href="https://privacy.contriba.online/privacy.html">Privacy Policy</a> &nbsp;|&nbsp;
+  <a href="mailto:support@contriba.online">support@contriba.online</a></p>
+</footer>
+
+</body>
+</html>
