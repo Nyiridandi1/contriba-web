@@ -14,15 +14,14 @@
 </head>
 
 <body>
-
-  <header class="hero-v2">
+  <header class="hero-v2" id="home">
     <nav class="navbar navbar-expand-lg navbar-dark custom-nav">
       <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="#home">
           <img src="assets/logo.png" alt="Contriba Logo" class="logo-white">
         </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-label="Open navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -43,7 +42,7 @@
       <div class="container">
         <div class="row align-items-center g-5">
           <div class="col-lg-6">
-            <div class="hero-badge">✨ Rwanda’s smart contribution platform</div>
+            <div class="hero-badge">Rwanda’s smart contribution platform</div>
 
             <h1>
               Create events.<br>
@@ -61,11 +60,6 @@
               <a href="#create" class="btn-main">Create an Event</a>
               <a href="#how" class="btn-outline-custom">See how it works</a>
             </div>
-
-            <div class="payment-strip">
-              <span>Powered by</span>
-              <img src="assets/mtn-airtel.png" alt="MTN and Airtel Money">
-            </div>
           </div>
 
           <div class="col-lg-6 text-center">
@@ -80,6 +74,18 @@
   </header>
 
   <main>
+    <section class="trusted-strip">
+      <div class="container">
+        <div class="trusted-card">
+          <div>
+            <span class="trusted-label">Trusted payments</span>
+            <h2>Built for Rwanda’s most used mobile money networks.</h2>
+          </div>
+          <img src="assets/mtn-airtel.png" alt="MTN and Airtel Money">
+        </div>
+      </div>
+    </section>
+
     <section class="next-section" id="features">
       <div class="container text-center">
         <p class="section-label">NEXT SPRINT</p>
