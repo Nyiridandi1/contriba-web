@@ -1,0 +1,47 @@
+/* ============================
+   GLOBAL PREMIUM ANIMATIONS
+============================ */
+
+.float-soft {
+  animation: floatSoft 5.5s ease-in-out infinite;
+}
+
+.float-medium {
+  animation: floatMedium 5s ease-in-out infinite;
+}
+
+.pulse-soft {
+  animation: pulseSoft 3.5s ease-in-out infinite;
+}
+
+@keyframes floatSoft {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes floatMedium {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes pulseSoft {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}

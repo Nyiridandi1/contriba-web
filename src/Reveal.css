@@ -1,0 +1,46 @@
+/* ============================
+   PREMIUM REVEAL ANIMATIONS
+============================ */
+
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 70px, 0) scale(.98);
+  filter: blur(8px);
+
+  will-change: opacity, transform, filter;
+
+  transition:
+    opacity .9s cubic-bezier(.22,.61,.36,1),
+    transform .9s cubic-bezier(.22,.61,.36,1),
+    filter .9s cubic-bezier(.22,.61,.36,1);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translate3d(0,0,0) scale(1);
+  filter: blur(0);
+}
+
+/* ============================
+   STAGGER ANIMATION
+============================ */
+
+.stagger-item{
+  opacity:0;
+  transform:translateY(35px);
+  transition:
+    opacity .8s ease,
+    transform .8s ease;
+}
+
+.reveal.active .stagger-item{
+  opacity:1;
+  transform:none;
+}
+
+.reveal.active .stagger-item:nth-child(1){transition-delay:.08s;}
+.reveal.active .stagger-item:nth-child(2){transition-delay:.16s;}
+.reveal.active .stagger-item:nth-child(3){transition-delay:.24s;}
+.reveal.active .stagger-item:nth-child(4){transition-delay:.32s;}
+.reveal.active .stagger-item:nth-child(5){transition-delay:.40s;}
+.reveal.active .stagger-item:nth-child(6){transition-delay:.48s;}

@@ -1,0 +1,369 @@
+/* PHASE 4 — PROFESSIONAL RESPONSIVE OPTIMIZATION */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* TABLET */
+@media (max-width: 1100px) {
+  .hero-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 50px;
+  }
+
+  .hero-left,
+  .hero-right {
+    width: 100%;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  section,
+  main,
+  footer {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .hero {
+    min-height: auto !important;
+    padding: 120px 20px 55px !important;
+    text-align: center !important;
+  }
+
+  .hero-content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 28px !important;
+    width: 100% !important;
+  }
+
+  .hero-left {
+    width: 100% !important;
+    max-width: 350px !important;
+    margin: 0 auto !important;
+  }
+
+  .hero-badge {
+    max-width: 300px !important;
+    margin: 0 auto 28px !important;
+    white-space: normal !important;
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+    padding: 12px 18px !important;
+  }
+
+  .hero h1 {
+    font-size: 32px !important;
+    line-height: 1.08 !important;
+    letter-spacing: -1.4px !important;
+    max-width: 330px !important;
+    margin: 0 auto 24px !important;
+  }
+
+  .hero p {
+    font-size: 16px !important;
+    line-height: 1.7 !important;
+    max-width: 320px !important;
+    margin: 0 auto 28px !important;
+  }
+
+  .hero-actions {
+    width: 100% !important;
+    max-width: 320px !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+  }
+
+  .hero-actions a,
+  .primary-btn,
+  .secondary-btn {
+    width: 100% !important;
+    min-height: 58px !important;
+    justify-content: center !important;
+  }
+
+  .trust-row {
+    width: 100% !important;
+    max-width: 320px !important;
+    margin: 30px auto 0 !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+  }
+
+  .trust-row div {
+    padding: 22px 0 !important;
+    text-align: center !important;
+  }
+
+  .hero-right {
+    width: 100% !important;
+    margin-top: 12px !important;
+  }
+
+  .hero-phone {
+    width: 100% !important;
+    max-width: 185px !important;
+    margin: 0 auto !important;
+    display: block !important;
+  }
+
+  .phone-glow {
+    width: 240px !important;
+    height: 240px !important;
+  }
+
+  .section-title,
+  .section-header {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 70px 20px 35px !important;
+    text-align: center !important;
+  }
+
+  .section-title h2,
+  .section-header h2 {
+    font-size: 30px !important;
+    line-height: 1.1 !important;
+    letter-spacing: -1.2px !important;
+    max-width: 310px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .section-title p,
+  .section-header p {
+    font-size: 16px !important;
+    line-height: 1.7 !important;
+    max-width: 310px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .features-grid,
+  .steps-grid,
+  .phones-row,
+  .testimonials-grid,
+  .about-grid,
+  .contact-grid,
+  .legal-grid {
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    max-width: 340px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    gap: 22px !important;
+  }
+
+  .feature-card,
+  .step-card,
+  .phone-card,
+  .testimonial-card,
+  .about-card,
+  .contact-card,
+  .legal-card {
+    width: 100% !important;
+    max-width: 340px !important;
+    padding: 28px 22px !important;
+    border-radius: 24px !important;
+  }
+
+  .phone-card img {
+    max-width: 210px !important;
+    width: 100% !important;
+  }
+
+  .page-hero {
+    padding: 105px 20px 28px !important;
+    text-align: center !important;
+  }
+
+  .page-title {
+    font-size: 34px !important;
+    line-height: 1.08 !important;
+    letter-spacing: -1.5px !important;
+  }
+
+  .page-description {
+    font-size: 16px !important;
+    line-height: 1.7 !important;
+    margin-bottom: 36px !important;
+  }
+
+  .page-actions {
+    flex-direction: column !important;
+    margin-top: 28px !important;
+  }
+
+  .page-button {
+    width: 100% !important;
+  }
+
+  .contriba-footer {
+    padding: 70px 20px 38px !important;
+    text-align: center !important;
+  }
+
+  .contriba-footer-inner {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 42px !important;
+    width: 100% !important;
+    max-width: 340px !important;
+    margin: 0 auto !important;
+  }
+
+  .footer-left {
+    align-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    overflow: visible !important;
+  }
+
+  .contriba-footer-logo {
+    max-width: 210px !important;
+    margin: 0 auto 28px !important;
+  }
+
+  .footer-left p {
+    max-width: 310px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .contriba-store-badges {
+    width: 100% !important;
+    max-width: 220px !important;
+    margin: 28px auto 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 14px !important;
+    overflow: visible !important;
+  }
+
+  .contriba-store-badges a,
+  .contriba-store-badges img {
+    width: 220px !important;
+    max-width: 220px !important;
+    height: auto !important;
+    object-fit: contain !important;
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  .contriba-socials {
+    max-width: 270px !important;
+    margin: 0 auto !important;
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    gap: 14px !important;
+  }
+
+  .footer-column {
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .contriba-footer-bottom {
+    flex-direction: column !important;
+    gap: 14px !important;
+    text-align: center !important;
+  }
+}
+
+/* SMALL PHONES */
+@media (max-width: 430px) {
+  .hero {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .hero h1 {
+    font-size: 29px !important;
+  }
+
+  .hero-phone {
+    max-width: 170px !important;
+  }
+
+  .section-title h2,
+  .section-header h2 {
+    font-size: 27px !important;
+    max-width: 285px !important;
+  }
+
+  .contriba-store-badges {
+    max-width: 205px !important;
+  }
+
+  .contriba-store-badges a,
+  .contriba-store-badges img {
+    width: 205px !important;
+    max-width: 205px !important;
+  }
+}
+
+/* FINAL FORCE FIX */
+
+@media (max-width: 768px) {
+  .section-title h2 {
+    font-size: 26px !important;
+    line-height: 1.12 !important;
+    max-width: 280px !important;
+    margin: 0 auto !important;
+    overflow-wrap: break-word !important;
+  }
+
+  .section-title p {
+    font-size: 15px !important;
+    max-width: 280px !important;
+    margin: 16px auto 0 !important;
+  }
+
+  .contriba-store-badges {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 14px !important;
+    width: 100% !important;
+    max-width: 190px !important;
+    margin: 24px auto !important;
+    overflow: visible !important;
+  }
+
+  .contriba-store-badges a {
+    display: block !important;
+    width: 190px !important;
+    max-width: 190px !important;
+    overflow: visible !important;
+  }
+
+  .contriba-store-badges img {
+    display: block !important;
+    width: 190px !important;
+    max-width: 190px !important;
+    height: auto !important;
+    object-fit: contain !important;
+  }
+
+  .footer-left {
+    overflow: visible !important;
+  }
+}

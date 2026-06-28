@@ -1,0 +1,21 @@
+.scroll-progress-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  z-index: 20000;
+  background: transparent;
+  pointer-events: none;
+}
+
+.scroll-progress-bar {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff4d57, #e50914, #ffb3b8);
+  box-shadow:
+    0 0 14px rgba(229, 9, 20, 0.55),
+    0 0 30px rgba(229, 9, 20, 0.25);
+  transition: width 0.08s linear;
+}

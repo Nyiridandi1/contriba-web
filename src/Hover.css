@@ -1,0 +1,58 @@
+/* ===================================
+   PREMIUM HOVER SYSTEM
+=================================== */
+
+.premium-hover{
+    position:relative;
+    transition:
+        transform .35s cubic-bezier(.22,.61,.36,1),
+        box-shadow .35s cubic-bezier(.22,.61,.36,1),
+        border-color .35s ease,
+        filter .35s ease;
+}
+
+.premium-hover::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:inherit;
+    pointer-events:none;
+
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(255,255,255,.22),
+            transparent 65%
+        );
+
+    opacity:0;
+    transition:opacity .35s ease;
+}
+
+.premium-hover:hover{
+
+    transform:
+        translateY(-8px)
+        scale(1.015);
+
+    filter:brightness(1.02);
+
+    box-shadow:
+        0 22px 60px rgba(0,0,0,.10),
+        0 10px 30px rgba(229,9,20,.10);
+
+}
+
+.premium-hover:hover::after{
+
+    opacity:1;
+
+}
+
+.premium-hover:active{
+
+    transform:
+        translateY(-3px)
+        scale(.995);
+
+}

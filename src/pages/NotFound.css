@@ -1,0 +1,189 @@
+.notfound-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top left, rgba(229, 9, 20, 0.16), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(255, 196, 87, 0.14), transparent 35%),
+    #fafafa;
+}
+
+.notfound-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(229, 9, 20, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(229, 9, 20, 0.045) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+}
+
+.notfound-glow {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(110px);
+  pointer-events: none;
+}
+
+.notfound-glow-one {
+  width: 620px;
+  height: 620px;
+  left: -180px;
+  top: -160px;
+  background: rgba(229, 9, 20, 0.14);
+}
+
+.notfound-glow-two {
+  width: 520px;
+  height: 520px;
+  right: -160px;
+  bottom: -140px;
+  background: rgba(255, 196, 87, 0.16);
+}
+
+.notfound-card {
+  position: relative;
+  z-index: 2;
+  width: min(720px, 100%);
+  text-align: center;
+  padding: 76px 58px;
+  border-radius: 38px;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.86));
+  border: 1px solid rgba(229, 9, 20, 0.09);
+  box-shadow:
+    0 34px 95px rgba(0, 0, 0, 0.09),
+    0 20px 45px rgba(229, 9, 20, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(18px);
+}
+
+.notfound-card::before {
+  content: "404";
+  position: absolute;
+  inset: auto 0 -42px 0;
+  font-size: clamp(150px, 22vw, 250px);
+  line-height: 0.8;
+  font-weight: 950;
+  letter-spacing: -16px;
+  color: rgba(229, 9, 20, 0.045);
+  pointer-events: none;
+}
+
+.notfound-card::after {
+  content: "";
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  right: -120px;
+  top: -120px;
+  border-radius: 999px;
+  background: rgba(229, 9, 20, 0.08);
+  pointer-events: none;
+}
+
+.notfound-icon {
+  position: relative;
+  z-index: 2;
+  width: 74px;
+  height: 74px;
+  margin: 0 auto 24px;
+  border-radius: 24px;
+  display: grid;
+  place-items: center;
+  color: #e50914;
+  background: rgba(229, 9, 20, 0.08);
+  border: 1px solid rgba(229, 9, 20, 0.12);
+}
+
+.notfound-label,
+.notfound-card h1,
+.notfound-card p,
+.notfound-actions {
+  position: relative;
+  z-index: 2;
+}
+
+.notfound-label {
+  color: #e50914;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.notfound-card h1 {
+  margin: 18px 0;
+  font-size: clamp(44px, 6vw, 68px);
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: -2.6px;
+  color: #111827;
+}
+
+.notfound-card p {
+  max-width: 540px;
+  margin: 0 auto 40px;
+  color: #687083;
+  font-size: 19px;
+  line-height: 1.8;
+}
+
+.notfound-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.notfound-card .primary-btn,
+.notfound-card .secondary-btn {
+  min-height: 58px;
+  padding: 0 26px;
+  border-radius: 999px;
+}
+
+.notfound-card .primary-btn {
+  background: #e50914;
+  color: white;
+  box-shadow: 0 18px 38px rgba(229, 9, 20, 0.22);
+}
+
+.notfound-card .secondary-btn {
+  color: #e50914;
+  background: white;
+  border: 1px solid rgba(229, 9, 20, 0.16);
+}
+
+@media (max-width: 768px) {
+  .notfound-page {
+    padding: 24px;
+  }
+
+  .notfound-card {
+    padding: 56px 26px;
+    border-radius: 30px;
+  }
+
+  .notfound-card::before {
+    letter-spacing: -10px;
+  }
+
+  .notfound-card p {
+    font-size: 17px;
+  }
+
+  .notfound-actions {
+    flex-direction: column;
+  }
+
+  .notfound-actions a {
+    width: 100%;
+  }
+}
