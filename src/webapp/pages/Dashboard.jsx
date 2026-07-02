@@ -69,26 +69,35 @@ function Dashboard() {
       setLoading(true);
       const result = await getDashboard();
       if (result.success) {
-        setData(result);
+        setData(result.dashboard); // ✅ read .dashboard not root
       }
       setLoading(false);
     }
     loadDashboard();
   }, []);
 
-  // ── Pull real data or fallback to zeros ──
-  const totalRaised = data?.total_raised || 0;
+  // ── Pull real data ──
+  const recentContributions = data?.recent_contributions || [];
+  const recentEvents = data?.events || [];
   const totalContributors = data?.total_contributors || 0;
   const totalEvents = data?.total_events || 0;
   const walletBalance = data?.wallet_balance || 0;
-  const recentContributions = data?.recent_contributions || [];
-  const recentEvents = data?.recent_events || [];
+
+  // ✅ Calculate total raised from real contributions
+  const totalRaised = recentContributions.reduce(
+    (sum, c) => sum + Number(c.amount || 0), 0
+  );
 
   // Use first active event for hero
   const heroEvent = recentEvents[0] || null;
-  const heroRaised = heroEvent?.total_raised || 0;
-  const heroGoal = heroEvent?.goal_amount || 0;
-  const heroProgress = heroGoal > 0 ? Math.min(100, Math.round((heroRaised / heroGoal) * 100)) : 0;
+  const heroRaised = heroEvent
+    ? recentContributions
+        .filter((c) => c.event_id === heroEvent.id)
+        .reduce((sum, c) => sum + Number(c.amount || 0), 0)
+    : 0;
+  const heroGoal = Number(heroEvent?.goal_amount || 0);
+  const heroProgress =
+    heroGoal > 0 ? Math.min(100, Math.round((heroRaised / heroGoal) * 100)) : 0;
 
   return (
     <main className="dashboard-page">
@@ -97,7 +106,9 @@ function Dashboard() {
       <section className="dashboard-main">
         <header className="dashboard-topbar">
           <div>
-            <span>{getGreeting()} {currentUser?.name?.split(" ")[0] || "there"}</span>
+            <span>
+              {getGreeting()} {currentUser?.name?.split(" ")[0] || "there"}
+            </span>
             <h1>Financial Command Center</h1>
           </div>
 
@@ -171,7 +182,13 @@ function Dashboard() {
                   <Eye size={18} />
                   View Public Page
                 </Link>
-                <button onClick={() => navigator.clipboard.writeText(`${window.location.origin}/events/${heroEvent.id}`)}>
+                <button
+                  onClick={() =>
+                    navigator.clipboard.writeText(
+                      `${window.location.origin}/events/${heroEvent.id}`
+                    )
+                  }
+                >
                   <Copy size={18} />
                   Copy Link
                 </button>
@@ -288,11 +305,7 @@ function Dashboard() {
             <div className="forecast-amount">
               <span>Total raised</span>
               <strong>{formatMoneyFull(heroRaised)}</strong>
-              <p>
-                {heroGoal > 0
-                  ? `Goal: ${formatMoneyFull(heroGoal)}`
-                  : "No goal set"}
-              </p>
+              <p>{heroGoal > 0 ? `Goal: ${formatMoneyFull(heroGoal)}` : "No goal set"}</p>
             </div>
 
             <div className="forecast-track">
@@ -370,7 +383,12 @@ function Dashboard() {
             <div className="health-list">
               <p><CheckCircle2 size={16} />Payments secured by Paypack</p>
               <p><CheckCircle2 size={16} />No suspicious activity</p>
-              <p><CheckCircle2 size={16} />{totalContributors > 0 ? "Strong contributor activity" : "Ready for contributions"}</p>
+              <p>
+                <CheckCircle2 size={16} />
+                {totalContributors > 0
+                  ? "Strong contributor activity"
+                  : "Ready for contributions"}
+              </p>
             </div>
           </div>
         </section>
@@ -405,25 +423,32 @@ function Dashboard() {
                 </div>
               )}
 
-              {!loading && recentContributions.slice(0, 5).map((person, index) => (
-                <div className="contributor-row" key={person.id || index}>
-                  <div>
-                    <strong>
-                      {index === 0 && "🥇 "}
-                      {index === 1 && "🥈 "}
-                      {index === 2 && "🥉 "}
-                      {person.is_anonymous ? "Anonymous" : person.contributor_name || "Guest"}
-                    </strong>
-                    <span>{person.message || "Supported this event."}</span>
+              {!loading &&
+                recentContributions.slice(0, 5).map((person, index) => (
+                  <div className="contributor-row" key={person.id || index}>
+                    <div>
+                      <strong>
+                        {index === 0 && "🥇 "}
+                        {index === 1 && "🥈 "}
+                        {index === 2 && "🥉 "}
+                        {person.is_anonymous
+                          ? "Anonymous"
+                          : person.contributor_name || "Guest"}
+                      </strong>
+                      <span>{person.message || "Supported this event."}</span>
+                    </div>
+                    <strong>{formatMoneyFull(person.amount)}</strong>
+                    <span>{person.payment_method?.toUpperCase() || "MoMo"}</span>
+                    <span>{formatTimeAgo(person.created_at)}</span>
+                    <small
+                      className={
+                        person.status === "success" ? "success" : "pending"
+                      }
+                    >
+                      {person.status === "success" ? "Success" : "Pending"}
+                    </small>
                   </div>
-                  <strong>{formatMoneyFull(person.amount)}</strong>
-                  <span>{person.payment_method?.toUpperCase() || "MoMo"}</span>
-                  <span>{formatTimeAgo(person.created_at)}</span>
-                  <small className={person.status === "success" ? "success" : "pending"}>
-                    {person.status === "success" ? "Success" : "Pending"}
-                  </small>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
 
@@ -516,12 +541,18 @@ function Dashboard() {
 
             <div className="activity-list">
               {recentContributions.length === 0 && (
-                <p><span></span>No activity yet — share your event to get started!</p>
+                <p>
+                  <span></span>
+                  No activity yet — share your event to get started!
+                </p>
               )}
               {recentContributions.slice(0, 4).map((item, index) => (
                 <p key={index}>
                   <span></span>
-                  {item.is_anonymous ? "Anonymous" : item.contributor_name || "Guest"} contributed {formatMoneyFull(item.amount)}
+                  {item.is_anonymous
+                    ? "Anonymous"
+                    : item.contributor_name || "Guest"}{" "}
+                  contributed {formatMoneyFull(item.amount)}
                 </p>
               ))}
             </div>
