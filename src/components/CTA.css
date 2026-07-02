@@ -41,7 +41,7 @@
   background:
     radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.26), transparent 26%),
     radial-gradient(circle at 82% 22%, rgba(255, 196, 87, 0.28), transparent 28%),
-    linear-gradient(135deg, #e50914, #b80511);
+    linear-gradient(135deg, #E50914, #b80511);
   color: white;
   box-shadow:
     0 35px 90px rgba(229, 9, 20, 0.28),
@@ -156,7 +156,7 @@
 
 .cta .primary-btn {
   background: white;
-  color: #e50914;
+  color: #E50914;
   box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
 }
 

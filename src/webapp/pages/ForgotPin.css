@@ -1,0 +1,36 @@
+/* =========================================
+   CONTRIBA FORGOT PIN PAGE
+========================================= */
+
+.forgot-pin-card {
+  max-width: 500px;
+}
+
+.forgot-pin-subtitle {
+  margin: -6px 0 18px;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.55;
+  font-weight: 700;
+}
+
+.forgot-pin-icon {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 8px;
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  color: #E50914;
+  background:
+    linear-gradient(135deg, rgba(255, 21, 31, 0.12), rgba(224, 0, 0, 0.06)),
+    #ffffff;
+  border: 1px solid rgba(224, 0, 0, 0.12);
+  box-shadow: 0 16px 34px rgba(224, 0, 0, 0.12);
+}
+
+.forgot-pin-card .auth-switch a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}

@@ -148,7 +148,7 @@
   border-radius: 18px;
   display: grid;
   place-items: center;
-  color: #e50914;
+  color: #E50914;
   background: rgba(229, 9, 20, 0.08);
   border: 1px solid rgba(229, 9, 20, 0.12);
 }
@@ -159,7 +159,7 @@
   gap: 7px;
   padding: 9px 13px;
   border-radius: 999px;
-  color: #e50914;
+  color: #E50914;
   background: rgba(229, 9, 20, 0.075);
   border: 1px solid rgba(229, 9, 20, 0.12);
   font-size: 13px;
@@ -201,7 +201,7 @@
   border-radius: 50%;
   background:
     radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.45), transparent 35%),
-    linear-gradient(135deg, #ff3131, #e50914);
+    linear-gradient(135deg, #ff3131, #E50914);
   color: white;
   display: flex;
   align-items: center;

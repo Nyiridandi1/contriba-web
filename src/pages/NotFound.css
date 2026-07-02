@@ -98,7 +98,7 @@
   border-radius: 24px;
   display: grid;
   place-items: center;
-  color: #e50914;
+  color: #E50914;
   background: rgba(229, 9, 20, 0.08);
   border: 1px solid rgba(229, 9, 20, 0.12);
 }
@@ -112,7 +112,7 @@
 }
 
 .notfound-label {
-  color: #e50914;
+  color: #E50914;
   font-size: 14px;
   font-weight: 900;
   letter-spacing: 2px;
@@ -150,13 +150,13 @@
 }
 
 .notfound-card .primary-btn {
-  background: #e50914;
+  background: #E50914;
   color: white;
   box-shadow: 0 18px 38px rgba(229, 9, 20, 0.22);
 }
 
 .notfound-card .secondary-btn {
-  color: #e50914;
+  color: #E50914;
   background: white;
   border: 1px solid rgba(229, 9, 20, 0.16);
 }

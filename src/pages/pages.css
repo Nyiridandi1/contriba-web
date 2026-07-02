@@ -17,7 +17,7 @@
 
 .page-tag {
   display: inline-block;
-  color: #e50914;
+  color: #E50914;
   font-size: 14px;
   font-weight: 900;
   letter-spacing: 3px;
@@ -86,7 +86,7 @@
 
 .contact-card a,
 .legal-card a {
-  color: #e50914;
+  color: #E50914;
   font-weight: 800;
   text-decoration: none;
 }
@@ -110,7 +110,7 @@
   min-height: 54px;
   padding: 0 28px;
   border-radius: 16px;
-  background: #e50914;
+  background: #E50914;
   color: white;
   font-weight: 900;
   text-decoration: none;

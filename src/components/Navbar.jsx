@@ -66,6 +66,10 @@ function Navbar() {
       </Link>
 
       <nav className={`nav-links ${menuOpen ? "nav-open" : ""}`}>
+        <Link to="/home" className="nav-link" onClick={closeMenu}>
+          Home
+        </Link>
+
         <button className="nav-link" onClick={() => scrollToSection("features")}>
           Features
         </button>
@@ -90,25 +94,28 @@ function Navbar() {
           Terms
         </Link>
 
-        <a
-          href="https://play.google.com/"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link to="/login" className="nav-link mobile-only" onClick={closeMenu}>
+          Login
+        </Link>
+
+        <Link
+          to="/register"
           className="download-btn mobile-download"
           onClick={closeMenu}
         >
-          Download App
-        </a>
+          Create Event
+        </Link>
       </nav>
 
-      <a
-        href="https://play.google.com/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="download-btn desktop-download"
-      >
-        Download App
-      </a>
+      <div className="nav-actions">
+        <Link to="/login" className="nav-login">
+          Login
+        </Link>
+
+        <Link to="/register" className="download-btn desktop-download">
+          Create Event
+        </Link>
+      </div>
 
       <button
         className={`menu-toggle ${menuOpen ? "active" : ""}`}

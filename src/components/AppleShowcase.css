@@ -15,7 +15,7 @@
 
 .apple-text span {
   display: block;
-  color: #e50914;
+  color: #E50914;
   font-size: 14px;
   font-weight: 900;
   letter-spacing: 2px;
@@ -63,7 +63,7 @@
 }
 
 .apple-features svg {
-  color: #e50914;
+  color: #E50914;
   flex-shrink: 0;
 }
 

@@ -1,0 +1,224 @@
+/* =========================================
+   CONTRIBA AUTH FORM SYSTEM
+========================================= */
+
+.auth-form-card {
+  width: 100%;
+  max-width: 500px;
+  margin: auto;
+  padding: 26px 34px;
+  border-radius: 34px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow:
+    0 30px 90px rgba(17, 24, 39, 0.12),
+    0 10px 28px rgba(224, 0, 0, 0.08);
+  backdrop-filter: blur(22px);
+}
+
+.auth-mini-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  margin-bottom: 10px;
+  border-radius: 999px;
+  background: rgba(224, 0, 0, 0.08);
+  color: #E50914;
+  font-size: 10.5px;
+  font-weight: 900;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+}
+
+.auth-form-card h2 {
+  margin: 0 0 16px;
+  color: #111827;
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 1000;
+  letter-spacing: -1.7px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.auth-form label {
+  color: #111827;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.auth-input {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  height: 48px;
+  padding: 0 15px;
+  border-radius: 16px;
+  border: 1.5px solid #e8e8e8;
+  background: #ffffff;
+  box-shadow: 0 10px 26px rgba(17, 24, 39, 0.035);
+  transition: 0.25s ease;
+}
+
+.auth-input:hover {
+  border-color: rgba(224, 0, 0, 0.25);
+}
+
+.auth-input:focus-within {
+  border-color: rgba(224, 0, 0, 0.55);
+  box-shadow: 0 0 0 5px rgba(224, 0, 0, 0.08);
+}
+
+.auth-input svg {
+  color: #8a8f98;
+  flex-shrink: 0;
+}
+
+.auth-country {
+  color: #111827;
+  font-size: 13px;
+  font-weight: 900;
+  white-space: nowrap;
+  padding-right: 11px;
+  border-right: 1.5px solid #eeeeee;
+}
+
+.auth-input input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.auth-input input::placeholder {
+  color: #b8bcc4;
+  font-weight: 600;
+}
+
+.auth-pin-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 9px 13px;
+  border-radius: 14px;
+  background: rgba(224, 0, 0, 0.07);
+  color: #d40000;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.auth-pin-note svg {
+  color: #E50914;
+  flex-shrink: 0;
+}
+
+.auth-eye-button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+}
+
+.auth-eye-button:hover {
+  background: rgba(17, 24, 39, 0.05);
+}
+
+.auth-message {
+  margin: 2px 0 0;
+  padding: 11px 13px;
+  border-radius: 14px;
+  background: #fff3f3;
+  color: #d60000;
+  font-size: 12.5px;
+  font-weight: 800;
+}
+
+.auth-submit {
+  width: 100%;
+  height: 50px;
+  margin-top: 6px;
+  border: none;
+  border-radius: 17px;
+  background: linear-gradient(135deg, #E50914, #E50914);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 950;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  transition: 0.25s ease;
+  box-shadow: 0 18px 42px rgba(224, 0, 0, 0.26);
+}
+
+.auth-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 55px rgba(224, 0, 0, 0.32);
+}
+
+.auth-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.auth-switch {
+  margin: 8px 0 0;
+  text-align: center;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.auth-switch a {
+  margin-left: 6px;
+  color: #E50914;
+  font-weight: 950;
+  text-decoration: none;
+}
+
+.auth-switch a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1100px) {
+  .auth-form-card {
+    width: calc(100% - 32px);
+    max-width: 620px;
+    padding: 26px 24px;
+    border-radius: 28px;
+  }
+}
+
+@media (max-width: 520px) {
+  .auth-form-card {
+    padding: 24px 20px;
+  }
+
+  .auth-form-card h2 {
+    font-size: 27px;
+  }
+
+  .auth-input {
+    height: 48px;
+  }
+
+  .auth-submit {
+    height: 50px;
+  }
+}

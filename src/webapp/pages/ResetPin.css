@@ -1,0 +1,35 @@
+/* =========================================
+   CONTRIBA RESET PIN
+========================================= */
+
+.reset-card {
+  max-width: 500px;
+}
+
+.reset-subtitle {
+  margin: -6px 0 18px;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 700;
+}
+
+.reset-icon {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 8px;
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  color: #E50914;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,21,31,.12),
+      rgba(224,0,0,.06)
+    );
+  border: 1px solid rgba(224,0,0,.12);
+  box-shadow:
+    0 16px 34px
+    rgba(224,0,0,.12);
+}
