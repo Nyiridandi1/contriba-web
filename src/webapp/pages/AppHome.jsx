@@ -1,25 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import {
-  BarChart3,
   Bell,
-  CalendarDays,
   CakeSlice,
   Church,
   Filter,
   GraduationCap,
   HandCoins,
   HeartHandshake,
-  Home,
-  Plus,
   Search,
-  Settings,
-  Share2,
   ShieldCheck,
   Sparkles,
   UserRound,
-  UsersRound,
-  WalletCards,
-  FileText,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -29,21 +20,9 @@ import { useAuth } from "../context/AuthContext";
 import logoIcon from "../../assets/logo-icon.png";
 import EventCard from "../components/events/EventCard";
 import EventCategoryPill from "../components/events/EventCategoryPill";
+import AppSidebar from "../components/AppSidebar";
 
 import "./AppHome.css";
-
-const navItems = [
-  { label: "Home", icon: Home, path: "/events", locked: false },
-  { label: "Dashboard", icon: BarChart3, path: "/dashboard", locked: true },
-  { label: "My Events", icon: CalendarDays, path: "/dashboard/events", locked: true },
-  { label: "Wallet", icon: WalletCards, path: "/wallet", locked: true },
-  { label: "Contributors", icon: UsersRound, path: "/contributors", locked: true },
-  { label: "Reports", icon: FileText, path: "/reports", locked: true },
-  { label: "Notifications", icon: Bell, path: "/notifications", locked: true },
-  { label: "Share Center", icon: Share2, path: "/share", locked: true },
-  { label: "Profile", icon: UserRound, path: "/profile", locked: true },
-  { label: "Settings", icon: Settings, path: "/settings", locked: true },
-];
 
 const categories = [
   { Icon: Sparkles, label: "All", active: true },
@@ -67,37 +46,22 @@ function getStoredUser() {
 }
 
 function getUserInitials(user) {
-  const name =
-    user?.name ||
-    user?.full_name ||
-    user?.fullName ||
-    user?.username ||
-    "Contriba User";
-
+  const name = user?.name || user?.full_name || "Contriba User";
   const parts = String(name).trim().split(" ").filter(Boolean);
-
-  if (parts.length === 1) {
-    return parts[0].slice(0, 2).toUpperCase();
-  }
-
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
   return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
 }
 
 function formatDaysLeft(date) {
   if (!date) return "Open";
-
   const eventDate = new Date(date);
   const today = new Date();
-
   if (Number.isNaN(eventDate.getTime())) return "Open";
-
   const diffTime = eventDate.getTime() - today.getTime();
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
   if (diffDays < 0) return "Ended";
   if (diffDays === 0) return "Today";
   if (diffDays === 1) return "1 day left";
-
   return `${diffDays} days left`;
 }
 
@@ -133,34 +97,27 @@ function AppHome() {
 
   const userInitials = getUserInitials(currentUser);
 
-  const getNavPath = (item) => {
-    if (item.locked && !isAuthenticated) return "/register";
-    return item.path;
-  };
-
   useEffect(() => {
     async function loadEvents() {
       setLoading(true);
       setMessage("");
-
       const result = await getEvents();
-
       if (!result.success) {
         setMessage(result.message || "Failed to load events.");
         setEvents([]);
         setLoading(false);
         return;
       }
-
       setEvents(result.events || []);
       setLoading(false);
     }
-
     loadEvents();
   }, []);
 
   return (
     <main className="app-home-page">
+
+      {/* ── Desktop sidebar ── */}
       <aside className="app-home-sidebar">
         <div>
           <Link to="/" className="app-home-brand">
@@ -172,28 +129,33 @@ function AppHome() {
           </Link>
 
           <nav className="app-home-nav">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-
-              return (
-                <Link
-                  to={getNavPath(item)}
-                  className={item.label === "Home" ? "active" : ""}
-                  key={item.label}
-                >
-                  <Icon size={18} />
-                  <span>{item.label}</span>
-                </Link>
-              );
-            })}
+            <Link to="/home" className="active">
+              <Sparkles size={18} />
+              <span>Home</span>
+            </Link>
+            <Link to={isAuthenticated ? "/dashboard" : "/register"}>
+              <ShieldCheck size={18} />
+              <span>Dashboard</span>
+            </Link>
+            <Link to={isAuthenticated ? "/wallet" : "/register"}>
+              <HeartHandshake size={18} />
+              <span>Wallet</span>
+            </Link>
+            <Link to={isAuthenticated ? "/notifications" : "/register"}>
+              <Bell size={18} />
+              <span>Notifications</span>
+            </Link>
+            <Link to={isAuthenticated ? "/profile" : "/register"}>
+              <UserRound size={18} />
+              <span>Profile</span>
+            </Link>
           </nav>
 
           <Link
             to={isAuthenticated ? "/create-event" : "/register"}
             className="app-home-create"
           >
-            <Plus size={18} />
-            Create Event
+            + Create Event
           </Link>
         </div>
 
@@ -202,15 +164,12 @@ function AppHome() {
             <div className="app-home-sidebar-card-icon">
               <Sparkles size={20} />
             </div>
-
             <h4>{isAuthenticated ? "Organizer Mode" : "Guest Mode"}</h4>
-
             <p>
               {isAuthenticated
                 ? "Create events, track contributions and manage your organizer tools."
                 : "Browse public events freely. Create an account to unlock your organizer dashboard, wallet and reports."}
             </p>
-
             <Link to={isAuthenticated ? "/create-event" : "/register"}>
               {isAuthenticated ? "Create Event" : "Create Free Account"}
             </Link>
@@ -225,6 +184,9 @@ function AppHome() {
           </div>
         </div>
       </aside>
+
+      {/* ── Mobile top bar + bottom nav via AppSidebar ── */}
+      <AppSidebar active="home" />
 
       <section className="app-home-main">
         <header className="app-home-topbar">
@@ -262,11 +224,8 @@ function AppHome() {
             {isAuthenticated && (
               <Link to="/profile" className="app-home-user-avatar">
                 <span className="app-home-user-online"></span>
-                {currentUser?.avatar_url || currentUser?.profile_photo || currentUser?.photo_url ? (
-                  <img
-                    src={currentUser.avatar_url || currentUser.profile_photo || currentUser.photo_url}
-                    alt="Profile"
-                  />
+                {currentUser?.avatar_url ? (
+                  <img src={currentUser.avatar_url} alt="Profile" />
                 ) : (
                   <strong>{userInitials}</strong>
                 )}
@@ -280,7 +239,6 @@ function AppHome() {
             <div className="app-home-lock-badge">
               <ShieldCheck size={22} />
             </div>
-
             <div>
               <h3>Organizer tools unlock after account creation</h3>
               <p>
@@ -288,7 +246,6 @@ function AppHome() {
                 wallet, reports, notifications and settings.
               </p>
             </div>
-
             <div className="app-home-lock-actions">
               <Link to="/login">Login</Link>
               <Link to="/register">Create Account</Link>
@@ -312,7 +269,6 @@ function AppHome() {
             <span>Live events</span>
             <h2>Popular Events</h2>
           </div>
-
           <p></p>
         </section>
 
