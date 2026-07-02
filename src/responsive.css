@@ -1,369 +1,559 @@
-/* PHASE 4 — PROFESSIONAL RESPONSIVE OPTIMIZATION */
+/* ═══════════════════════════════════════════
+   CONTRIBA — GLOBAL MOBILE RESPONSIVE CSS
+   Premium SaaS Mobile Experience
+═══════════════════════════════════════════ */
 
-* {
-  box-sizing: border-box;
+/* ── PAGE LAYOUTS ── */
+.dashboard-page,
+.wallet-page,
+.reports-page,
+.notifications-page {
+  display: flex;
+  min-height: 100vh;
 }
 
-html,
-body,
-#root {
-  width: 100%;
-  max-width: 100%;
+.dashboard-main,
+.wallet-main,
+.reports-main,
+.notifications-main {
+  flex: 1;
+  min-width: 0;
   overflow-x: hidden;
 }
 
-/* TABLET */
-@media (max-width: 1100px) {
-  .hero-content {
+/* ═══════════════════════════════════════════
+   TABLET (992px)
+═══════════════════════════════════════════ */
+@media (max-width: 992px) {
+
+  /* Dashboard */
+  .dashboard-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .smart-insights-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .dashboard-content-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Wallet */
+  .wallet-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .wallet-content-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Reports */
+  .reports-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .reports-content-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Notifications */
+  .notifications-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .notifications-content-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   MOBILE (768px)
+═══════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* ── Page structure ── */
+  .dashboard-page,
+  .wallet-page,
+  .reports-page,
+  .notifications-page {
     flex-direction: column;
-    text-align: center;
-    gap: 50px;
+    padding-bottom: 80px;
   }
 
-  .hero-left,
-  .hero-right {
-    width: 100%;
-  }
-}
-
-/* MOBILE */
-@media (max-width: 768px) {
-  section,
-  main,
-  footer {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-
-  .hero {
-    min-height: auto !important;
-    padding: 120px 20px 55px !important;
-    text-align: center !important;
-  }
-
-  .hero-content {
-    display: flex !important;
+  /* ── Topbars ── */
+  .dashboard-topbar,
+  .wallet-topbar,
+  .reports-topbar,
+  .notifications-topbar {
     flex-direction: column !important;
-    align-items: center !important;
-    gap: 28px !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    padding: 20px 16px !important;
+  }
+
+  .dashboard-top-actions,
+  .wallet-top-actions,
+  .reports-top-actions,
+  .notifications-top-actions {
     width: 100% !important;
-  }
-
-  .hero-left {
-    width: 100% !important;
-    max-width: 350px !important;
-    margin: 0 auto !important;
-  }
-
-  .hero-badge {
-    max-width: 300px !important;
-    margin: 0 auto 28px !important;
-    white-space: normal !important;
-    font-size: 12px !important;
-    line-height: 1.4 !important;
-    padding: 12px 18px !important;
-  }
-
-  .hero h1 {
-    font-size: 32px !important;
-    line-height: 1.08 !important;
-    letter-spacing: -1.4px !important;
-    max-width: 330px !important;
-    margin: 0 auto 24px !important;
-  }
-
-  .hero p {
-    font-size: 16px !important;
-    line-height: 1.7 !important;
-    max-width: 320px !important;
-    margin: 0 auto 28px !important;
-  }
-
-  .hero-actions {
-    width: 100% !important;
-    max-width: 320px !important;
-    margin: 0 auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 14px !important;
-  }
-
-  .hero-actions a,
-  .primary-btn,
-  .secondary-btn {
-    width: 100% !important;
-    min-height: 58px !important;
-    justify-content: center !important;
-  }
-
-  .trust-row {
-    width: 100% !important;
-    max-width: 320px !important;
-    margin: 30px auto 0 !important;
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 0 !important;
-  }
-
-  .trust-row div {
-    padding: 22px 0 !important;
-    text-align: center !important;
-  }
-
-  .hero-right {
-    width: 100% !important;
-    margin-top: 12px !important;
-  }
-
-  .hero-phone {
-    width: 100% !important;
-    max-width: 185px !important;
-    margin: 0 auto !important;
-    display: block !important;
-  }
-
-  .phone-glow {
-    width: 240px !important;
-    height: 240px !important;
-  }
-
-  .section-title,
-  .section-header {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 70px 20px 35px !important;
-    text-align: center !important;
-  }
-
-  .section-title h2,
-  .section-header h2 {
-    font-size: 30px !important;
-    line-height: 1.1 !important;
-    letter-spacing: -1.2px !important;
-    max-width: 310px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  .section-title p,
-  .section-header p {
-    font-size: 16px !important;
-    line-height: 1.7 !important;
-    max-width: 310px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  .features-grid,
-  .steps-grid,
-  .phones-row,
-  .testimonials-grid,
-  .about-grid,
-  .contact-grid,
-  .legal-grid {
-    grid-template-columns: 1fr !important;
-    width: 100% !important;
-    max-width: 340px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    gap: 22px !important;
-  }
-
-  .feature-card,
-  .step-card,
-  .phone-card,
-  .testimonial-card,
-  .about-card,
-  .contact-card,
-  .legal-card {
-    width: 100% !important;
-    max-width: 340px !important;
-    padding: 28px 22px !important;
-    border-radius: 24px !important;
-  }
-
-  .phone-card img {
-    max-width: 210px !important;
-    width: 100% !important;
-  }
-
-  .page-hero {
-    padding: 105px 20px 28px !important;
-    text-align: center !important;
-  }
-
-  .page-title {
-    font-size: 34px !important;
-    line-height: 1.08 !important;
-    letter-spacing: -1.5px !important;
-  }
-
-  .page-description {
-    font-size: 16px !important;
-    line-height: 1.7 !important;
-    margin-bottom: 36px !important;
-  }
-
-  .page-actions {
-    flex-direction: column !important;
-    margin-top: 28px !important;
-  }
-
-  .page-button {
-    width: 100% !important;
-  }
-
-  .contriba-footer {
-    padding: 70px 20px 38px !important;
-    text-align: center !important;
-  }
-
-  .contriba-footer-inner {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 42px !important;
-    width: 100% !important;
-    max-width: 340px !important;
-    margin: 0 auto !important;
-  }
-
-  .footer-left {
-    align-items: center !important;
-    text-align: center !important;
-    width: 100% !important;
-    overflow: visible !important;
-  }
-
-  .contriba-footer-logo {
-    max-width: 210px !important;
-    margin: 0 auto 28px !important;
-  }
-
-  .footer-left p {
-    max-width: 310px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  .contriba-store-badges {
-    width: 100% !important;
-    max-width: 220px !important;
-    margin: 28px auto 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    gap: 14px !important;
-    overflow: visible !important;
-  }
-
-  .contriba-store-badges a,
-  .contriba-store-badges img {
-    width: 220px !important;
-    max-width: 220px !important;
-    height: auto !important;
-    object-fit: contain !important;
-    display: block !important;
-    overflow: visible !important;
-  }
-
-  .contriba-socials {
-    max-width: 270px !important;
-    margin: 0 auto !important;
-    justify-content: center !important;
+    justify-content: flex-start !important;
     flex-wrap: wrap !important;
-    gap: 14px !important;
+    gap: 8px !important;
   }
 
-  .footer-column {
-    align-items: center !important;
-    text-align: center !important;
+  .dashboard-topbar h1,
+  .wallet-topbar h1,
+  .reports-topbar h1,
+  .notifications-topbar h1 {
+    font-size: 24px !important;
   }
 
-  .contriba-footer-bottom {
+  /* ── Hero cards ── */
+  .dashboard-hero-card {
     flex-direction: column !important;
-    gap: 14px !important;
-    text-align: center !important;
-  }
-}
-
-/* SMALL PHONES */
-@media (max-width: 430px) {
-  .hero {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
+    padding: 20px 16px !important;
+    margin: 0 16px !important;
+    border-radius: 16px !important;
   }
 
-  .hero h1 {
-    font-size: 29px !important;
+  .dashboard-hero-left h2 {
+    font-size: 22px !important;
   }
 
-  .hero-phone {
-    max-width: 170px !important;
-  }
-
-  .section-title h2,
-  .section-header h2 {
-    font-size: 27px !important;
-    max-width: 285px !important;
-  }
-
-  .contriba-store-badges {
-    max-width: 205px !important;
-  }
-
-  .contriba-store-badges a,
-  .contriba-store-badges img {
-    width: 205px !important;
-    max-width: 205px !important;
-  }
-}
-
-/* FINAL FORCE FIX */
-
-@media (max-width: 768px) {
-  .section-title h2 {
-    font-size: 26px !important;
-    line-height: 1.12 !important;
-    max-width: 280px !important;
-    margin: 0 auto !important;
-    overflow-wrap: break-word !important;
-  }
-
-  .section-title p {
-    font-size: 15px !important;
-    max-width: 280px !important;
-    margin: 16px auto 0 !important;
-  }
-
-  .contriba-store-badges {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 14px !important;
+  .dashboard-hero-actions {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
     width: 100% !important;
-    max-width: 190px !important;
-    margin: 24px auto !important;
-    overflow: visible !important;
   }
 
-  .contriba-store-badges a {
-    display: block !important;
-    width: 190px !important;
-    max-width: 190px !important;
-    overflow: visible !important;
+  .dashboard-hero-actions a,
+  .dashboard-hero-actions button {
+    flex: 1 !important;
+    min-width: 120px !important;
+    justify-content: center !important;
+    font-size: 13px !important;
+    padding: 10px 12px !important;
   }
 
-  .contriba-store-badges img {
-    display: block !important;
-    width: 190px !important;
-    max-width: 190px !important;
-    height: auto !important;
-    object-fit: contain !important;
+  .dashboard-progress-row {
+    gap: 12px !important;
   }
 
-  .footer-left {
-    overflow: visible !important;
+  /* ── AI Coach ── */
+  .ai-coach-card {
+    flex-direction: column !important;
+    margin: 16px !important;
+    padding: 20px 16px !important;
+    border-radius: 16px !important;
+  }
+
+  .ai-coach-card h2 {
+    font-size: 18px !important;
+  }
+
+  .ai-coach-metric {
+    width: 100% !important;
+    text-align: left !important;
+    padding: 14px !important;
+    border-radius: 12px !important;
+    background: rgba(255,255,255,0.1) !important;
+  }
+
+  .ai-coach-actions {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  /* ── Stats grids ── */
+  .dashboard-stats-grid,
+  .wallet-stats-grid,
+  .reports-stats-grid,
+  .notifications-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    padding: 0 16px !important;
+  }
+
+  .dashboard-stat-card,
+  .wallet-stat-card,
+  .reports-stat-card,
+  .notifications-stat-card {
+    padding: 16px !important;
+    border-radius: 14px !important;
+  }
+
+  .dashboard-stat-card strong,
+  .wallet-stat-card strong {
+    font-size: 20px !important;
+  }
+
+  /* ── Smart insights grid ── */
+  .smart-insights-grid {
+    grid-template-columns: 1fr !important;
+    padding: 0 16px !important;
+    gap: 12px !important;
+  }
+
+  /* ── Content grids ── */
+  .dashboard-content-grid,
+  .wallet-content-grid,
+  .reports-content-grid,
+  .notifications-content-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    padding: 0 16px !important;
+  }
+
+  /* ── Panels ── */
+  .dashboard-panel,
+  .wallet-panel,
+  .reports-panel,
+  .notifications-panel {
+    padding: 16px !important;
+    border-radius: 16px !important;
+  }
+
+  /* ── Contributors table ── */
+  .contributors-table {
+    overflow-x: auto !important;
+  }
+
+  .contributor-row {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    padding: 12px 0 !important;
+  }
+
+  .contributor-row > div {
+    min-width: 0 !important;
+    flex: 1 !important;
+  }
+
+  .contributor-row > strong:last-of-type {
+    margin-left: auto !important;
+  }
+
+  /* ── Withdraw table ── */
+  .withdraw-table {
+    overflow-x: auto !important;
+  }
+
+  .withdraw-row {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    padding: 12px 0 !important;
+  }
+
+  /* ── Hero sections ── */
+  .wallet-hero,
+  .reports-hero,
+  .notifications-hero {
+    flex-direction: column !important;
+    margin: 0 16px !important;
+    padding: 20px 16px !important;
+    border-radius: 16px !important;
+    gap: 16px !important;
+  }
+
+  .wallet-hero-left h2,
+  .reports-hero-left h2,
+  .notifications-hero-left h2 {
+    font-size: 22px !important;
+  }
+
+  .wallet-security-card,
+  .reports-hero-card,
+  .notifications-hero-card {
+    width: 100% !important;
+    border-radius: 14px !important;
+    padding: 16px !important;
+  }
+
+  .wallet-hero-actions,
+  .reports-hero-actions,
+  .notifications-hero-actions {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  /* ── Wallet withdraw panel ── */
+  .wallet-withdraw-panel .destination-list {
+    gap: 8px !important;
+  }
+
+  /* ── Notifications ── */
+  .notifications-hero {
+    flex-direction: column !important;
+  }
+
+  .notification-item {
+    padding: 14px 0 !important;
+  }
+
+  /* ── Section padding ── */
+  .dashboard-main > section,
+  .wallet-main > section,
+  .reports-main > section,
+  .notifications-main > section {
+    margin-bottom: 16px !important;
+  }
+
+  /* ── Smart cards ── */
+  .smart-card {
+    padding: 16px !important;
+  }
+
+  .waiting-stats {
+    gap: 12px !important;
+  }
+
+  /* ── Export grid ── */
+  .export-card-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  /* ── Available reports ── */
+  .available-reports-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  /* ── Quick actions ── */
+  .quick-actions-grid,
+  .notification-actions-grid,
+  .report-actions-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  /* ── AI insights on dashboard ── */
+  .ai-coach-card {
+    margin: 0 16px !important;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   SMALL MOBILE (480px)
+═══════════════════════════════════════════ */
+@media (max-width: 480px) {
+
+  .dashboard-stats-grid,
+  .wallet-stats-grid,
+  .reports-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .export-card-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .dashboard-topbar h1,
+  .wallet-topbar h1 {
+    font-size: 20px !important;
+  }
+
+  .dashboard-hero-left h2,
+  .wallet-hero-left h2 {
+    font-size: 18px !important;
+  }
+
+  .smart-insights-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   APP HOME MOBILE (Events page)
+═══════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  .app-home-page {
+    flex-direction: column !important;
+  }
+
+  .app-home-sidebar {
+    display: none !important;
+  }
+
+  .app-home-main {
+    width: 100% !important;
+    padding-bottom: 80px !important;
+  }
+
+  .app-home-topbar {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    padding: 16px !important;
+  }
+
+  .app-home-topbar h1 {
+    font-size: 22px !important;
+  }
+
+  .app-home-top-actions {
+    width: 100% !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .app-home-search {
+    flex: 1 !important;
+    min-width: 200px !important;
+  }
+
+  .app-home-events-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+    padding: 0 16px !important;
+  }
+
+  .app-home-categories {
+    padding: 0 16px !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    gap: 8px !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  .app-home-categories::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .app-home-lock-banner {
+    flex-direction: column !important;
+    margin: 0 16px !important;
+    padding: 16px !important;
+    gap: 12px !important;
+  }
+
+  .app-home-section-header {
+    padding: 0 16px !important;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   EVENT DETAILS MOBILE
+═══════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  .event-details-page {
+    padding-bottom: 80px !important;
+  }
+
+  .event-details-content {
+    flex-direction: column !important;
+    padding: 0 16px !important;
+    gap: 16px !important;
+  }
+
+  .event-details-sidebar {
+    width: 100% !important;
+    position: relative !important;
+    top: 0 !important;
+  }
+
+  .event-details-gallery {
+    flex-direction: column !important;
+  }
+
+  .event-details-thumbs {
+    flex-direction: row !important;
+    overflow-x: auto !important;
+  }
+
+  .event-details-main-image {
+    border-radius: 16px !important;
+  }
+
+  .event-details-title-row {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .event-share-actions {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  .event-share-actions button {
+    flex: 1 !important;
+    min-width: 80px !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+    padding: 8px 10px !important;
+  }
+
+  .event-details-meta {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .event-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .event-details-card {
+    padding: 16px !important;
+    border-radius: 14px !important;
+  }
+
+  .event-details-hero {
+    padding: 0 !important;
+  }
+
+  .event-details-back {
+    margin: 16px !important;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   AUTH PAGES MOBILE
+═══════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  .auth-layout {
+    flex-direction: column !important;
+    min-height: 100vh !important;
+  }
+
+  .auth-intro {
+    padding: 40px 24px 24px !important;
+    min-height: auto !important;
+  }
+
+  .auth-intro h1 {
+    font-size: 36px !important;
+  }
+
+  .auth-form-card {
+    padding: 24px 20px !important;
+    border-radius: 24px 24px 0 0 !important;
+    min-height: auto !important;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   QR MODAL MOBILE
+═══════════════════════════════════════════ */
+@media (max-width: 480px) {
+
+  .qr-modal {
+    border-radius: 20px 20px 0 0 !important;
+    padding: 20px 16px 32px !important;
+  }
+
+  .qr-modal-overlay {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+
+  .qr-modal-actions {
+    gap: 8px !important;
   }
 }
