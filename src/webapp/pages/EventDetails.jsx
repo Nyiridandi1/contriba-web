@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { QRCodeCanvas } from "qrcode.react";
+import { createClient } from "@supabase/supabase-js";
 
 import {
   addEventComment,
@@ -36,6 +37,12 @@ import {
 import { useAuth } from "../context/AuthContext";
 import EventProgress from "../components/events/EventProgress";
 import "./EventDetails.css";
+
+// ── Supabase client for realtime ──
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
 
 const fallbackImage =
   "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80";
@@ -143,6 +150,9 @@ function EventDetails() {
   const [likesCount, setLikesCount] = useState(0);
   const [likeLoading, setLikeLoading] = useState(false);
 
+  // ── REALTIME REF ──
+  const channelRef = useRef(null);
+
   const normalizedEvent = useMemo(() => {
     if (!event) return null;
     return normalizeEvent(event);
@@ -177,7 +187,6 @@ function EventDetails() {
         setComments(commentsResult.comments || []);
       }
 
-      // ── Load likes ──
       const likesResult = await getEventLikes(id);
       if (likesResult.success) {
         setLikesCount(likesResult.likes || 0);
@@ -188,6 +197,41 @@ function EventDetails() {
     }
 
     loadEventDetails();
+  }, [id]);
+
+  // ── SUPABASE REALTIME FOR COMMENTS ──
+  useEffect(() => {
+    if (!id) return;
+
+    const channel = supabase
+      .channel(`comments-${id}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "comments",
+          filter: `event_id=eq.${id}`,
+        },
+        (payload) => {
+          // New comment arrives instantly
+          setComments((prev) => {
+            // Avoid duplicates
+            const exists = prev.find((c) => c.id === payload.new.id);
+            if (exists) return prev;
+            return [payload.new, ...prev];
+          });
+        }
+      )
+      .subscribe();
+
+    channelRef.current = channel;
+
+    return () => {
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current);
+      }
+    };
   }, [id]);
 
   async function handlePostComment() {
@@ -201,7 +245,12 @@ function EventDetails() {
     });
 
     if (result.success && result.comment) {
-      setComments((current) => [result.comment, ...current]);
+      // Optimistically add — realtime will also fire but we deduplicate
+      setComments((current) => {
+        const exists = current.find((c) => c.id === result.comment.id);
+        if (exists) return current;
+        return [result.comment, ...current];
+      });
       setCommentName("");
       setCommentText("");
     }
@@ -215,19 +264,16 @@ function EventDetails() {
       window.location.href = "/login";
       return;
     }
-
     if (likeLoading) return;
     setLikeLoading(true);
 
     if (liked) {
-      // Unlike
       const result = await unlikeEvent(id);
       if (result.success) {
         setLiked(false);
         setLikesCount((prev) => Math.max(0, prev - 1));
       }
     } else {
-      // Like
       const result = await likeEvent(id);
       if (result.success) {
         setLiked(true);
@@ -415,12 +461,10 @@ function EventDetails() {
             </div>
 
             <div className="event-share-actions">
-              {/* ── LIKE BUTTON ── */}
               <button
                 type="button"
                 onClick={handleLike}
                 disabled={likeLoading}
-                className={liked ? "liked" : ""}
                 style={{
                   color: liked ? "#E50914" : undefined,
                   borderColor: liked ? "#E50914" : undefined,
@@ -521,27 +565,49 @@ function EventDetails() {
             </div>
           </div>
 
+          {/* ── REALTIME COMMENTS ── */}
           <div className="event-details-card">
             <div className="card-title-row">
-              <h2>Comments</h2>
-              <button type="button">Newest</button>
+              <h2>
+                Comments
+                {comments.length > 0 && (
+                  <span style={{
+                    marginLeft: "8px",
+                    fontSize: "13px",
+                    fontWeight: 500,
+                    color: "rgba(0,0,0,0.4)"
+                  }}>
+                    ({comments.length})
+                  </span>
+                )}
+              </h2>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <span className="live-dot" style={{ width: "7px", height: "7px" }}></span>
+                <span style={{ fontSize: "12px", color: "#E50914", fontWeight: 600 }}>Live</span>
+              </div>
             </div>
+
             <div className="comment-form">
               <input
                 type="text"
-                placeholder="Your name"
+                placeholder="Your name (optional)"
                 value={commentName}
-                onChange={(event) => setCommentName(event.target.value)}
+                onChange={(e) => setCommentName(e.target.value)}
               />
               <textarea
                 placeholder="Write a comment..."
                 value={commentText}
-                onChange={(event) => setCommentText(event.target.value)}
+                onChange={(e) => setCommentText(e.target.value)}
               />
-              <button type="button" onClick={handlePostComment} disabled={commentLoading}>
+              <button
+                type="button"
+                onClick={handlePostComment}
+                disabled={commentLoading || !commentText.trim()}
+              >
                 {commentLoading ? "Posting..." : "Post Comment"}
               </button>
             </div>
+
             <div className="comments-list">
               {comments.length === 0 && (
                 <div className="comment-item">
@@ -560,7 +626,7 @@ function EventDetails() {
                   <div className="comment-icon"><MessageCircle size={17} /></div>
                   <div>
                     <div className="comment-top">
-                      <strong>{comment.name || "Guest"}</strong>
+                      <strong>{comment.name || comment.is_anonymous ? "Anonymous" : "Guest"}</strong>
                       <span>{formatTimeAgo(comment.created_at)}</span>
                     </div>
                     <p>{comment.message}</p>
