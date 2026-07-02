@@ -19,70 +19,77 @@ import {
   TrendingUp,
   UsersRound,
   WalletCards,
-  Zap,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import { getDashboard, getUser } from "../api/api";
 import AppSidebar from "../components/AppSidebar";
 import "./Dashboard.css";
 
-const contributors = [
-  {
-    name: "Olivier Ishimwe",
-    amount: "RWF 500,000",
-    method: "MTN",
-    time: "2 mins ago",
-    status: "Success",
-    message: "Congratulations!",
-  },
-  {
-    name: "Grace N.",
-    amount: "RWF 250,000",
-    method: "Airtel",
-    time: "18 mins ago",
-    status: "Success",
-    message: "So happy for you.",
-  },
-  {
-    name: "Patrick K.",
-    amount: "RWF 150,000",
-    method: "Visa",
-    time: "1 hour ago",
-    status: "Success",
-    message: "God bless your union.",
-  },
-  {
-    name: "Anonymous",
-    amount: "RWF 100,000",
-    method: "MTN",
-    time: "3 hours ago",
-    status: "Pending",
-    message: "Wishing you the best.",
-  },
-];
+function formatMoney(value) {
+  const num = Number(value || 0);
+  if (num >= 1000000) return `RWF ${(num / 1000000).toFixed(2)}M`;
+  if (num >= 1000) return `RWF ${(num / 1000).toFixed(0)}K`;
+  return `RWF ${num.toLocaleString()}`;
+}
 
-const activity = [
-  "Olivier contributed RWF 500,000",
-  "Jean & Alice Wedding reached 77%",
-  "Grace shared your event link",
-  "18 visitors viewed but did not contribute",
-];
+function formatMoneyFull(value) {
+  return `RWF ${Number(value || 0).toLocaleString()}`;
+}
 
-const sources = [
-  { name: "WhatsApp", value: "61%", width: "61%" },
-  { name: "Instagram", value: "16%", width: "16%" },
-  { name: "Facebook", value: "11%", width: "11%" },
-  { name: "QR Code", value: "7%", width: "7%" },
-  { name: "Direct Link", value: "5%", width: "5%" },
-];
+function formatTimeAgo(value) {
+  if (!value) return "Recently";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Recently";
+  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (seconds < 60) return "Just now";
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes} min${minutes > 1 ? "s" : ""} ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+  const days = Math.floor(hours / 24);
+  return `${days} day${days > 1 ? "s" : ""} ago`;
+}
 
-const paymentBreakdown = [
-  { name: "MTN MoMo", value: "71%", width: "71%" },
-  { name: "Airtel Money", value: "18%", width: "18%" },
-  { name: "Visa / Card", value: "11%", width: "11%" },
-];
+function getGreeting() {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Good morning";
+  if (hour < 17) return "Good afternoon";
+  return "Good evening";
+}
 
 function Dashboard() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const currentUser = getUser();
+
+  useEffect(() => {
+    async function loadDashboard() {
+      setLoading(true);
+      const result = await getDashboard();
+      if (result.success) {
+        setData(result);
+      }
+      setLoading(false);
+    }
+    loadDashboard();
+  }, []);
+
+  // ── Pull real data or fallback to zeros ──
+  const totalRaised = data?.total_raised || 0;
+  const totalContributors = data?.total_contributors || 0;
+  const totalEvents = data?.total_events || 0;
+  const walletBalance = data?.wallet_balance || 0;
+  const recentContributions = data?.recent_contributions || [];
+  const recentEvents = data?.recent_events || [];
+
+  // Use first active event for hero
+  const heroEvent = recentEvents[0] || null;
+  const heroRaised = heroEvent?.total_raised || 0;
+  const heroGoal = heroEvent?.goal_amount || 0;
+  const heroProgress = heroGoal > 0 ? Math.min(100, Math.round((heroRaised / heroGoal) * 100)) : 0;
+
   return (
     <main className="dashboard-page">
       <AppSidebar active="dashboard" />
@@ -90,7 +97,7 @@ function Dashboard() {
       <section className="dashboard-main">
         <header className="dashboard-topbar">
           <div>
-            <span>Good evening Olivier</span>
+            <span>{getGreeting()} {currentUser?.name?.split(" ")[0] || "there"}</span>
             <h1>Financial Command Center</h1>
           </div>
 
@@ -112,53 +119,69 @@ function Dashboard() {
           </div>
         </header>
 
+        {/* ── HERO CARD ── */}
         <section className="dashboard-hero-card">
           <div className="dashboard-hero-left">
             <span className="dashboard-badge">
               <Sparkles size={16} />
-              Active Event
+              {loading ? "Loading..." : heroEvent ? "Active Event" : "No Active Event"}
             </span>
 
-            <h2>Jean & Alice Wedding</h2>
+            <h2>
+              {loading
+                ? "Loading your events..."
+                : heroEvent
+                ? heroEvent.title
+                : "Create your first event"}
+            </h2>
 
             <p>
               Track every contribution, contributor, payment method, message,
               visitor and financial movement in one trusted dashboard.
             </p>
 
-            <div className="dashboard-progress-row">
-              <div>
-                <span>Raised</span>
-                <strong>RWF 3,850,000</strong>
-              </div>
+            {heroEvent && (
+              <>
+                <div className="dashboard-progress-row">
+                  <div>
+                    <span>Raised</span>
+                    <strong>{formatMoneyFull(heroRaised)}</strong>
+                  </div>
+                  <div>
+                    <span>Goal</span>
+                    <strong>{formatMoneyFull(heroGoal)}</strong>
+                  </div>
+                  <div>
+                    <span>Progress</span>
+                    <strong>{heroProgress}%</strong>
+                  </div>
+                </div>
 
-              <div>
-                <span>Goal</span>
-                <strong>RWF 5,000,000</strong>
-              </div>
-
-              <div>
-                <span>Progress</span>
-                <strong>77%</strong>
-              </div>
-            </div>
-
-            <div className="dashboard-progress-track">
-              <div></div>
-            </div>
+                <div className="dashboard-progress-track">
+                  <div style={{ width: `${heroProgress}%` }}></div>
+                </div>
+              </>
+            )}
           </div>
 
           <div className="dashboard-hero-actions">
-            <Link to="/events/jean-alice-wedding">
-              <Eye size={18} />
-              View Public Page
-            </Link>
-
-            <button>
-              <Copy size={18} />
-              Copy Link
-            </button>
-
+            {heroEvent ? (
+              <>
+                <Link to={`/events/${heroEvent.id}`}>
+                  <Eye size={18} />
+                  View Public Page
+                </Link>
+                <button onClick={() => navigator.clipboard.writeText(`${window.location.origin}/events/${heroEvent.id}`)}>
+                  <Copy size={18} />
+                  Copy Link
+                </button>
+              </>
+            ) : (
+              <Link to="/create-event">
+                <Sparkles size={18} />
+                Create Event
+              </Link>
+            )}
             <button>
               <QrCode size={18} />
               QR Code
@@ -166,6 +189,7 @@ function Dashboard() {
           </div>
         </section>
 
+        {/* ── AI COACH ── */}
         <section className="ai-coach-card">
           <div className="ai-coach-content">
             <span className="dashboard-badge dark">
@@ -173,13 +197,16 @@ function Dashboard() {
               AI Financial Coach
             </span>
 
-            <h2>Your event is performing better than 81% of weddings.</h2>
+            <h2>
+              {totalRaised > 0
+                ? `You've collected ${formatMoney(totalRaised)} across ${totalEvents} event${totalEvents !== 1 ? "s" : ""}.`
+                : "Create your first event to start collecting contributions."}
+            </h2>
 
             <p>
-              At the current pace, you are likely to reach your goal{" "}
-              <strong>3 days early</strong>. Most contributors are coming from{" "}
-              <strong>WhatsApp</strong>. Share your event again between{" "}
-              <strong>6PM and 9PM</strong> to increase activity.
+              {totalContributors > 0
+                ? `${totalContributors} people have contributed to your events. Share your event link between 6PM and 9PM to increase activity.`
+                : "Once you create an event and share it, your contributors will appear here with real-time updates."}
             </p>
 
             <div className="ai-coach-actions">
@@ -196,68 +223,80 @@ function Dashboard() {
           </div>
 
           <div className="ai-coach-metric">
-            <span>Expected Final</span>
-            <strong>RWF 5.42M</strong>
-            <p>+RWF 420K if shared tonight</p>
+            <span>Wallet Balance</span>
+            <strong>{formatMoney(walletBalance)}</strong>
+            <p>Available to withdraw</p>
           </div>
         </section>
 
+        {/* ── STATS GRID ── */}
         <section className="dashboard-stats-grid">
           <div className="dashboard-stat-card">
             <span>Total Collected</span>
-            <strong>RWF 3.85M</strong>
+            <strong>{formatMoney(totalRaised)}</strong>
             <p>
               <TrendingUp size={15} />
-              +18% today
+              {totalEvents} event{totalEvents !== 1 ? "s" : ""}
             </p>
           </div>
 
           <Link to="/contributors" className="dashboard-stat-card">
             <span>Contributors</span>
-            <strong>287</strong>
+            <strong>{totalContributors}</strong>
             <p>
               <UsersRound size={15} />
-              23 today
+              Total supporters
             </p>
           </Link>
 
           <div className="dashboard-stat-card">
-            <span>Visitors</span>
-            <strong>1,240</strong>
+            <span>My Events</span>
+            <strong>{totalEvents}</strong>
             <p>
               <Eye size={15} />
-              29% conversion
+              Active events
             </p>
           </div>
 
           <div className="dashboard-stat-card">
-            <span>Pending Payments</span>
-            <strong>14</strong>
+            <span>Wallet Balance</span>
+            <strong>{formatMoney(walletBalance)}</strong>
             <p>
               <Clock size={15} />
-              Waiting confirmation
+              Ready to withdraw
             </p>
           </div>
         </section>
 
+        {/* ── SMART INSIGHTS ── */}
         <section className="smart-insights-grid">
           <div className="smart-card forecast-card">
             <div className="panel-heading">
               <div>
                 <span>Goal Prediction</span>
-                <h3>Likely to reach goal</h3>
+                <h3>
+                  {heroProgress >= 100
+                    ? "Goal reached! 🎉"
+                    : heroProgress > 50
+                    ? "On track!"
+                    : "Keep going!"}
+                </h3>
               </div>
               <TrendingUp size={22} />
             </div>
 
             <div className="forecast-amount">
-              <span>Projected collection</span>
-              <strong>RWF 5,420,000</strong>
-              <p>Estimated finish: 12 July</p>
+              <span>Total raised</span>
+              <strong>{formatMoneyFull(heroRaised)}</strong>
+              <p>
+                {heroGoal > 0
+                  ? `Goal: ${formatMoneyFull(heroGoal)}`
+                  : "No goal set"}
+              </p>
             </div>
 
             <div className="forecast-track">
-              <div></div>
+              <div style={{ width: `${heroProgress}%` }}></div>
             </div>
           </div>
 
@@ -265,25 +304,23 @@ function Dashboard() {
             <div className="panel-heading">
               <div>
                 <span>Reminder Center</span>
-                <h3>People waiting</h3>
+                <h3>Contributors</h3>
               </div>
               <Bell size={22} />
             </div>
 
             <div className="waiting-stats">
               <div>
-                <strong>189</strong>
-                <span>Viewed</span>
+                <strong>{totalContributors}</strong>
+                <span>Total</span>
               </div>
-
               <div>
-                <strong>142</strong>
-                <span>Paid</span>
+                <strong>{totalEvents}</strong>
+                <span>Events</span>
               </div>
-
               <div>
-                <strong>47</strong>
-                <span>Waiting</span>
+                <strong>{formatMoney(walletBalance)}</strong>
+                <span>Balance</span>
               </div>
             </div>
 
@@ -293,30 +330,12 @@ function Dashboard() {
             </button>
           </div>
 
-          <div className="smart-card share-time-card">
-            <div className="panel-heading">
-              <div>
-                <span>Best Time To Share</span>
-                <h3>Today 6PM – 9PM</h3>
-              </div>
-              <Zap size={22} />
-            </div>
-
-            <p>
-              Your audience responds best in the evening. Sharing now could
-              increase contributions by <strong>34%</strong>.
-            </p>
-          </div>
-        </section>
-
-        <section className="dashboard-content-grid">
-          <div className="dashboard-panel large">
+          <div className="dashboard-panel chart-panel">
             <div className="panel-heading">
               <div>
                 <span>Contribution Analytics</span>
                 <h3>Daily money movement</h3>
               </div>
-
               <button>
                 This week
                 <ArrowRight size={16} />
@@ -324,33 +343,13 @@ function Dashboard() {
             </div>
 
             <div className="chart-bars">
-              <div style={{ height: "38%" }}>
-                <span>Mon</span>
-              </div>
-
-              <div style={{ height: "62%" }}>
-                <span>Tue</span>
-              </div>
-
-              <div style={{ height: "45%" }}>
-                <span>Wed</span>
-              </div>
-
-              <div style={{ height: "82%" }}>
-                <span>Thu</span>
-              </div>
-
-              <div style={{ height: "70%" }}>
-                <span>Fri</span>
-              </div>
-
-              <div style={{ height: "92%" }}>
-                <span>Sat</span>
-              </div>
-
-              <div style={{ height: "56%" }}>
-                <span>Sun</span>
-              </div>
+              <div style={{ height: "38%" }}><span>Mon</span></div>
+              <div style={{ height: "62%" }}><span>Tue</span></div>
+              <div style={{ height: "45%" }}><span>Wed</span></div>
+              <div style={{ height: "82%" }}><span>Thu</span></div>
+              <div style={{ height: "70%" }}><span>Fri</span></div>
+              <div style={{ height: "92%" }}><span>Sat</span></div>
+              <div style={{ height: "56%" }}><span>Sun</span></div>
             </div>
           </div>
 
@@ -358,95 +357,32 @@ function Dashboard() {
             <div className="panel-heading">
               <div>
                 <span>Financial Health</span>
-                <h3>Excellent</h3>
+                <h3>{totalRaised > 0 ? "Excellent" : "Getting started"}</h3>
               </div>
               <ShieldCheck size={22} />
             </div>
 
             <div className="health-score">
-              <strong>96%</strong>
-              <span>Healthy</span>
+              <strong>{totalRaised > 0 ? "96%" : "—"}</strong>
+              <span>{totalRaised > 0 ? "Healthy" : "No data yet"}</span>
             </div>
 
             <div className="health-list">
-              <p>
-                <CheckCircle2 size={16} />
-                Goal progressing well
-              </p>
-
-              <p>
-                <CheckCircle2 size={16} />
-                No suspicious activity
-              </p>
-
-              <p>
-                <CheckCircle2 size={16} />
-                Strong contributor activity
-              </p>
+              <p><CheckCircle2 size={16} />Payments secured by Paypack</p>
+              <p><CheckCircle2 size={16} />No suspicious activity</p>
+              <p><CheckCircle2 size={16} />{totalContributors > 0 ? "Strong contributor activity" : "Ready for contributions"}</p>
             </div>
           </div>
         </section>
 
-        <section className="dashboard-content-grid">
-          <div className="dashboard-panel">
-            <div className="panel-heading">
-              <div>
-                <span>Contribution Sources</span>
-                <h3>Where money comes from</h3>
-              </div>
-              <Share2 size={22} />
-            </div>
-
-            <div className="source-list">
-              {sources.map((source) => (
-                <div className="source-item" key={source.name}>
-                  <div>
-                    <span>{source.name}</span>
-                    <strong>{source.value}</strong>
-                  </div>
-
-                  <div className="source-track">
-                    <span style={{ width: source.width }}></span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="dashboard-panel">
-            <div className="panel-heading">
-              <div>
-                <span>Payment Breakdown</span>
-                <h3>Preferred methods</h3>
-              </div>
-              <WalletCards size={22} />
-            </div>
-
-            <div className="source-list">
-              {paymentBreakdown.map((source) => (
-                <div className="source-item" key={source.name}>
-                  <div>
-                    <span>{source.name}</span>
-                    <strong>{source.value}</strong>
-                  </div>
-
-                  <div className="source-track red">
-                    <span style={{ width: source.width }}></span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
+        {/* ── RECENT CONTRIBUTIONS ── */}
         <section className="dashboard-content-grid">
           <div className="dashboard-panel large">
             <div className="panel-heading">
               <div>
-                <span>Top Contributors</span>
-                <h3>Biggest supporters</h3>
+                <span>Recent Contributions</span>
+                <h3>Latest supporters</h3>
               </div>
-
               <Link to="/contributors">
                 View all
                 <ArrowRight size={16} />
@@ -454,30 +390,37 @@ function Dashboard() {
             </div>
 
             <div className="contributors-table">
-              {contributors.map((person, index) => (
-                <div className="contributor-row" key={person.name}>
+              {loading && (
+                <div className="contributor-row">
+                  <div><strong>Loading...</strong></div>
+                </div>
+              )}
+
+              {!loading && recentContributions.length === 0 && (
+                <div className="contributor-row">
+                  <div>
+                    <strong>No contributions yet</strong>
+                    <span>Share your event to start receiving contributions</span>
+                  </div>
+                </div>
+              )}
+
+              {!loading && recentContributions.slice(0, 5).map((person, index) => (
+                <div className="contributor-row" key={person.id || index}>
                   <div>
                     <strong>
                       {index === 0 && "🥇 "}
                       {index === 1 && "🥈 "}
                       {index === 2 && "🥉 "}
-                      {person.name}
+                      {person.is_anonymous ? "Anonymous" : person.contributor_name || "Guest"}
                     </strong>
-                    <span>{person.message}</span>
+                    <span>{person.message || "Supported this event."}</span>
                   </div>
-
-                  <strong>{person.amount}</strong>
-
-                  <span>{person.method}</span>
-
-                  <span>{person.time}</span>
-
-                  <small
-                    className={
-                      person.status === "Success" ? "success" : "pending"
-                    }
-                  >
-                    {person.status}
+                  <strong>{formatMoneyFull(person.amount)}</strong>
+                  <span>{person.payment_method?.toUpperCase() || "MoMo"}</span>
+                  <span>{formatTimeAgo(person.created_at)}</span>
+                  <small className={person.status === "success" ? "success" : "pending"}>
+                    {person.status === "success" ? "Success" : "Pending"}
                   </small>
                 </div>
               ))}
@@ -495,7 +438,7 @@ function Dashboard() {
 
             <div className="wallet-balance">
               <span>Ready to withdraw</span>
-              <strong>RWF 3,810,000</strong>
+              <strong>{formatMoneyFull(walletBalance)}</strong>
               <p>Estimated arrival: 2 minutes</p>
             </div>
 
@@ -506,6 +449,7 @@ function Dashboard() {
           </div>
         </section>
 
+        {/* ── QUICK ACTIONS ── */}
         <section className="dashboard-content-grid">
           <div className="dashboard-panel ai-panel">
             <span className="dashboard-badge dark">
@@ -516,14 +460,13 @@ function Dashboard() {
             <h3>What you should do next</h3>
 
             <p>
-              47 people viewed your event but have not contributed yet. Send a
-              friendly reminder now and include the public link. Based on
-              current patterns, this could generate an additional{" "}
-              <strong>RWF 420,000</strong> tonight.
+              {totalContributors > 0
+                ? `You have ${totalContributors} supporters. Send a friendly reminder and include the public link to increase contributions.`
+                : "Create your first event and share it with friends and family to start collecting contributions."}
             </p>
 
             <button>
-              Send smart reminder
+              {totalContributors > 0 ? "Send smart reminder" : "Create Event"}
               <ArrowRight size={17} />
             </button>
           </div>
@@ -560,6 +503,7 @@ function Dashboard() {
           </div>
         </section>
 
+        {/* ── LIVE ACTIVITY ── */}
         <section className="dashboard-content-grid">
           <div className="dashboard-panel">
             <div className="panel-heading">
@@ -571,10 +515,13 @@ function Dashboard() {
             </div>
 
             <div className="activity-list">
-              {activity.map((item) => (
-                <p key={item}>
+              {recentContributions.length === 0 && (
+                <p><span></span>No activity yet — share your event to get started!</p>
+              )}
+              {recentContributions.slice(0, 4).map((item, index) => (
+                <p key={index}>
                   <span></span>
-                  {item}
+                  {item.is_anonymous ? "Anonymous" : item.contributor_name || "Guest"} contributed {formatMoneyFull(item.amount)}
                 </p>
               ))}
             </div>
@@ -591,8 +538,8 @@ function Dashboard() {
 
             <div className="qr-box">
               <QrCode size={64} />
-              <strong>125 scans</strong>
-              <span>64% conversion rate</span>
+              <strong>{totalContributors} contributors</strong>
+              <span>{heroProgress}% of goal reached</span>
             </div>
           </div>
         </section>
