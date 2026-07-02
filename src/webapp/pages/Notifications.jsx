@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import {
   AlertCircle,
   ArrowRight,
@@ -9,105 +10,181 @@ import {
   Download,
   FileText,
   Filter,
-  MessageCircle,
   RefreshCcw,
   Search,
   Send,
   Settings,
   ShieldCheck,
   Sparkles,
-  TrendingUp,
-  UsersRound,
   WalletCards,
 } from "lucide-react";
+import { createClient } from "@supabase/supabase-js";
+
+import {
+  getNotifications,
+  markAllNotificationsRead,
+  markNotificationRead,
+  getUser,
+} from "../api/api";
 
 import AppSidebar from "../components/AppSidebar";
 import "./Notifications.css";
 
-const notificationStats = [
-  {
-    title: "Unread Alerts",
-    value: "18",
-    note: "Needs review",
-    icon: BellRing,
-  },
-  {
-    title: "Today",
-    value: "42",
-    note: "New activities",
-    icon: Clock,
-  },
-  {
-    title: "Payments",
-    value: "23",
-    note: "Received today",
-    icon: CreditCard,
-  },
-  {
-    title: "AI Alerts",
-    value: "6",
-    note: "Smart recommendations",
-    icon: Sparkles,
-  },
-];
-
-const notifications = [
-  {
-    type: "Payment",
-    title: "New contribution received",
-    description: "Olivier Ishimwe contributed RWF 500,000 through MTN MoMo.",
-    time: "2 mins ago",
-    status: "Success",
-    icon: CreditCard,
-  },
-  {
-    type: "Reminder",
-    title: "Reminder campaign sent",
-    description: "A reminder was sent to 42 people who viewed but did not pay.",
-    time: "12 mins ago",
-    status: "Sent",
-    icon: Send,
-  },
-  {
-    type: "AI Insight",
-    title: "Best sharing window detected",
-    description:
-      "Your audience is most active between 6PM and 9PM. Sharing now may increase contributions.",
-    time: "28 mins ago",
-    status: "Insight",
-    icon: Sparkles,
-  },
-  {
-    type: "Withdrawal",
-    title: "Withdrawal completed",
-    description: "RWF 500,000 was sent to MTN MoMo • 0788 123 456.",
-    time: "Today, 10:42 AM",
-    status: "Completed",
-    icon: WalletCards,
-  },
-  {
-    type: "Payment Failed",
-    title: "Payment could not be completed",
-    description:
-      "Jean Claude attempted to contribute RWF 50,000 but payment failed before confirmation.",
-    time: "Yesterday, 6:12 PM",
-    status: "Failed",
-    icon: AlertCircle,
-  },
-  {
-    type: "Report",
-    title: "Financial report generated",
-    description:
-      "Jean & Alice Wedding Full Report was generated successfully as PDF.",
-    time: "Yesterday, 11:24 AM",
-    status: "Ready",
-    icon: FileText,
-  },
-];
+// ── Supabase client for realtime ──
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
 
 const filters = ["All", "Payments", "Reminders", "Withdrawals", "AI", "Reports"];
 
+function getIcon(type) {
+  if (!type) return Bell;
+  const t = type.toLowerCase();
+  if (t.includes("payment") || t.includes("contribution")) return CreditCard;
+  if (t.includes("withdraw")) return WalletCards;
+  if (t.includes("report")) return FileText;
+  if (t.includes("reminder")) return Send;
+  if (t.includes("ai") || t.includes("insight")) return Sparkles;
+  if (t.includes("fail") || t.includes("error")) return AlertCircle;
+  return Bell;
+}
+
+function getStatus(notification) {
+  if (!notification.type) return "Info";
+  const t = notification.type.toLowerCase();
+  if (t.includes("fail") || t.includes("error")) return "Failed";
+  if (t.includes("success") || t.includes("payment") || t.includes("contribution")) return "Success";
+  if (t.includes("withdraw")) return "Completed";
+  if (t.includes("reminder")) return "Sent";
+  if (t.includes("ai") || t.includes("insight")) return "Insight";
+  if (t.includes("report")) return "Ready";
+  return "Info";
+}
+
+function getStatusClass(status) {
+  if (["Success", "Completed", "Ready", "Sent"].includes(status)) return "success";
+  if (status === "Failed") return "failed";
+  return "insight";
+}
+
+function formatTimeAgo(value) {
+  if (!value) return "Recently";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Recently";
+  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (seconds < 60) return "Just now";
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes} min${minutes > 1 ? "s" : ""} ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+  const days = Math.floor(hours / 24);
+  return `${days} day${days > 1 ? "s" : ""} ago`;
+}
+
 function Notifications() {
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeFilter, setActiveFilter] = useState("All");
+  const [search, setSearch] = useState("");
+  const [markingRead, setMarkingRead] = useState(false);
+  const channelRef = useRef(null);
+
+  const currentUser = getUser();
+
+  const unreadCount = notifications.filter((n) => !n.is_read).length;
+
+  const filteredNotifications = notifications.filter((n) => {
+    const matchesFilter =
+      activeFilter === "All" ||
+      (activeFilter === "Payments" && n.type?.toLowerCase().includes("payment")) ||
+      (activeFilter === "Reminders" && n.type?.toLowerCase().includes("reminder")) ||
+      (activeFilter === "Withdrawals" && n.type?.toLowerCase().includes("withdraw")) ||
+      (activeFilter === "AI" && n.type?.toLowerCase().includes("ai")) ||
+      (activeFilter === "Reports" && n.type?.toLowerCase().includes("report"));
+
+    const matchesSearch =
+      !search ||
+      n.title?.toLowerCase().includes(search.toLowerCase()) ||
+      n.message?.toLowerCase().includes(search.toLowerCase());
+
+    return matchesFilter && matchesSearch;
+  });
+
+  async function loadNotifications() {
+    setLoading(true);
+    const result = await getNotifications();
+    if (result.success) {
+      setNotifications(result.notifications || []);
+    }
+    setLoading(false);
+  }
+
+  // ── SUPABASE REALTIME ──
+  useEffect(() => {
+    loadNotifications();
+
+    if (!currentUser?.id) return;
+
+    // Subscribe to new notifications for this user
+    const channel = supabase
+      .channel("notifications-realtime")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "notifications",
+          filter: `user_id=eq.${currentUser.id}`,
+        },
+        (payload) => {
+          // New notification arrives — add to top instantly
+          setNotifications((prev) => [payload.new, ...prev]);
+        }
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "notifications",
+          filter: `user_id=eq.${currentUser.id}`,
+        },
+        (payload) => {
+          // Update existing notification (e.g. marked as read)
+          setNotifications((prev) =>
+            prev.map((n) => (n.id === payload.new.id ? payload.new : n))
+          );
+        }
+      )
+      .subscribe();
+
+    channelRef.current = channel;
+
+    return () => {
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current);
+      }
+    };
+  }, [currentUser?.id]);
+
+  async function handleMarkAllRead() {
+    if (markingRead) return;
+    setMarkingRead(true);
+    const result = await markAllNotificationsRead();
+    if (result.success) {
+      setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
+    }
+    setMarkingRead(false);
+  }
+
+  async function handleMarkRead(id) {
+    await markNotificationRead(id);
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, is_read: true } : n))
+    );
+  }
+
   return (
     <main className="notifications-page">
       <AppSidebar active="notifications" />
@@ -116,7 +193,12 @@ function Notifications() {
         <header className="notifications-topbar">
           <div>
             <span>Notifications Center</span>
-            <h1>Financial activity feed</h1>
+            <h1>
+              Financial activity feed
+              {unreadCount > 0 && (
+                <span className="notifications-unread-badge">{unreadCount}</span>
+              )}
+            </h1>
             <p>
               Stay updated on every payment, reminder, withdrawal, report and AI
               insight across your event fundraising flow.
@@ -124,14 +206,18 @@ function Notifications() {
           </div>
 
           <div className="notifications-top-actions">
-            <button>
+            <button onClick={loadNotifications}>
               <RefreshCcw size={18} />
               Refresh
             </button>
 
-            <button className="red">
+            <button
+              className="red"
+              onClick={handleMarkAllRead}
+              disabled={markingRead || unreadCount === 0}
+            >
               <CheckCircle2 size={18} />
-              Mark All Read
+              {markingRead ? "Marking..." : "Mark All Read"}
             </button>
           </div>
         </header>
@@ -166,31 +252,54 @@ function Notifications() {
 
           <div className="notifications-hero-card">
             <Sparkles size={28} />
-            <span>AI Notification Insight</span>
-            <strong>Activity is 34% higher than yesterday.</strong>
+            <span>Live Notification Feed</span>
+            <strong>
+              {unreadCount > 0
+                ? `${unreadCount} unread notification${unreadCount > 1 ? "s" : ""}`
+                : "You're all caught up!"}
+            </strong>
             <p>
-              Best next action: send another reminder around 7:15 PM while your
-              audience is active.
+              {unreadCount > 0
+                ? "Review your latest activity below."
+                : "No new notifications at the moment."}
             </p>
           </div>
         </section>
 
         <section className="notifications-stats-grid">
-          {notificationStats.map((item) => {
-            const Icon = item.icon;
-
-            return (
-              <div className="notifications-stat-card" key={item.title}>
-                <div className="notifications-stat-icon">
-                  <Icon size={20} />
-                </div>
-
-                <span>{item.title}</span>
-                <strong>{item.value}</strong>
-                <p>{item.note}</p>
-              </div>
-            );
-          })}
+          <div className="notifications-stat-card">
+            <div className="notifications-stat-icon"><BellRing size={20} /></div>
+            <span>Unread Alerts</span>
+            <strong>{unreadCount}</strong>
+            <p>Needs review</p>
+          </div>
+          <div className="notifications-stat-card">
+            <div className="notifications-stat-icon"><Clock size={20} /></div>
+            <span>Total</span>
+            <strong>{notifications.length}</strong>
+            <p>All notifications</p>
+          </div>
+          <div className="notifications-stat-card">
+            <div className="notifications-stat-icon"><CreditCard size={20} /></div>
+            <span>Payments</span>
+            <strong>
+              {notifications.filter((n) =>
+                n.type?.toLowerCase().includes("payment") ||
+                n.type?.toLowerCase().includes("contribution")
+              ).length}
+            </strong>
+            <p>Payment alerts</p>
+          </div>
+          <div className="notifications-stat-card">
+            <div className="notifications-stat-icon"><Sparkles size={20} /></div>
+            <span>AI Alerts</span>
+            <strong>
+              {notifications.filter((n) =>
+                n.type?.toLowerCase().includes("ai")
+              ).length}
+            </strong>
+            <p>Smart recommendations</p>
+          </div>
         </section>
 
         <section className="notifications-content-grid">
@@ -198,7 +307,11 @@ function Notifications() {
             <div className="notifications-toolbar">
               <div className="notifications-search">
                 <Search size={18} />
-                <input placeholder="Search payments, names, reports, alerts..." />
+                <input
+                  placeholder="Search payments, names, reports, alerts..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
               </div>
 
               <button>
@@ -208,8 +321,12 @@ function Notifications() {
             </div>
 
             <div className="notification-filter-row">
-              {filters.map((filter, index) => (
-                <button className={index === 0 ? "active" : ""} key={filter}>
+              {filters.map((filter) => (
+                <button
+                  className={activeFilter === filter ? "active" : ""}
+                  key={filter}
+                  onClick={() => setActiveFilter(filter)}
+                >
                   {filter}
                 </button>
               ))}
@@ -218,58 +335,92 @@ function Notifications() {
             <div className="notifications-panel-heading">
               <div>
                 <span>Notification Timeline</span>
-                <h3>Happening now</h3>
+                <h3>
+                  {loading
+                    ? "Loading..."
+                    : `${filteredNotifications.length} notification${filteredNotifications.length !== 1 ? "s" : ""}`}
+                </h3>
               </div>
               <Bell size={22} />
             </div>
 
             <div className="notifications-timeline">
-              {notifications.map((item) => {
-                const Icon = item.icon;
+              {loading && (
+                <div className="notification-item">
+                  <div className="notification-content">
+                    <p>Loading notifications...</p>
+                  </div>
+                </div>
+              )}
 
-                return (
-                  <div className="notification-item" key={item.title}>
-                    <div className="notification-icon">
-                      <Icon size={20} />
+              {!loading && filteredNotifications.length === 0 && (
+                <div className="notification-item">
+                  <div className="notification-icon">
+                    <Bell size={20} />
+                  </div>
+                  <div className="notification-content">
+                    <div className="notification-title-row">
+                      <div>
+                        <span>System</span>
+                        <h4>No notifications yet</h4>
+                      </div>
                     </div>
+                    <p>When someone contributes to your event, you'll see it here instantly.</p>
+                  </div>
+                </div>
+              )}
 
-                    <div className="notification-content">
-                      <div className="notification-title-row">
-                        <div>
-                          <span>{item.type}</span>
-                          <h4>{item.title}</h4>
+              {!loading &&
+                filteredNotifications.map((item) => {
+                  const Icon = getIcon(item.type);
+                  const status = getStatus(item);
+
+                  return (
+                    <div
+                      className={`notification-item ${!item.is_read ? "unread" : ""}`}
+                      key={item.id}
+                      onClick={() => !item.is_read && handleMarkRead(item.id)}
+                      style={{ cursor: !item.is_read ? "pointer" : "default" }}
+                    >
+                      <div className="notification-icon">
+                        <Icon size={20} />
+                      </div>
+
+                      <div className="notification-content">
+                        <div className="notification-title-row">
+                          <div>
+                            <span>{item.type || "Notification"}</span>
+                            <h4>{item.title}</h4>
+                          </div>
+
+                          <small className={getStatusClass(status)}>
+                            {status}
+                          </small>
                         </div>
 
-                        <small
-                          className={
-                            item.status === "Success" ||
-                            item.status === "Completed" ||
-                            item.status === "Ready" ||
-                            item.status === "Sent"
-                              ? "success"
-                              : item.status === "Failed"
-                              ? "failed"
-                              : "insight"
-                          }
-                        >
-                          {item.status}
-                        </small>
+                        <p>{item.message}</p>
+
+                        <div className="notification-footer">
+                          <time>{formatTimeAgo(item.created_at)}</time>
+
+                          {!item.is_read && (
+                            <button onClick={(e) => {
+                              e.stopPropagation();
+                              handleMarkRead(item.id);
+                            }}>
+                              Mark Read
+                              <ArrowRight size={15} />
+                            </button>
+                          )}
+                        </div>
                       </div>
 
-                      <p>{item.description}</p>
-
-                      <div className="notification-footer">
-                        <time>{item.time}</time>
-
-                        <button>
-                          View Details
-                          <ArrowRight size={15} />
-                        </button>
-                      </div>
+                      {!item.is_read && (
+                        <div className="notification-unread-dot" />
+                      )}
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
           </div>
 
@@ -277,21 +428,27 @@ function Notifications() {
             <div className="notifications-panel ai-alert-panel">
               <span className="notifications-badge dark">
                 <Sparkles size={16} />
-                AI Alert
+                Live Status
               </span>
 
-              <h3>Send a reminder before 9PM.</h3>
+              <h3>
+                {unreadCount > 0
+                  ? `You have ${unreadCount} unread notification${unreadCount > 1 ? "s" : ""}.`
+                  : "You're all caught up!"}
+              </h3>
 
               <p>
-                47 people viewed your event but have not contributed yet. Based
-                on current patterns, this reminder could generate up to RWF
-                420,000 tonight.
+                {unreadCount > 0
+                  ? "Review your notifications and take action on pending payments or reminders."
+                  : "New notifications will appear here instantly when someone contributes to your event."}
               </p>
 
-              <button>
-                Send Smart Reminder
-                <ArrowRight size={17} />
-              </button>
+              {unreadCount > 0 && (
+                <button onClick={handleMarkAllRead} disabled={markingRead}>
+                  {markingRead ? "Marking..." : "Mark All Read"}
+                  <ArrowRight size={17} />
+                </button>
+              )}
             </div>
 
             <div className="notifications-panel">
@@ -304,7 +461,7 @@ function Notifications() {
               </div>
 
               <div className="notification-actions-grid">
-                <button>
+                <button onClick={handleMarkAllRead} disabled={markingRead}>
                   <CheckCircle2 size={18} />
                   Mark All Read
                 </button>
@@ -343,7 +500,7 @@ function Notifications() {
 
                 <p>
                   <CheckCircle2 size={16} />
-                  Reminder tracking active
+                  Realtime notifications active
                 </p>
 
                 <p>
