@@ -28,8 +28,12 @@ import {
   getEvent,
   getEventComments,
   getEventContributions,
+  getEventLikes,
+  likeEvent,
+  unlikeEvent,
 } from "../api/api";
 
+import { useAuth } from "../context/AuthContext";
 import EventProgress from "../components/events/EventProgress";
 import "./EventDetails.css";
 
@@ -112,6 +116,7 @@ function normalizeEvent(event) {
 
 function EventDetails() {
   const { id } = useParams();
+  const { isAuthenticated } = useAuth();
 
   const [event, setEvent] = useState(null);
   const [contributors, setContributors] = useState([]);
@@ -132,6 +137,11 @@ function EventDetails() {
   // ── QR STATE ──
   const [showQR, setShowQR] = useState(false);
   const qrRef = useRef(null);
+
+  // ── LIKE STATE ──
+  const [liked, setLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState(0);
+  const [likeLoading, setLikeLoading] = useState(false);
 
   const normalizedEvent = useMemo(() => {
     if (!event) return null;
@@ -167,6 +177,13 @@ function EventDetails() {
         setComments(commentsResult.comments || []);
       }
 
+      // ── Load likes ──
+      const likesResult = await getEventLikes(id);
+      if (likesResult.success) {
+        setLikesCount(likesResult.likes || 0);
+        setLiked(likesResult.liked || false);
+      }
+
       setLoading(false);
     }
 
@@ -190,6 +207,35 @@ function EventDetails() {
     }
 
     setCommentLoading(false);
+  }
+
+  // ── LIKE HANDLER ──
+  async function handleLike() {
+    if (!isAuthenticated) {
+      window.location.href = "/login";
+      return;
+    }
+
+    if (likeLoading) return;
+    setLikeLoading(true);
+
+    if (liked) {
+      // Unlike
+      const result = await unlikeEvent(id);
+      if (result.success) {
+        setLiked(false);
+        setLikesCount((prev) => Math.max(0, prev - 1));
+      }
+    } else {
+      // Like
+      const result = await likeEvent(id);
+      if (result.success) {
+        setLiked(true);
+        setLikesCount((prev) => prev + 1);
+      }
+    }
+
+    setLikeLoading(false);
   }
 
   // ── SHARE HANDLER ──
@@ -369,18 +415,35 @@ function EventDetails() {
             </div>
 
             <div className="event-share-actions">
-              <button type="button">
-                <Heart size={17} />
-                Save
+              {/* ── LIKE BUTTON ── */}
+              <button
+                type="button"
+                onClick={handleLike}
+                disabled={likeLoading}
+                className={liked ? "liked" : ""}
+                style={{
+                  color: liked ? "#E50914" : undefined,
+                  borderColor: liked ? "#E50914" : undefined,
+                }}
+              >
+                <Heart
+                  size={17}
+                  fill={liked ? "#E50914" : "none"}
+                  color={liked ? "#E50914" : "currentColor"}
+                />
+                {likesCount > 0 ? likesCount : "Save"}
               </button>
+
               <button type="button" onClick={handleShare}>
                 <Share2 size={17} />
                 Share
               </button>
+
               <button type="button" onClick={handleCopyLink}>
                 {copied ? <Check size={17} /> : <Copy size={17} />}
                 {copied ? "Copied!" : "Copy Link"}
               </button>
+
               <button type="button" onClick={() => setShowQR(true)}>
                 <QrCode size={17} />
                 QR Code
@@ -580,13 +643,17 @@ function EventDetails() {
           <Heart size={18} />
           Contribute
         </Link>
-        <button type="button">
-          <Zap size={18} />
-          Live Feed
+        <button type="button" onClick={handleLike} disabled={likeLoading}>
+          <Heart
+            size={18}
+            fill={liked ? "#E50914" : "none"}
+            color={liked ? "#E50914" : "currentColor"}
+          />
+          {liked ? `Liked ${likesCount}` : "Like"}
         </button>
         <button type="button" onClick={handleShare}>
           <Share2 size={18} />
-          {copied ? "Copied!" : "Share"}
+          Share
         </button>
         <button type="button" onClick={() => setShowQR(true)}>
           <QrCode size={18} />

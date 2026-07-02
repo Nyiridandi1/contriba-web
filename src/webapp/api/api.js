@@ -122,6 +122,15 @@ export const updateEvent = (id, eventData) =>
 export const deleteEvent = (id) =>
   apiCall(`/api/events/${id}`, "DELETE");
 
+export const likeEvent = (id) =>
+  apiCall(`/api/events/${id}/like`, "POST");
+
+export const unlikeEvent = (id) =>
+  apiCall(`/api/events/${id}/like`, "DELETE");
+
+export const getEventLikes = (id) =>
+  apiCall(`/api/events/${id}/likes`);
+
 /* =========================
    CONTRIBUTIONS
 ========================= */
