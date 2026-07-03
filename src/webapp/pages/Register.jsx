@@ -1,19 +1,17 @@
 import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
-  CheckCircle2,
   Eye,
   EyeOff,
   Lock,
+  Mail,
   Phone,
-  ShieldAlert,
   User,
   UserPlus,
 } from "lucide-react";
 
 import { useState } from "react";
-
-import { useAuth } from "../context/AuthContext";
+import { sendOTP } from "../api/api";
 
 import AuthLayout from "../layout/AuthLayout";
 import logoIcon from "../../assets/logo-icon.png";
@@ -23,10 +21,10 @@ import "./Register.css";
 
 function Register() {
   const navigate = useNavigate();
-  const { register } = useAuth();
 
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [pin, setPin] = useState("");
   const [confirmPin, setConfirmPin] = useState("");
 
@@ -36,16 +34,12 @@ function Register() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // ── SUCCESS MODAL STATE ──
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [registeredName, setRegisteredName] = useState("");
-  const [registeredPin, setRegisteredPin] = useState("");
-
   const cleanPhone = phone.replace(/[^\d]/g, "");
 
   const canSubmit =
     fullName.trim().length >= 3 &&
     cleanPhone.length >= 9 &&
+    email.includes("@") &&
     pin.length >= 4 &&
     confirmPin.length >= 4 &&
     pin === confirmPin &&
@@ -65,6 +59,11 @@ function Register() {
       return;
     }
 
+    if (!email.includes("@")) {
+      setMessage("Please enter a valid email address.");
+      return;
+    }
+
     if (pin.length < 4) {
       setMessage("PIN must contain at least 4 digits.");
       return;
@@ -77,208 +76,150 @@ function Register() {
 
     setLoading(true);
 
-    const result = await register(fullName.trim(), cleanPhone, pin);
+    // Send OTP to email
+    const result = await sendOTP(fullName.trim(), cleanPhone, email.trim());
 
     setLoading(false);
 
     if (!result.success) {
-      setMessage(result.message || "Registration failed.");
+      setMessage(result.message || "Failed to send verification code.");
       return;
     }
 
-    // ── Show success modal ──
-    setRegisteredName(fullName.trim().split(" ")[0]);
-    setRegisteredPin(pin);
-    setShowSuccess(true);
-  }
-
-  function handleContinue() {
-    setShowSuccess(false);
-    navigate("/home");
+    // Navigate to OTP screen with all data
+    navigate("/otp", {
+      state: {
+        name: fullName.trim(),
+        phone: cleanPhone,
+        email: email.trim(),
+        pin,
+      },
+    });
   }
 
   return (
-    <>
-      {/* ── SUCCESS MODAL ── */}
-      {showSuccess && (
-        <div className="register-success-overlay">
-          <div className="register-success-modal">
+    <AuthLayout>
+      <div className="auth-intro">
+        <Link to="/" className="auth-back" aria-label="Back to home">
+          <ArrowLeft size={20} />
+        </Link>
 
-            {/* Dark header with Contriba branding */}
-            <div className="register-success-header">
-              <div className="register-success-brand">
-                <img src={logoIcon} alt="Contriba" />
-                <span>Contriba</span>
-              </div>
+        <img src={logoIcon} alt="Contriba" className="auth-logo-icon" />
 
-              <div className="register-success-check">
-                <CheckCircle2 size={32} color="#16a34a" />
-              </div>
+        <h1>
+          Create
+          <br />
+          Account
+        </h1>
 
-              <h2>Account Created Successfully</h2>
-              <p>
-                Welcome to Contriba, <strong>{registeredName}</strong>.
-                Your organizer account is ready.
-              </p>
-            </div>
+        <p>
+          Start collecting event contributions beautifully,
+          securely and easily.
+        </p>
+      </div>
 
-            {/* Body */}
-            <div className="register-success-body">
+      <div className="auth-form-card register-card">
+        <span className="auth-mini-label">Create Account</span>
+        <h2>Create your account</h2>
 
-              {/* PIN Warning */}
-              <div className="register-pin-warning">
-                <div className="register-pin-warning-header">
-                  <ShieldAlert size={18} color="#E50914" />
-                  <strong>Save Your PIN — No Recovery Option</strong>
-                </div>
-                <p>
-                  Your PIN is <strong>{registeredPin}</strong>. Contriba has
-                  <strong> no OTP, no email reset</strong> and no way to
-                  recover a forgotten PIN.
-                </p>
-                <div className="register-pin-tips">
-                  <p>+ Write it down somewhere safe</p>
-                  <p>+ Save it in your phone notes</p>
-                  <p>+ Tell a trusted person</p>
-                  <p>- Never share with anyone</p>
-                </div>
-              </div>
-
-              {/* PIN Display */}
-              <div className="register-pin-display">
-                <span>Your PIN</span>
-                <strong>{registeredPin}</strong>
-              </div>
-
-              {/* Continue button */}
-              <button
-                type="button"
-                className="register-continue-btn"
-                onClick={handleContinue}
-              >
-                I have saved my PIN — Continue
-              </button>
-
-              <p className="register-success-note">
-                You will need this PIN every time you log in to Contriba.
-              </p>
-            </div>
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <label>Full Name *</label>
+          <div className="auth-input">
+            <User size={20} />
+            <input
+              type="text"
+              placeholder="Enter your full name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+            />
           </div>
-        </div>
-      )}
 
-      <AuthLayout>
-        <div className="auth-intro">
-          <Link to="/" className="auth-back" aria-label="Back to home">
-            <ArrowLeft size={20} />
-          </Link>
+          <label>Phone Number *</label>
+          <div className="auth-input">
+            <Phone size={20} />
+            <span className="auth-country">+250</span>
+            <input
+              type="tel"
+              placeholder="781 234 567"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+          </div>
 
-          <img src={logoIcon} alt="Contriba" className="auth-logo-icon" />
+          <label>Email Address *</label>
+          <div className="auth-input">
+            <Mail size={20} />
+            <input
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
 
-          <h1>
-            Create
-            <br />
-            Account
-          </h1>
+          <div className="auth-pin-note">
+            <Lock size={16} />
+            Create a secure 4-digit PIN. You cannot recover it if lost.
+          </div>
 
-          <p>
-            Start collecting event contributions beautifully,
-            securely and easily.
-          </p>
-        </div>
-
-        <div className="auth-form-card register-card">
-          <span className="auth-mini-label">Create Account</span>
-          <h2>Create your account</h2>
-
-          <form className="auth-form" onSubmit={handleSubmit}>
-            <label>Full Name *</label>
-            <div className="auth-input">
-              <User size={20} />
-              <input
-                type="text"
-                placeholder="Enter your full name"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-              />
-            </div>
-
-            <label>Phone Number *</label>
-            <div className="auth-input">
-              <Phone size={20} />
-              <span className="auth-country">+250</span>
-              <input
-                type="tel"
-                placeholder="781 234 567"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </div>
-
-            <div className="auth-pin-note">
-              <Lock size={16} />
-              Create a secure 4-digit PIN. You cannot recover it if lost.
-            </div>
-
-            <label>Create PIN *</label>
-            <div className="auth-input">
-              <Lock size={20} />
-              <input
-                type={showPin ? "text" : "password"}
-                placeholder="••••"
-                value={pin}
-                maxLength={6}
-                onChange={(e) => setPin(e.target.value)}
-              />
-              <button
-                type="button"
-                className="auth-eye-button"
-                onClick={() => setShowPin(!showPin)}
-              >
-                {showPin ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
-            </div>
-
-            <label>Confirm PIN *</label>
-            <div className="auth-input">
-              <Lock size={20} />
-              <input
-                type={showConfirmPin ? "text" : "password"}
-                placeholder="••••"
-                value={confirmPin}
-                maxLength={6}
-                onChange={(e) => setConfirmPin(e.target.value)}
-              />
-              <button
-                type="button"
-                className="auth-eye-button"
-                onClick={() => setShowConfirmPin(!showConfirmPin)}
-              >
-                {showConfirmPin ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
-            </div>
-
-            {message && (
-              <p className="auth-message">{message}</p>
-            )}
-
+          <label>Create PIN *</label>
+          <div className="auth-input">
+            <Lock size={20} />
+            <input
+              type={showPin ? "text" : "password"}
+              placeholder="••••"
+              value={pin}
+              maxLength={6}
+              onChange={(e) => setPin(e.target.value)}
+            />
             <button
-              type="submit"
-              className="auth-submit"
-              disabled={!canSubmit}
+              type="button"
+              className="auth-eye-button"
+              onClick={() => setShowPin(!showPin)}
             >
-              <UserPlus size={20} />
-              {loading ? "Creating Account..." : "Create Account"}
+              {showPin ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
+          </div>
 
-            <p className="auth-switch">
-              Already have an account?
-              <Link to="/login">Login</Link>
-            </p>
-          </form>
-        </div>
-      </AuthLayout>
-    </>
+          <label>Confirm PIN *</label>
+          <div className="auth-input">
+            <Lock size={20} />
+            <input
+              type={showConfirmPin ? "text" : "password"}
+              placeholder="••••"
+              value={confirmPin}
+              maxLength={6}
+              onChange={(e) => setConfirmPin(e.target.value)}
+            />
+            <button
+              type="button"
+              className="auth-eye-button"
+              onClick={() => setShowConfirmPin(!showConfirmPin)}
+            >
+              {showConfirmPin ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+
+          {message && (
+            <p className="auth-message">{message}</p>
+          )}
+
+          <button
+            type="submit"
+            className="auth-submit"
+            disabled={!canSubmit}
+          >
+            <UserPlus size={20} />
+            {loading ? "Sending verification code..." : "Continue"}
+          </button>
+
+          <p className="auth-switch">
+            Already have an account?
+            <Link to="/login">Login</Link>
+          </p>
+        </form>
+      </div>
+    </AuthLayout>
   );
 }
 

@@ -1,13 +1,16 @@
-import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
-  ArrowRight,
   CheckCircle2,
-  LockKeyhole,
+  Mail,
   RefreshCcw,
+  ShieldAlert,
   ShieldCheck,
 } from "lucide-react";
+
+import { useEffect, useRef, useState } from "react";
+import { useAuth } from "../context/AuthContext";
+import { sendOTP, verifyOTP } from "../api/api";
 
 import AuthLayout from "../layout/AuthLayout";
 import logoIcon from "../../assets/logo-icon.png";
@@ -17,188 +20,300 @@ import "./Otp.css";
 
 function Otp() {
   const navigate = useNavigate();
-  const inputRefs = useRef([]);
+  const location = useLocation();
+  const { login } = useAuth();
+
+  // Get data passed from Register
+  const { name, phone, email, pin } = location.state || {};
 
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const [seconds, setSeconds] = useState(119);
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("error");
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(60);
+  const [canResend, setCanResend] = useState(false);
 
-  const otpCode = otp.join("");
-  const canVerify = otpCode.length === 6;
+  // ── Success modal state ──
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [registeredName, setRegisteredName] = useState("");
+  const [registeredPin, setRegisteredPin] = useState("");
 
+  const inputRefs = useRef([]);
+
+  // Redirect if no state
   useEffect(() => {
-    if (seconds <= 0) return;
+    if (!email || !phone || !pin) {
+      navigate("/register");
+    }
+  }, [email, phone, pin, navigate]);
 
-    const timer = setInterval(() => {
-      setSeconds((current) => current - 1);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [seconds]);
-
-  function formatTime(value) {
-    const minutes = Math.floor(value / 60);
-    const remainingSeconds = value % 60;
-
-    return `${String(minutes).padStart(2, "0")}:${String(
-      remainingSeconds
-    ).padStart(2, "0")}`;
-  }
-
-  function handleChange(index, value) {
-    const digit = value.replace(/\D/g, "");
-
-    if (!digit) {
-      const updatedOtp = [...otp];
-      updatedOtp[index] = "";
-      setOtp(updatedOtp);
+  // Countdown timer for resend
+  useEffect(() => {
+    if (resendCooldown <= 0) {
+      setCanResend(true);
       return;
     }
+    const timer = setTimeout(() => setResendCooldown(c => c - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [resendCooldown]);
 
-    const updatedOtp = [...otp];
-    updatedOtp[index] = digit.slice(-1);
-    setOtp(updatedOtp);
+  function handleOtpChange(index, value) {
+    // Only allow digits
+    if (value && !/^\d$/.test(value)) return;
 
-    if (index < 5) {
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    // Auto focus next input
+    if (value && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
   }
 
-  function handleKeyDown(index, event) {
-    if (event.key === "Backspace" && !otp[index] && index > 0) {
+  function handleKeyDown(index, e) {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
   }
 
-  function handlePaste(event) {
-    event.preventDefault();
-
-    const pastedCode = event.clipboardData
-      .getData("text")
-      .replace(/\D/g, "")
-      .slice(0, 6);
-
-    if (!pastedCode) return;
-
-    const updatedOtp = ["", "", "", "", "", ""];
-
-    pastedCode.split("").forEach((digit, index) => {
-      updatedOtp[index] = digit;
+  function handlePaste(e) {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    const newOtp = [...otp];
+    pasted.split("").forEach((digit, i) => {
+      if (i < 6) newOtp[i] = digit;
     });
-
-    setOtp(updatedOtp);
-
-    const nextIndex = pastedCode.length >= 6 ? 5 : pastedCode.length;
-    inputRefs.current[nextIndex]?.focus();
+    setOtp(newOtp);
+    // Focus last filled input
+    const lastIndex = Math.min(pasted.length, 5);
+    inputRefs.current[lastIndex]?.focus();
   }
 
-  function handleResend() {
-    setSeconds(119);
-    setOtp(["", "", "", "", "", ""]);
-    setMessage("A new verification code has been sent.");
-    inputRefs.current[0]?.focus();
-  }
+  const otpValue = otp.join("");
+  const isComplete = otpValue.length === 6;
 
-  function handleSubmit(event) {
-    event.preventDefault();
+  async function handleVerify() {
+    if (!isComplete) return;
+    setLoading(true);
     setMessage("");
 
-    if (!canVerify) {
-      setMessage("Please enter the 6-digit verification code.");
+    const result = await verifyOTP(email, otpValue, name, phone, pin);
+
+    setLoading(false);
+
+    if (!result.success) {
+      setMessage(result.message || "Invalid code. Please try again.");
+      setMessageType("error");
+      // Clear OTP inputs
+      setOtp(["", "", "", "", "", ""]);
+      inputRefs.current[0]?.focus();
       return;
     }
 
-    // Temporary frontend flow
-    // OTP verification will be connected here.
-    navigate("/success");
+    // Save session
+    if (login) {
+      await login(phone, pin);
+    }
+
+    // Show success modal
+    setRegisteredName(name?.split(" ")[0] || "there");
+    setRegisteredPin(pin);
+    setShowSuccess(true);
   }
 
+  async function handleResend() {
+    if (!canResend || resendLoading) return;
+    setResendLoading(true);
+    setMessage("");
+
+    const result = await sendOTP(name, phone, email);
+
+    setResendLoading(false);
+
+    if (!result.success) {
+      setMessage(result.message || "Failed to resend code.");
+      setMessageType("error");
+      return;
+    }
+
+    setMessage("New verification code sent to your email!");
+    setMessageType("success");
+    setOtp(["", "", "", "", "", ""]);
+    inputRefs.current[0]?.focus();
+    setResendCooldown(60);
+    setCanResend(false);
+  }
+
+  function handleContinue() {
+    setShowSuccess(false);
+    navigate("/home");
+  }
+
+  if (!email) return null;
+
   return (
-    <AuthLayout>
-      <div className="auth-intro">
-        <Link to="/register" className="auth-back" aria-label="Back to register">
-          <ArrowLeft size={20} />
-        </Link>
+    <>
+      {/* ── SUCCESS MODAL ── */}
+      {showSuccess && (
+        <div className="register-success-overlay">
+          <div className="register-success-modal">
+            <div className="register-success-header">
+              <div className="register-success-brand">
+                <img src={logoIcon} alt="Contriba" />
+                <span>Contriba</span>
+              </div>
 
-        <img src={logoIcon} alt="Contriba" className="auth-logo-icon" />
+              <div className="register-success-check">
+                <CheckCircle2 size={32} color="#16a34a" />
+              </div>
 
-        <h1>
-          Verify
-          <br />
-          Phone
-        </h1>
+              <h2>Account Created Successfully</h2>
+              <p>
+                Welcome to Contriba, <strong>{registeredName}</strong>.
+                Your organizer account is ready.
+              </p>
+            </div>
 
-        <p>
-          Enter the secure code sent to your phone number to protect your
-          Contriba account.
-        </p>
-      </div>
+            <div className="register-success-body">
+              <div className="register-pin-warning">
+                <div className="register-pin-warning-header">
+                  <ShieldAlert size={18} color="#E50914" />
+                  <strong>Save Your PIN — No Recovery Option</strong>
+                </div>
+                <p>
+                  Your PIN is <strong>{registeredPin}</strong>. Contriba has
+                  <strong> no OTP, no email reset</strong> and no way to
+                  recover a forgotten PIN.
+                </p>
+                <div className="register-pin-tips">
+                  <p>+ Write it down somewhere safe</p>
+                  <p>+ Save it in your phone notes</p>
+                  <p>+ Tell a trusted person</p>
+                  <p>- Never share with anyone</p>
+                </div>
+              </div>
 
-      <div className="auth-form-card otp-card">
-        <span className="auth-mini-label">Phone Verification</span>
+              <div className="register-pin-display">
+                <span>Your PIN</span>
+                <strong>{registeredPin}</strong>
+              </div>
 
-        <h2>Enter OTP code</h2>
+              <button
+                type="button"
+                className="register-continue-btn"
+                onClick={handleContinue}
+              >
+                I have saved my PIN — Continue
+              </button>
 
-        <p className="otp-subtitle">
-          We sent a 6-digit code to your phone number.
-        </p>
+              <p className="register-success-note">
+                You will need this PIN every time you log in to Contriba.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
-        <form onSubmit={handleSubmit} className="auth-form otp-form">
-          <div className="otp-icon-box">
-            <ShieldCheck size={24} />
+      <AuthLayout>
+        <div className="auth-intro">
+          <Link to="/register" className="auth-back" aria-label="Back">
+            <ArrowLeft size={20} />
+          </Link>
+
+          <img src={logoIcon} alt="Contriba" className="auth-logo-icon" />
+
+          <h1>
+            Verify
+            <br />
+            Email
+          </h1>
+
+          <p>
+            Enter the 6-digit code sent to your email to complete registration.
+          </p>
+        </div>
+
+        <div className="auth-form-card">
+          <span className="auth-mini-label">Email Verification</span>
+          <h2>Check your email</h2>
+
+          {/* Email info */}
+          <div className="otp-email-info">
+            <Mail size={18} />
+            <div>
+              <p>Code sent to</p>
+              <strong>{email}</strong>
+            </div>
           </div>
 
-          <div className="otp-inputs" onPaste={handlePaste}>
+          {/* OTP inputs */}
+          <div className="otp-inputs">
             {otp.map((digit, index) => (
               <input
                 key={index}
-                ref={(element) => {
-                  inputRefs.current[index] = element;
-                }}
+                ref={(el) => (inputRefs.current[index] = el)}
                 type="text"
                 inputMode="numeric"
-                maxLength="1"
+                maxLength={1}
                 value={digit}
-                onChange={(event) => handleChange(index, event.target.value)}
-                onKeyDown={(event) => handleKeyDown(index, event)}
-                aria-label={`OTP digit ${index + 1}`}
+                onChange={(e) => handleOtpChange(index, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(index, e)}
+                onPaste={handlePaste}
+                className={`otp-input ${digit ? "filled" : ""}`}
+                autoFocus={index === 0}
               />
             ))}
           </div>
 
-          <div className="otp-timer-row">
-            <div className="otp-timer">
-              <LockKeyhole size={15} />
-              Code expires in <strong>{formatTime(seconds)}</strong>
+          {/* Message */}
+          {message && (
+            <div className={`otp-message ${messageType}`}>
+              {messageType === "success" ? (
+                <ShieldCheck size={16} />
+              ) : (
+                <ShieldAlert size={16} />
+              )}
+              {message}
             </div>
+          )}
 
+          {/* Verify button */}
+          <button
+            type="button"
+            className="auth-submit"
+            onClick={handleVerify}
+            disabled={!isComplete || loading}
+          >
+            {loading ? "Verifying..." : "Verify & Create Account"}
+          </button>
+
+          {/* Resend */}
+          <div className="otp-resend">
+            <p>Didn't receive the code?</p>
             <button
               type="button"
-              className="otp-resend"
               onClick={handleResend}
-              disabled={seconds > 0}
+              disabled={!canResend || resendLoading}
+              className={canResend ? "active" : ""}
             >
-              <RefreshCcw size={15} />
-              Resend
+              <RefreshCcw size={14} />
+              {resendLoading
+                ? "Sending..."
+                : canResend
+                ? "Resend code"
+                : `Resend in ${resendCooldown}s`}
             </button>
           </div>
 
-          {message && <p className="auth-message">{message}</p>}
-
-          <button type="submit" className="auth-submit" disabled={!canVerify}>
-            <CheckCircle2 size={20} />
-            Verify Code
-          </button>
-
           <p className="auth-switch">
-            Wrong number?
-            <Link to="/register">
-              Edit phone <ArrowRight size={14} />
-            </Link>
+            Wrong details?
+            <Link to="/register">Go back</Link>
           </p>
-        </form>
-      </div>
-    </AuthLayout>
+        </div>
+      </AuthLayout>
+    </>
   );
 }
 

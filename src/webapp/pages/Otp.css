@@ -1,140 +1,148 @@
-/* =========================================
-   CONTRIBA OTP PAGE
-========================================= */
-
-.otp-card {
-  max-width: 500px;
+/* ── OTP EMAIL INFO ── */
+.otp-email-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(229, 9, 20, 0.04);
+  border: 1px solid rgba(229, 9, 20, 0.12);
+  border-radius: 14px;
+  margin-bottom: 24px;
 }
 
-.otp-subtitle {
-  margin: -6px 0 18px;
-  color: #6b7280;
-  font-size: 14px;
-  line-height: 1.5;
-  font-weight: 700;
-}
-
-.otp-form {
-  gap: 10px;
-}
-
-.otp-icon-box {
-  width: 54px;
-  height: 54px;
-  margin: 0 auto 4px;
-  display: grid;
-  place-items: center;
-  border-radius: 18px;
+.otp-email-info svg {
   color: #E50914;
-  background:
-    linear-gradient(135deg, rgba(255, 21, 31, 0.12), rgba(224, 0, 0, 0.06)),
-    #ffffff;
-  border: 1px solid rgba(224, 0, 0, 0.12);
-  box-shadow: 0 16px 34px rgba(224, 0, 0, 0.12);
+  flex-shrink: 0;
 }
 
-.otp-inputs {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 10px;
-  margin: 4px 0 2px;
+.otp-email-info p {
+  margin: 0 0 2px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.otp-inputs input {
-  width: 100%;
-  height: 56px;
-  border: 1.5px solid #e8e8e8;
-  border-radius: 16px;
-  background: #ffffff;
+.otp-email-info strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 800;
   color: #111827;
+}
+
+/* ── OTP INPUTS ── */
+.otp-inputs {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.otp-input {
+  width: 48px;
+  height: 56px;
+  border-radius: 14px;
+  border: 2px solid rgba(17, 24, 39, 0.1);
+  background: #f9fafb;
   text-align: center;
   font-size: 22px;
-  font-weight: 1000;
-  outline: none;
-  box-shadow: 0 10px 26px rgba(17, 24, 39, 0.035);
-  transition: 0.25s ease;
-}
-
-.otp-inputs input:hover {
-  border-color: rgba(224, 0, 0, 0.25);
-}
-
-.otp-inputs input:focus {
-  border-color: rgba(224, 0, 0, 0.6);
-  box-shadow: 0 0 0 5px rgba(224, 0, 0, 0.08);
-  transform: translateY(-1px);
-}
-
-.otp-timer-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  margin: 8px 0 0;
-  padding: 12px 14px;
-  border-radius: 16px;
-  background: rgba(17, 24, 39, 0.035);
-}
-
-.otp-timer {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  color: #6b7280;
-  font-size: 13px;
-  font-weight: 800;
-}
-
-.otp-timer svg {
-  color: #E50914;
-}
-
-.otp-timer strong {
+  font-weight: 900;
   color: #111827;
-  font-weight: 1000;
+  outline: none;
+  transition: all 0.2s;
+  font-family: inherit;
 }
 
-.otp-resend {
-  border: none;
-  background: transparent;
+.otp-input:focus {
+  border-color: #E50914;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(229, 9, 20, 0.08);
+}
+
+.otp-input.filled {
+  border-color: #E50914;
+  background: white;
   color: #E50914;
+}
+
+/* ── MESSAGE ── */
+.otp-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 12px;
   font-size: 13px;
-  font-weight: 950;
-  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.otp-message.error {
+  background: rgba(229, 9, 20, 0.06);
+  border: 1px solid rgba(229, 9, 20, 0.15);
+  color: #E50914;
+}
+
+.otp-message.success {
+  background: rgba(22, 163, 74, 0.06);
+  border: 1px solid rgba(22, 163, 74, 0.15);
+  color: #16a34a;
+}
+
+/* ── RESEND ── */
+.otp-resend {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.otp-resend p {
+  margin: 0;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.otp-resend button {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: 0.25s ease;
-}
-
-.otp-resend:hover:not(:disabled) {
-  transform: translateY(-1px);
-}
-
-.otp-resend:disabled {
-  color: #a8adb7;
+  padding: 8px 16px;
+  border-radius: 100px;
+  border: 1.5px solid rgba(17, 24, 39, 0.1);
+  background: none;
+  color: #9ca3af;
+  font-size: 13px;
+  font-weight: 700;
   cursor: not-allowed;
+  font-family: inherit;
+  transition: all 0.2s;
 }
 
-.otp-card .auth-switch a {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+.otp-resend button.active {
+  border-color: #E50914;
+  color: #E50914;
+  cursor: pointer;
+  background: rgba(229, 9, 20, 0.04);
 }
 
-@media (max-width: 520px) {
+.otp-resend button.active:hover {
+  background: #E50914;
+  color: white;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 480px) {
   .otp-inputs {
-    gap: 7px;
+    gap: 8px;
   }
 
-  .otp-inputs input {
+  .otp-input {
+    width: 42px;
     height: 50px;
-    border-radius: 14px;
-    font-size: 19px;
-  }
-
-  .otp-timer-row {
-    align-items: flex-start;
-    flex-direction: column;
+    font-size: 20px;
+    border-radius: 12px;
   }
 }

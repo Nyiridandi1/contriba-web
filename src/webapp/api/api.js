@@ -97,6 +97,13 @@ export const changePin = (old_pin, new_pin) =>
 export const updatePushToken = (push_token) =>
   apiCall("/api/auth/update-push-token", "POST", { push_token });
 
+// ── OTP Email Verification ──
+export const sendOTP = (name, phone, email) =>
+  apiCall("/api/auth/send-otp", "POST", { name, phone, email });
+
+export const verifyOTP = (email, otp, name, phone, pin) =>
+  apiCall("/api/auth/verify-otp", "POST", { email, otp, name, phone, pin });
+
 /* =========================
    DASHBOARD
 ========================= */
