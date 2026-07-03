@@ -11,6 +11,7 @@ import {
   ShieldCheck,
   Sparkles,
   UserRound,
+  X,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -25,7 +26,7 @@ import AppSidebar from "../components/AppSidebar";
 import "./AppHome.css";
 
 const categories = [
-  { Icon: Sparkles, label: "All", active: true },
+  { Icon: Sparkles, label: "All" },
   { Icon: HeartHandshake, label: "Wedding" },
   { Icon: GraduationCap, label: "Graduation" },
   { Icon: CakeSlice, label: "Birthday" },
@@ -90,10 +91,12 @@ function AppHome() {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
 
-  const normalizedEvents = useMemo(
-    () => events.map((event) => normalizeEvent(event)),
-    [events]
-  );
+  // ── SEARCH + FILTER STATE ──
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [showFilters, setShowFilters] = useState(false);
+  const [sortBy, setSortBy] = useState("newest");
+  const [filterFunded, setFilterFunded] = useState("all");
 
   const userInitials = getUserInitials(currentUser);
 
@@ -114,9 +117,74 @@ function AppHome() {
     loadEvents();
   }, []);
 
+  const normalizedEvents = useMemo(
+    () => events.map((event) => normalizeEvent(event)),
+    [events]
+  );
+
+  // ── FILTERED + SEARCHED + SORTED EVENTS ──
+  const filteredEvents = useMemo(() => {
+    let result = [...normalizedEvents];
+
+    // 1. Category filter
+    if (activeCategory !== "All") {
+      result = result.filter(
+        (e) => e.category?.toLowerCase() === activeCategory.toLowerCase()
+      );
+    }
+
+    // 2. Search filter
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(
+        (e) =>
+          e.title?.toLowerCase().includes(q) ||
+          e.location?.toLowerCase().includes(q) ||
+          e.category?.toLowerCase().includes(q)
+      );
+    }
+
+    // 3. Funded filter
+    if (filterFunded === "active") {
+      result = result.filter((e) => e.daysLeft !== "Ended");
+    } else if (filterFunded === "ended") {
+      result = result.filter((e) => e.daysLeft === "Ended");
+    } else if (filterFunded === "funded") {
+      result = result.filter(
+        (e) => e.target > 0 && e.raised >= e.target
+      );
+    }
+
+    // 4. Sort
+    if (sortBy === "newest") {
+      // already sorted by backend
+    } else if (sortBy === "most_raised") {
+      result.sort((a, b) => b.raised - a.raised);
+    } else if (sortBy === "most_contributors") {
+      result.sort((a, b) => b.contributors - a.contributors);
+    } else if (sortBy === "ending_soon") {
+      result.sort((a, b) => {
+        if (a.daysLeft === "Ended") return 1;
+        if (b.daysLeft === "Ended") return -1;
+        return 0;
+      });
+    }
+
+    return result;
+  }, [normalizedEvents, searchQuery, activeCategory, sortBy, filterFunded]);
+
+  function clearSearch() {
+    setSearchQuery("");
+    setActiveCategory("All");
+    setFilterFunded("all");
+    setSortBy("newest");
+  }
+
+  const hasActiveFilters =
+    searchQuery || activeCategory !== "All" || filterFunded !== "all" || sortBy !== "newest";
+
   return (
     <main className="app-home-page">
-
       {/* ── Desktop sidebar ── */}
       <aside className="app-home-sidebar">
         <div>
@@ -185,7 +253,7 @@ function AppHome() {
         </div>
       </aside>
 
-      {/* ── Mobile top bar + bottom nav via AppSidebar ── */}
+      {/* ── Mobile top bar + bottom nav ── */}
       <AppSidebar active="home" />
 
       <section className="app-home-main">
@@ -200,17 +268,35 @@ function AppHome() {
           </div>
 
           <div className="app-home-top-actions">
+            {/* ── SEARCH INPUT ── */}
             <div className="app-home-search">
               <Search size={18} />
               <input
                 type="text"
                 placeholder="Search events, people or locations..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
+              {searchQuery && (
+                <button
+                  className="app-home-search-clear"
+                  onClick={() => setSearchQuery("")}
+                  type="button"
+                >
+                  <X size={15} />
+                </button>
+              )}
             </div>
 
-            <button type="button">
+            {/* ── FILTERS BUTTON ── */}
+            <button
+              type="button"
+              className={showFilters ? "active" : ""}
+              onClick={() => setShowFilters(!showFilters)}
+            >
               <Filter size={18} />
               Filters
+              {hasActiveFilters && <span className="filter-dot" />}
             </button>
 
             <Link
@@ -234,6 +320,66 @@ function AppHome() {
           </div>
         </header>
 
+        {/* ── FILTER PANEL ── */}
+        {showFilters && (
+          <div className="app-home-filter-panel">
+            <div className="filter-panel-inner">
+              <div className="filter-group">
+                <label>Sort by</label>
+                <div className="filter-chips">
+                  {[
+                    { value: "newest", label: "Newest" },
+                    { value: "most_raised", label: "Most Raised" },
+                    { value: "most_contributors", label: "Most Contributors" },
+                    { value: "ending_soon", label: "Ending Soon" },
+                  ].map((opt) => (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      className={sortBy === opt.value ? "active" : ""}
+                      onClick={() => setSortBy(opt.value)}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="filter-group">
+                <label>Status</label>
+                <div className="filter-chips">
+                  {[
+                    { value: "all", label: "All Events" },
+                    { value: "active", label: "Active" },
+                    { value: "ended", label: "Ended" },
+                    { value: "funded", label: "Fully Funded" },
+                  ].map((opt) => (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      className={filterFunded === opt.value ? "active" : ""}
+                      onClick={() => setFilterFunded(opt.value)}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {hasActiveFilters && (
+                <button
+                  type="button"
+                  className="filter-clear-btn"
+                  onClick={clearSearch}
+                >
+                  <X size={14} />
+                  Clear all filters
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
         {!isAuthenticated && (
           <section className="app-home-lock-banner">
             <div className="app-home-lock-badge">
@@ -253,23 +399,42 @@ function AppHome() {
           </section>
         )}
 
+        {/* ── CATEGORIES ── */}
         <section className="app-home-categories">
           {categories.map((category) => (
             <EventCategoryPill
               key={category.label}
               Icon={category.Icon}
               label={category.label}
-              active={category.active}
+              active={activeCategory === category.label}
+              onClick={() => setActiveCategory(category.label)}
             />
           ))}
         </section>
 
+        {/* ── RESULTS HEADER ── */}
         <section className="app-home-section-header">
           <div>
-            <span>Live events</span>
-            <h2>Popular Events</h2>
+            <span>
+              {hasActiveFilters ? "Search results" : "Live events"}
+            </span>
+            <h2>
+              {hasActiveFilters
+                ? `${filteredEvents.length} event${filteredEvents.length !== 1 ? "s" : ""} found`
+                : "Popular Events"}
+            </h2>
           </div>
-          <p></p>
+
+          {hasActiveFilters && (
+            <button
+              type="button"
+              className="app-home-clear-btn"
+              onClick={clearSearch}
+            >
+              <X size={14} />
+              Clear
+            </button>
+          )}
         </section>
 
         {loading && (
@@ -286,19 +451,31 @@ function AppHome() {
           </section>
         )}
 
-        {!loading && !message && normalizedEvents.length === 0 && (
+        {!loading && !message && filteredEvents.length === 0 && (
           <section className="app-home-empty-state">
-            <h3>No public events yet</h3>
-            <p>Create the first event and it will appear here.</p>
-            <Link to={isAuthenticated ? "/create-event" : "/register"}>
-              Create Event
-            </Link>
+            <h3>
+              {hasActiveFilters ? "No events match your search" : "No public events yet"}
+            </h3>
+            <p>
+              {hasActiveFilters
+                ? "Try different keywords or clear your filters."
+                : "Create the first event and it will appear here."}
+            </p>
+            {hasActiveFilters ? (
+              <button type="button" onClick={clearSearch}>
+                Clear filters
+              </button>
+            ) : (
+              <Link to={isAuthenticated ? "/create-event" : "/register"}>
+                Create Event
+              </Link>
+            )}
           </section>
         )}
 
-        {!loading && !message && normalizedEvents.length > 0 && (
+        {!loading && !message && filteredEvents.length > 0 && (
           <section className="app-home-events-grid">
-            {normalizedEvents.map((event) => (
+            {filteredEvents.map((event) => (
               <EventCard key={event.id} event={event} />
             ))}
           </section>

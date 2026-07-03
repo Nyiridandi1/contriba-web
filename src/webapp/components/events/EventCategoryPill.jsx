@@ -1,9 +1,13 @@
 import "./EventCategoryPill.css";
 
-function EventCategoryPill({ Icon, label, active }) {
+function EventCategoryPill({ Icon, label, active = false, onClick }) {
   return (
-    <button className={`event-category-pill ${active ? "active" : ""}`}>
-      <Icon size={17} />
+    <button
+      type="button"
+      className={`event-category-pill ${active ? "active" : ""}`}
+      onClick={onClick}
+    >
+      {Icon && <Icon size={16} />}
       {label}
     </button>
   );
