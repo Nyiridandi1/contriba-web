@@ -680,4 +680,99 @@
   .app-home-main {
     padding-bottom: 90px !important;
   }
+}/* ── MOBILE TOPBAR AVATAR ── */
+@media (max-width: 768px) {
+  .mobile-topbar-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #E50914, #ff445f);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(229, 9, 20, 0.3);
+  }
+
+  .mobile-topbar-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .mobile-topbar-avatar span {
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  /* ── DRAWER USER INFO ── */
+  .mobile-drawer-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: rgba(229, 9, 20, 0.04);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    margin-bottom: 8px;
+  }
+
+  .mobile-drawer-user-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #E50914, #ff445f);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 800;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .mobile-drawer-user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .mobile-drawer-user strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 800;
+    color: #111827;
+  }
+
+  .mobile-drawer-user small {
+    display: block;
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 2px;
+  }
+
+  /* ── TOPBAR CREATE BUTTON ── */
+  .mobile-topbar-create {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: #E50914;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+  }
+}@media (max-width: 768px) {
+  .app-home-icon-action { display: none !important; }
+  .app-home-user-avatar { display: none !important; }
+  .app-home-top-actions button { display: none !important; }
 }

@@ -16,6 +16,7 @@ import {
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+import { getUser } from "../../api/api";
 import logoIcon from "../../assets/logo-icon.png";
 import "./AppSidebar.css";
 
@@ -31,7 +32,6 @@ const navItems = [
   { label: "Settings", icon: Settings, path: "/settings", key: "settings" },
 ];
 
-// Bottom nav shows only 5 most important items
 const bottomNavItems = [
   { label: "Home", icon: Home, path: "/home", key: "home" },
   { label: "Dashboard", icon: BarChart3, path: "/dashboard", key: "dashboard" },
@@ -40,8 +40,17 @@ const bottomNavItems = [
   { label: "Profile", icon: UserRound, path: "/profile", key: "profile" },
 ];
 
+function getUserInitials(user) {
+  const name = user?.name || "U";
+  const parts = String(name).trim().split(" ").filter(Boolean);
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+}
+
 function AppSidebar({ active = "dashboard" }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const currentUser = getUser();
+  const initials = getUserInitials(currentUser);
 
   return (
     <>
@@ -95,10 +104,33 @@ function AppSidebar({ active = "dashboard" }) {
         </Link>
 
         <div className="mobile-topbar-actions">
+          {/* Bell icon */}
+          <Link
+            to="/notifications"
+            className="mobile-topbar-btn"
+            aria-label="Notifications"
+          >
+            <Bell size={20} />
+          </Link>
+
+          {/* Avatar */}
+          {currentUser ? (
+            <Link to="/profile" className="mobile-topbar-avatar">
+              {currentUser.avatar_url ? (
+                <img src={currentUser.avatar_url} alt="Profile" />
+              ) : (
+                <span>{initials}</span>
+              )}
+            </Link>
+          ) : null}
+
+          {/* Create Event */}
           <Link to="/create-event" className="mobile-topbar-create">
             <Plus size={15} />
-            New Event
+            New
           </Link>
+
+          {/* Hamburger */}
           <button
             className="mobile-topbar-btn"
             onClick={() => setDrawerOpen(true)}
@@ -137,6 +169,23 @@ function AppSidebar({ active = "dashboard" }) {
             <X size={18} />
           </button>
         </div>
+
+        {/* User info in drawer */}
+        {currentUser && (
+          <div className="mobile-drawer-user">
+            <div className="mobile-drawer-user-avatar">
+              {currentUser.avatar_url ? (
+                <img src={currentUser.avatar_url} alt="Profile" />
+              ) : (
+                <span>{initials}</span>
+              )}
+            </div>
+            <div>
+              <strong>{currentUser.name || "Organizer"}</strong>
+              <small>{currentUser.phone || ""}</small>
+            </div>
+          </div>
+        )}
 
         <nav className="mobile-drawer-nav">
           {navItems.map((item) => {
@@ -183,7 +232,6 @@ function AppSidebar({ active = "dashboard" }) {
           );
         })}
 
-        {/* Center create button */}
         <Link to="/create-event" className="mobile-bottom-create">
           <Plus size={22} />
         </Link>
