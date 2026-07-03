@@ -993,4 +993,18 @@
   .event-details-page {
     padding-bottom: 80px !important;
   }
+}@media (max-width: 768px) {
+  .event-bottom-bar {
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 8px 12px !important;
+  }
+
+  .event-bottom-bar a,
+  .event-bottom-bar button {
+    min-width: 0 !important;
+    font-size: 9px !important;
+  }
 }
