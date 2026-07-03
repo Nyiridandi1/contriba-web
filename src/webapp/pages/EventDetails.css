@@ -1068,4 +1068,23 @@
   .event-bottom-bar button {
     font-size: 10px !important;
   }
+}@media (max-width: 768px) {
+  .event-details-main-image {
+    height: 320px !important;
+    border-radius: 20px !important;
+  }
+
+  .event-details-gallery {
+    grid-template-columns: 1fr !important;
+  }
+
+  .event-details-thumbs {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .event-thumb {
+    height: 90px !important;
+    border-radius: 12px !important;
+  }
 }
