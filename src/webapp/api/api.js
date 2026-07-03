@@ -153,6 +153,9 @@ export const initiateContribution = (data) =>
 export const getEventContributions = (eventId) =>
   apiCall(`/api/contributions/event/${eventId}`);
 
+export const getContributorsCRM = () =>
+  apiCall("/api/contributions/crm");
+
 export const confirmContribution = (id, transactionId) =>
   apiCall(`/api/contributions/${id}/confirm`, "PUT", {
     transaction_id: transactionId,

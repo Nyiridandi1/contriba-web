@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import {
   ArrowDownUp,
   ArrowRight,
@@ -20,9 +22,10 @@ import {
 } from "lucide-react";
 
 import AppSidebar from "../components/AppSidebar";
+import { getContributorsCRM } from "../api/api";
 import "./Contributors.css";
 
-const contributors = [
+const demoContributors = [
   {
     id: 1,
     name: "Olivier Ishimwe",
@@ -37,89 +40,19 @@ const contributors = [
     total: "RWF 750,000",
     contributions: 2,
   },
-  {
-    id: 2,
-    name: "Grace N.",
-    phone: "+250 782 444 220",
-    amount: "RWF 250,000",
-    method: "Airtel Money",
-    date: "Today",
-    time: "18 mins ago",
-    status: "Success",
-    message: "So happy for you. Wishing you a blessed marriage.",
-    avatar: "GN",
-    total: "RWF 250,000",
-    contributions: 1,
-  },
-  {
-    id: 3,
-    name: "Patrick K.",
-    phone: "+250 790 988 100",
-    amount: "RWF 150,000",
-    method: "Visa / Card",
-    date: "Today",
-    time: "1 hour ago",
-    status: "Success",
-    message: "God bless your union.",
-    avatar: "PK",
-    total: "RWF 150,000",
-    contributions: 1,
-  },
-  {
-    id: 4,
-    name: "Anonymous",
-    phone: "Hidden",
-    amount: "RWF 100,000",
-    method: "MTN MoMo",
-    date: "Today",
-    time: "3 hours ago",
-    status: "Pending",
-    message: "Wishing you the best.",
-    avatar: "AN",
-    total: "RWF 100,000",
-    contributions: 1,
-  },
-  {
-    id: 5,
-    name: "Divine M.",
-    phone: "+250 788 778 889",
-    amount: "RWF 80,000",
-    method: "Airtel Money",
-    date: "Yesterday",
-    time: "8:40 PM",
-    status: "Success",
-    message: "May your home be full of joy.",
-    avatar: "DM",
-    total: "RWF 180,000",
-    contributions: 3,
-  },
-  {
-    id: 6,
-    name: "Jean Claude",
-    phone: "+250 722 111 900",
-    amount: "RWF 50,000",
-    method: "MTN MoMo",
-    date: "Yesterday",
-    time: "6:12 PM",
-    status: "Failed",
-    message: "Payment failed before confirmation.",
-    avatar: "JC",
-    total: "RWF 0",
-    contributions: 0,
-  },
 ];
 
 const timeline = [
   {
     title: "Payment confirmed",
-    detail: "RWF 500,000 received through MTN MoMo.",
-    time: "2 mins ago",
+    detail: "Payment received successfully.",
+    time: "Recently",
     status: "success",
   },
   {
     title: "Receipt generated",
-    detail: "Receipt #CTR-2048 was created automatically.",
-    time: "1 min ago",
+    detail: "Receipt was created automatically.",
+    time: "Recently",
     status: "success",
   },
   {
@@ -130,8 +63,72 @@ const timeline = [
   },
 ];
 
+function formatMoney(amount) {
+  return `RWF ${Number(amount || 0).toLocaleString()}`;
+}
+
 function Contributors() {
-  const selectedContributor = contributors[0];
+  const [contributors, setContributors] = useState([]);
+  const [stats, setStats] = useState({
+    total_contributors: 0,
+    total_collected: 0,
+    thank_you_pending: 0,
+    failed_pending: 0,
+  });
+  const [aiRecommendation, setAiRecommendation] = useState({
+    title: "Loading contributor insights",
+    message: "Contriba is checking your real contributor activity.",
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadContributors();
+  }, []);
+
+  async function loadContributors() {
+    setLoading(true);
+
+    const response = await getContributorsCRM();
+
+    if (response?.success) {
+      setContributors(response.contributors || []);
+      setStats(
+        response.stats || {
+          total_contributors: 0,
+          total_collected: 0,
+          thank_you_pending: 0,
+          failed_pending: 0,
+        }
+      );
+      setAiRecommendation(
+        response.ai_recommendation || {
+          title: "Contributor CRM connected",
+          message: "Your real contributor data is now connected.",
+        }
+      );
+    } else {
+      setContributors([]);
+      setAiRecommendation({
+        title: "Contributor data unavailable",
+        message: response?.message || "Unable to load contributors right now.",
+      });
+    }
+
+    setLoading(false);
+  }
+
+  const displayContributors = contributors.length > 0 ? contributors : [];
+  const selectedContributor =
+    displayContributors[0] || {
+      avatar: "CO",
+      name: loading ? "Loading..." : "No contributor yet",
+      phone: loading ? "Please wait" : "No contribution received yet",
+      total: "RWF 0",
+      contributions: 0,
+      message: loading
+        ? "Contriba is loading real contributor data."
+        : "Real contributors will appear here after payments are created.",
+    };
 
   return (
     <main className="contributors-page">
@@ -175,33 +172,33 @@ function Contributors() {
 
           <div className="contributors-hero-card">
             <span>AI Recommendation</span>
-            <strong>47 people viewed but did not pay</strong>
-            <p>Send a warm reminder now and you may collect +RWF 420K tonight.</p>
+            <strong>{aiRecommendation.title}</strong>
+            <p>{aiRecommendation.message}</p>
           </div>
         </section>
 
         <section className="contributors-stats-grid">
           <div className="contributors-stat-card">
             <span>Total Contributors</span>
-            <strong>287</strong>
+            <strong>{stats.total_contributors}</strong>
             <p>
               <UsersRound size={15} />
-              23 joined today
+              Real contributors
             </p>
           </div>
 
           <div className="contributors-stat-card">
             <span>Total Collected</span>
-            <strong>RWF 3.85M</strong>
+            <strong>{formatMoney(stats.total_collected)}</strong>
             <p>
               <TrendingUp size={15} />
-              +18% today
+              From successful payments
             </p>
           </div>
 
           <div className="contributors-stat-card">
             <span>Thank-you Pending</span>
-            <strong>41</strong>
+            <strong>{stats.thank_you_pending}</strong>
             <p>
               <MessageCircle size={15} />
               Needs action
@@ -210,7 +207,7 @@ function Contributors() {
 
           <div className="contributors-stat-card">
             <span>Failed / Pending</span>
-            <strong>14</strong>
+            <strong>{stats.failed_pending}</strong>
             <p>
               <Clock size={15} />
               Follow up needed
@@ -246,7 +243,7 @@ function Contributors() {
               </div>
 
               <div className="contributors-table-body">
-                {contributors.map((person) => (
+                {displayContributors.map((person) => (
                   <div className="contributors-row" key={person.id}>
                     <div className="contributors-person">
                       <div className="contributors-avatar">{person.avatar}</div>
@@ -289,6 +286,49 @@ function Contributors() {
                     </div>
                   </div>
                 ))}
+
+                {!loading && displayContributors.length === 0 && (
+                  <div className="contributors-row">
+                    <div className="contributors-person">
+                      <div className="contributors-avatar">CO</div>
+                      <div>
+                        <strong>No contributors yet</strong>
+                        <span>Waiting for real payments</span>
+                        <small>
+                          Real contributors will appear here after users
+                          contribute to your events.
+                        </small>
+                      </div>
+                    </div>
+
+                    <div className="contributors-amount">
+                      <strong>RWF 0</strong>
+                      <span>Now</span>
+                    </div>
+
+                    <div className="contributors-method">
+                      <span>None</span>
+                      <small>Empty</small>
+                    </div>
+
+                    <small className="contributors-status pending">
+                      <Clock size={14} />
+                      Pending
+                    </small>
+
+                    <div className="contributors-actions">
+                      <button>
+                        <MessageCircle size={16} />
+                      </button>
+                      <button>
+                        <FileText size={16} />
+                      </button>
+                      <button>
+                        <ChevronRight size={16} />
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
