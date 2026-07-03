@@ -21,6 +21,7 @@ import logoIcon from "../../assets/logo-icon.png";
 import "./AppSidebar.css";
 
 const navItems = [
+  { label: "Home", icon: Home, path: "/home", key: "home" },
   { label: "Dashboard", icon: BarChart3, path: "/dashboard", key: "dashboard" },
   { label: "Events", icon: CalendarDays, path: "/dashboard/events", key: "events" },
   { label: "Wallet", icon: WalletCards, path: "/wallet", key: "wallet" },
