@@ -251,9 +251,10 @@ function AppHome() {
           </div>
 
           <div className="app-home-sidebar-footer">
-            <span>Contriba Web V2</span>
+            <span>© 2026 Contriba</span>
             <div>
               <Link to="/privacy">Privacy</Link>
+              <Link to="/terms">Terms</Link>
               <Link to="/contact">Support</Link>
             </div>
           </div>
