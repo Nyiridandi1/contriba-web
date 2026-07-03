@@ -1,15 +1,13 @@
-/* =========================================
-   CONTRIBA REGISTER PAGE
-========================================= */
-
 .register-card {
-  max-width: 500px;
-}/* ── REGISTRATION SUCCESS MODAL ── */
+  max-width: 480px;
+}
+
+/* ── REGISTRATION SUCCESS MODAL — PREMIUM ── */
 .register-success-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(12px);
   z-index: 9999;
   display: flex;
   align-items: center;
@@ -19,64 +17,101 @@
 
 .register-success-modal {
   background: white;
-  border-radius: 24px;
-  padding: 32px 28px;
+  border-radius: 28px;
   width: 100%;
-  max-width: 440px;
+  max-width: 460px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.2);
+  align-items: stretch;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.25);
   animation: successPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
 }
 
 @keyframes successPop {
-  from { opacity: 0; transform: scale(0.85); }
-  to { opacity: 1; transform: scale(1); }
+  from { opacity: 0; transform: scale(0.88) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-.register-success-icon {
-  width: 72px;
-  height: 72px;
+/* ── MODAL HEADER ── */
+.register-success-header {
+  background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+  padding: 28px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.register-success-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.register-success-brand img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.register-success-brand span {
+  font-size: 20px;
+  font-weight: 900;
+  color: white;
+  letter-spacing: -0.5px;
+}
+
+.register-success-check {
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  background: rgba(22, 163, 74, 0.1);
+  background: rgba(22, 163, 74, 0.15);
+  border: 2px solid rgba(22, 163, 74, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.register-success-modal h2 {
+.register-success-header h2 {
   margin: 0;
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 900;
-  color: #111827;
+  color: white;
   letter-spacing: -0.5px;
   text-align: center;
 }
 
-.register-success-subtitle {
+.register-success-header p {
   margin: 0;
-  font-size: 15px;
-  color: #6b7280;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
   text-align: center;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
-.register-success-subtitle strong {
-  color: #111827;
+.register-success-header p strong {
+  color: white;
+}
+
+/* ── MODAL BODY ── */
+.register-success-body {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 /* ── PIN WARNING BOX ── */
 .register-pin-warning {
   width: 100%;
   background: rgba(229, 9, 20, 0.04);
-  border: 1.5px solid rgba(229, 9, 20, 0.2);
+  border: 1.5px solid rgba(229, 9, 20, 0.15);
   border-radius: 16px;
   padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .register-pin-warning-header {
@@ -100,20 +135,22 @@
 
 .register-pin-warning > p strong {
   color: #111827;
+  font-weight: 800;
 }
 
 .register-pin-tips {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.7);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 12px;
+  background: white;
   border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .register-pin-tips p {
   margin: 0;
-  font-size: 13px;
+  font-size: 12px;
   color: #374151;
   font-weight: 600;
 }
@@ -124,22 +161,23 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 18px;
+  padding: 16px 20px;
   background: #111827;
   border-radius: 14px;
-  color: white;
 }
 
 .register-pin-display span {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .register-pin-display strong {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 900;
-  letter-spacing: 8px;
+  letter-spacing: 10px;
   color: #ffffff;
 }
 
@@ -156,12 +194,14 @@
   cursor: pointer;
   transition: all 0.2s;
   font-family: inherit;
-  box-shadow: 0 8px 24px rgba(229, 9, 20, 0.3);
+  box-shadow: 0 8px 24px rgba(229, 9, 20, 0.25);
+  letter-spacing: -0.2px;
 }
 
 .register-continue-btn:hover {
   background: #b5070f;
   transform: translateY(-1px);
+  box-shadow: 0 12px 32px rgba(229, 9, 20, 0.35);
 }
 
 .register-success-note {
@@ -175,17 +215,28 @@
 /* ── MOBILE ── */
 @media (max-width: 480px) {
   .register-success-modal {
-    padding: 24px 20px;
     border-radius: 20px;
+  }
+
+  .register-success-header {
+    padding: 24px 20px 20px;
+  }
+
+  .register-success-header h2 {
+    font-size: 18px;
+  }
+
+  .register-success-body {
+    padding: 20px;
     gap: 14px;
   }
 
-  .register-success-modal h2 {
-    font-size: 22px;
+  .register-pin-tips {
+    grid-template-columns: 1fr;
   }
 
   .register-pin-display strong {
-    font-size: 18px;
-    letter-spacing: 6px;
+    font-size: 22px;
+    letter-spacing: 8px;
   }
 }

@@ -86,7 +86,7 @@ function Register() {
       return;
     }
 
-    // ── Show success modal instead of navigating ──
+    // ── Show success modal ──
     setRegisteredName(fullName.trim().split(" ")[0]);
     setRegisteredPin(pin);
     setShowSuccess(true);
@@ -104,53 +104,65 @@ function Register() {
         <div className="register-success-overlay">
           <div className="register-success-modal">
 
-            {/* Success icon */}
-            <div className="register-success-icon">
-              <CheckCircle2 size={40} color="#16a34a" />
-            </div>
-
-            <h2>Account Created! 🎉</h2>
-            <p className="register-success-subtitle">
-              Welcome to Contriba, <strong>{registeredName}</strong>! Your organizer account is ready.
-            </p>
-
-            {/* PIN Warning */}
-            <div className="register-pin-warning">
-              <div className="register-pin-warning-header">
-                <ShieldAlert size={20} color="#E50914" />
-                <strong>Important — Save Your PIN!</strong>
+            {/* Dark header with Contriba branding */}
+            <div className="register-success-header">
+              <div className="register-success-brand">
+                <img src={logoIcon} alt="Contriba" />
+                <span>Contriba</span>
               </div>
+
+              <div className="register-success-check">
+                <CheckCircle2 size={32} color="#16a34a" />
+              </div>
+
+              <h2>Account Created Successfully</h2>
               <p>
-                Your PIN is <strong>{registeredPin}</strong>. There is
-                <strong> no way to recover your PIN</strong> if you forget it.
-                We have no OTP or email reset.
+                Welcome to Contriba, <strong>{registeredName}</strong>.
+                Your organizer account is ready.
               </p>
-              <div className="register-pin-tips">
-                <p>✅ Write it down somewhere safe</p>
-                <p>✅ Save it in your phone notes</p>
-                <p>✅ Tell a trusted person</p>
-                <p>❌ Don't share it with anyone else</p>
+            </div>
+
+            {/* Body */}
+            <div className="register-success-body">
+
+              {/* PIN Warning */}
+              <div className="register-pin-warning">
+                <div className="register-pin-warning-header">
+                  <ShieldAlert size={18} color="#E50914" />
+                  <strong>Save Your PIN — No Recovery Option</strong>
+                </div>
+                <p>
+                  Your PIN is <strong>{registeredPin}</strong>. Contriba has
+                  <strong> no OTP, no email reset</strong> and no way to
+                  recover a forgotten PIN.
+                </p>
+                <div className="register-pin-tips">
+                  <p>+ Write it down somewhere safe</p>
+                  <p>+ Save it in your phone notes</p>
+                  <p>+ Tell a trusted person</p>
+                  <p>- Never share with anyone</p>
+                </div>
               </div>
+
+              {/* PIN Display */}
+              <div className="register-pin-display">
+                <span>Your PIN</span>
+                <strong>{registeredPin}</strong>
+              </div>
+
+              {/* Continue button */}
+              <button
+                type="button"
+                className="register-continue-btn"
+                onClick={handleContinue}
+              >
+                I have saved my PIN — Continue
+              </button>
+
+              <p className="register-success-note">
+                You will need this PIN every time you log in to Contriba.
+              </p>
             </div>
-
-            {/* PIN Display */}
-            <div className="register-pin-display">
-              <span>Your PIN</span>
-              <strong>{registeredPin}</strong>
-            </div>
-
-            {/* Continue button */}
-            <button
-              type="button"
-              className="register-continue-btn"
-              onClick={handleContinue}
-            >
-              I've saved my PIN — Continue
-            </button>
-
-            <p className="register-success-note">
-              You will need this PIN every time you log in to Contriba.
-            </p>
           </div>
         </div>
       )}
@@ -194,7 +206,7 @@ function Register() {
             <label>Phone Number *</label>
             <div className="auth-input">
               <Phone size={20} />
-              <span className="auth-country">🇷🇼 +250</span>
+              <span className="auth-country">+250</span>
               <input
                 type="tel"
                 placeholder="781 234 567"
@@ -205,7 +217,7 @@ function Register() {
 
             <div className="auth-pin-note">
               <Lock size={16} />
-              Create a secure 4-digit PIN. You cannot recover it if lost!
+              Create a secure 4-digit PIN. You cannot recover it if lost.
             </div>
 
             <label>Create PIN *</label>
