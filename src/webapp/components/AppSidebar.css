@@ -572,4 +572,33 @@
     border: none;
     cursor: pointer;
   }
+}.app-sidebar-footer {
+  margin-top: 18px;
+  text-align: center;
+}
+
+.app-sidebar-footer p {
+  margin: 0 0 12px;
+  font-size: 12px;
+  color: #8b8b8b;
+  font-weight: 600;
+}
+
+.app-sidebar-footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.app-sidebar-footer-links a {
+  text-decoration: none;
+  color: #7b7b7b;
+  font-size: 13px;
+  font-weight: 700;
+  transition: 0.25s;
+}
+
+.app-sidebar-footer-links a:hover {
+  color: #E50914;
 }

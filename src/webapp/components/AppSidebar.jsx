@@ -55,9 +55,6 @@ function AppSidebar({ active = "dashboard" }) {
 
   return (
     <>
-      {/* ══════════════════════════════
-          DESKTOP SIDEBAR
-      ══════════════════════════════ */}
       <aside className="app-sidebar">
         <Link to="/" className="app-sidebar-brand">
           <img src={logoIcon} alt="Contriba" />
@@ -93,11 +90,18 @@ function AppSidebar({ active = "dashboard" }) {
             withdrawals from one premium command center.
           </p>
         </div>
+
+        <div className="app-sidebar-footer">
+          <p>© 2026 Contriba</p>
+
+          <div className="app-sidebar-footer-links">
+            <Link to="/privacy">Privacy</Link>
+            <Link to="/terms">Terms</Link>
+            <Link to="/contact">Support</Link>
+          </div>
+        </div>
       </aside>
 
-      {/* ══════════════════════════════
-          MOBILE TOP BAR
-      ══════════════════════════════ */}
       <div className="mobile-topbar">
         <Link to="/" className="mobile-topbar-brand">
           <img src={logoIcon} alt="Contriba" />
@@ -105,7 +109,6 @@ function AppSidebar({ active = "dashboard" }) {
         </Link>
 
         <div className="mobile-topbar-actions">
-          {/* Bell icon */}
           <Link
             to="/notifications"
             className="mobile-topbar-btn"
@@ -114,7 +117,6 @@ function AppSidebar({ active = "dashboard" }) {
             <Bell size={20} />
           </Link>
 
-          {/* Avatar */}
           {currentUser ? (
             <Link to="/profile" className="mobile-topbar-avatar">
               {currentUser.avatar_url ? (
@@ -125,13 +127,11 @@ function AppSidebar({ active = "dashboard" }) {
             </Link>
           ) : null}
 
-          {/* Create Event */}
           <Link to="/create-event" className="mobile-topbar-create">
             <Plus size={15} />
             New
           </Link>
 
-          {/* Hamburger */}
           <button
             className="mobile-topbar-btn"
             onClick={() => setDrawerOpen(true)}
@@ -142,17 +142,11 @@ function AppSidebar({ active = "dashboard" }) {
         </div>
       </div>
 
-      {/* ══════════════════════════════
-          MOBILE DRAWER OVERLAY
-      ══════════════════════════════ */}
       <div
         className={`mobile-menu-overlay ${drawerOpen ? "open" : ""}`}
         onClick={() => setDrawerOpen(false)}
       />
 
-      {/* ══════════════════════════════
-          MOBILE DRAWER
-      ══════════════════════════════ */}
       <div className={`mobile-menu-drawer ${drawerOpen ? "open" : ""}`}>
         <div className="mobile-drawer-header">
           <Link
@@ -163,6 +157,7 @@ function AppSidebar({ active = "dashboard" }) {
             <img src={logoIcon} alt="Contriba" />
             <span>Contriba</span>
           </Link>
+
           <button
             className="mobile-drawer-close"
             onClick={() => setDrawerOpen(false)}
@@ -171,7 +166,6 @@ function AppSidebar({ active = "dashboard" }) {
           </button>
         </div>
 
-        {/* User info in drawer */}
         {currentUser && (
           <div className="mobile-drawer-user">
             <div className="mobile-drawer-user-avatar">
@@ -181,6 +175,7 @@ function AppSidebar({ active = "dashboard" }) {
                 <span>{initials}</span>
               )}
             </div>
+
             <div>
               <strong>{currentUser.name || "Organizer"}</strong>
               <small>{currentUser.phone || ""}</small>
@@ -215,9 +210,6 @@ function AppSidebar({ active = "dashboard" }) {
         </Link>
       </div>
 
-      {/* ══════════════════════════════
-          MOBILE BOTTOM NAVIGATION
-      ══════════════════════════════ */}
       <nav className="mobile-bottom-nav">
         {bottomNavItems.map((item) => {
           const Icon = item.icon;
