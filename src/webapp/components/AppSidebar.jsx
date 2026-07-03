@@ -16,7 +16,7 @@ import {
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { getUser } from "../../api/api";
+import { getUser } from "../api/api";
 import logoIcon from "../../assets/logo-icon.png";
 import "./AppSidebar.css";
 
