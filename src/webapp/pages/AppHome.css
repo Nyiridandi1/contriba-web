@@ -676,4 +676,8 @@
 @media (max-width: 480px) {
   .app-home-main { padding: 12px 12px 90px !important; }
   .app-home-topbar h1 { font-size: 28px !important; }
+}@media (max-width: 768px) {
+  .app-home-main {
+    padding-bottom: 90px !important;
+  }
 }
