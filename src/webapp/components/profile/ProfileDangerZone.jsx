@@ -1,37 +1,110 @@
-import { AlertTriangle, LogOut, ShieldAlert, Trash2 } from "lucide-react";
+import { AlertTriangle, LogOut, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { clearSession } from "../../api/api";
 
 function ProfileDangerZone() {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+  const [showDeactivateConfirm, setShowDeactivateConfirm] = useState(false);
+  const [logoutLoading, setLogoutLoading] = useState(false);
+  const [deactivateLoading, setDeactivateLoading] = useState(false);
+
+  // ── LOGOUT ALL DEVICES ──
+  async function handleLogoutAll() {
+    setLogoutLoading(true);
+    try {
+      clearSession();
+      if (logout) await logout();
+      navigate("/login");
+    } catch {
+      clearSession();
+      navigate("/login");
+    }
+    setLogoutLoading(false);
+  }
+
+  // ── DEACTIVATE PROFILE ──
+  async function handleDeactivate() {
+    setDeactivateLoading(true);
+    try {
+      clearSession();
+      if (logout) await logout();
+      navigate("/");
+    } catch {
+      clearSession();
+      navigate("/");
+    }
+    setDeactivateLoading(false);
+  }
+
   return (
-    <section className="profile-panel danger-panel">
-      <div className="profile-panel-heading">
+    <div className="profile-danger-zone">
+      <div className="profile-danger-header">
         <div>
-          <span>Danger Zone</span>
+          <span>DANGER ZONE</span>
           <h3>Account control</h3>
         </div>
-
-        <ShieldAlert size={22} />
+        <AlertTriangle size={22} color="#E50914" />
       </div>
 
-      <div className="danger-warning">
-        <AlertTriangle size={20} />
+      <div className="profile-danger-warning">
+        <AlertTriangle size={16} />
         <p>
-          These actions affect your account access, organizer profile and saved
-          data. Use them carefully.
+          These actions affect your account access, organizer profile and
+          saved data. Use them carefully.
         </p>
       </div>
 
-      <div className="danger-actions">
-        <button type="button">
-          <LogOut size={18} />
-          Logout All Devices
-        </button>
+      {/* ── LOGOUT ALL DEVICES ── */}
+      <button
+        className="profile-danger-btn-secondary"
+        onClick={handleLogoutAll}
+        disabled={logoutLoading}
+        type="button"
+      >
+        <LogOut size={18} />
+        {logoutLoading ? "Logging out..." : "Logout All Devices"}
+      </button>
 
-        <button className="danger" type="button">
+      {/* ── DEACTIVATE PROFILE ── */}
+      {!showDeactivateConfirm ? (
+        <button
+          className="profile-danger-btn-primary"
+          onClick={() => setShowDeactivateConfirm(true)}
+          type="button"
+        >
           <Trash2 size={18} />
           Deactivate Profile
         </button>
-      </div>
-    </section>
+      ) : (
+        <div className="profile-danger-confirm">
+          <p>
+            ⚠️ Are you sure? This will deactivate your organizer profile
+            and remove access to your events and wallet.
+          </p>
+          <div className="profile-danger-confirm-actions">
+            <button
+              type="button"
+              className="profile-danger-btn-cancel"
+              onClick={() => setShowDeactivateConfirm(false)}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              className="profile-danger-btn-primary"
+              onClick={handleDeactivate}
+              disabled={deactivateLoading}
+            >
+              <Trash2 size={16} />
+              {deactivateLoading ? "Deactivating..." : "Yes, Deactivate"}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
