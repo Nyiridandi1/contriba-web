@@ -91,7 +91,6 @@ function AppHome() {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
 
-  // ── SEARCH + FILTER STATE ──
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [showFilters, setShowFilters] = useState(false);
@@ -104,16 +103,20 @@ function AppHome() {
     async function loadEvents() {
       setLoading(true);
       setMessage("");
+
       const result = await getEvents();
+
       if (!result.success) {
         setMessage(result.message || "Failed to load events.");
         setEvents([]);
         setLoading(false);
         return;
       }
+
       setEvents(result.events || []);
       setLoading(false);
     }
+
     loadEvents();
   }, []);
 
@@ -122,43 +125,38 @@ function AppHome() {
     [events]
   );
 
-  // ── FILTERED + SEARCHED + SORTED EVENTS ──
   const filteredEvents = useMemo(() => {
     let result = [...normalizedEvents];
 
-    // 1. Category filter
     if (activeCategory !== "All") {
       result = result.filter(
-        (e) => e.category?.toLowerCase() === activeCategory.toLowerCase()
+        (event) =>
+          event.category?.toLowerCase() === activeCategory.toLowerCase()
       );
     }
 
-    // 2. Search filter
     if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
+      const query = searchQuery.toLowerCase();
+
       result = result.filter(
-        (e) =>
-          e.title?.toLowerCase().includes(q) ||
-          e.location?.toLowerCase().includes(q) ||
-          e.category?.toLowerCase().includes(q)
+        (event) =>
+          event.title?.toLowerCase().includes(query) ||
+          event.location?.toLowerCase().includes(query) ||
+          event.category?.toLowerCase().includes(query)
       );
     }
 
-    // 3. Funded filter
     if (filterFunded === "active") {
-      result = result.filter((e) => e.daysLeft !== "Ended");
+      result = result.filter((event) => event.daysLeft !== "Ended");
     } else if (filterFunded === "ended") {
-      result = result.filter((e) => e.daysLeft === "Ended");
+      result = result.filter((event) => event.daysLeft === "Ended");
     } else if (filterFunded === "funded") {
       result = result.filter(
-        (e) => e.target > 0 && e.raised >= e.target
+        (event) => event.target > 0 && event.raised >= event.target
       );
     }
 
-    // 4. Sort
-    if (sortBy === "newest") {
-      // already sorted by backend
-    } else if (sortBy === "most_raised") {
+    if (sortBy === "most_raised") {
       result.sort((a, b) => b.raised - a.raised);
     } else if (sortBy === "most_contributors") {
       result.sort((a, b) => b.contributors - a.contributors);
@@ -181,11 +179,13 @@ function AppHome() {
   }
 
   const hasActiveFilters =
-    searchQuery || activeCategory !== "All" || filterFunded !== "all" || sortBy !== "newest";
+    searchQuery ||
+    activeCategory !== "All" ||
+    filterFunded !== "all" ||
+    sortBy !== "newest";
 
   return (
     <main className="app-home-page">
-      {/* ── Desktop sidebar ── */}
       <aside className="app-home-sidebar">
         <div>
           <Link to="/" className="app-home-brand">
@@ -201,18 +201,22 @@ function AppHome() {
               <Sparkles size={18} />
               <span>Home</span>
             </Link>
+
             <Link to={isAuthenticated ? "/dashboard" : "/register"}>
               <ShieldCheck size={18} />
               <span>Dashboard</span>
             </Link>
+
             <Link to={isAuthenticated ? "/wallet" : "/register"}>
               <HeartHandshake size={18} />
               <span>Wallet</span>
             </Link>
+
             <Link to={isAuthenticated ? "/notifications" : "/register"}>
               <Bell size={18} />
               <span>Notifications</span>
             </Link>
+
             <Link to={isAuthenticated ? "/profile" : "/register"}>
               <UserRound size={18} />
               <span>Profile</span>
@@ -232,12 +236,15 @@ function AppHome() {
             <div className="app-home-sidebar-card-icon">
               <Sparkles size={20} />
             </div>
+
             <h4>{isAuthenticated ? "Organizer Mode" : "Guest Mode"}</h4>
+
             <p>
               {isAuthenticated
                 ? "Create events, track contributions and manage your organizer tools."
                 : "Browse public events freely. Create an account to unlock your organizer dashboard, wallet and reports."}
             </p>
+
             <Link to={isAuthenticated ? "/create-event" : "/register"}>
               {isAuthenticated ? "Create Event" : "Create Free Account"}
             </Link>
@@ -253,7 +260,6 @@ function AppHome() {
         </div>
       </aside>
 
-      {/* ── Mobile top bar + bottom nav ── */}
       <AppSidebar active="home" />
 
       <section className="app-home-main">
@@ -268,15 +274,15 @@ function AppHome() {
           </div>
 
           <div className="app-home-top-actions">
-            {/* ── SEARCH INPUT ── */}
             <div className="app-home-search">
               <Search size={18} />
               <input
                 type="text"
                 placeholder="Search events, people or locations..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(event) => setSearchQuery(event.target.value)}
               />
+
               {searchQuery && (
                 <button
                   className="app-home-search-clear"
@@ -288,7 +294,6 @@ function AppHome() {
               )}
             </div>
 
-            {/* ── FILTERS BUTTON ── */}
             <button
               type="button"
               className={showFilters ? "active" : ""}
@@ -310,6 +315,7 @@ function AppHome() {
             {isAuthenticated && (
               <Link to="/profile" className="app-home-user-avatar">
                 <span className="app-home-user-online"></span>
+
                 {currentUser?.avatar_url ? (
                   <img src={currentUser.avatar_url} alt="Profile" />
                 ) : (
@@ -320,26 +326,26 @@ function AppHome() {
           </div>
         </header>
 
-        {/* ── FILTER PANEL ── */}
         {showFilters && (
           <div className="app-home-filter-panel">
             <div className="filter-panel-inner">
               <div className="filter-group">
                 <label>Sort by</label>
+
                 <div className="filter-chips">
                   {[
                     { value: "newest", label: "Newest" },
                     { value: "most_raised", label: "Most Raised" },
                     { value: "most_contributors", label: "Most Contributors" },
                     { value: "ending_soon", label: "Ending Soon" },
-                  ].map((opt) => (
+                  ].map((option) => (
                     <button
-                      key={opt.value}
+                      key={option.value}
                       type="button"
-                      className={sortBy === opt.value ? "active" : ""}
-                      onClick={() => setSortBy(opt.value)}
+                      className={sortBy === option.value ? "active" : ""}
+                      onClick={() => setSortBy(option.value)}
                     >
-                      {opt.label}
+                      {option.label}
                     </button>
                   ))}
                 </div>
@@ -347,20 +353,21 @@ function AppHome() {
 
               <div className="filter-group">
                 <label>Status</label>
+
                 <div className="filter-chips">
                   {[
                     { value: "all", label: "All Events" },
                     { value: "active", label: "Active" },
                     { value: "ended", label: "Ended" },
                     { value: "funded", label: "Fully Funded" },
-                  ].map((opt) => (
+                  ].map((option) => (
                     <button
-                      key={opt.value}
+                      key={option.value}
                       type="button"
-                      className={filterFunded === opt.value ? "active" : ""}
-                      onClick={() => setFilterFunded(opt.value)}
+                      className={filterFunded === option.value ? "active" : ""}
+                      onClick={() => setFilterFunded(option.value)}
                     >
-                      {opt.label}
+                      {option.label}
                     </button>
                   ))}
                 </div>
@@ -385,6 +392,7 @@ function AppHome() {
             <div className="app-home-lock-badge">
               <ShieldCheck size={22} />
             </div>
+
             <div>
               <h3>Organizer tools unlock after account creation</h3>
               <p>
@@ -392,6 +400,7 @@ function AppHome() {
                 wallet, reports, notifications and settings.
               </p>
             </div>
+
             <div className="app-home-lock-actions">
               <Link to="/login">Login</Link>
               <Link to="/register">Create Account</Link>
@@ -399,7 +408,6 @@ function AppHome() {
           </section>
         )}
 
-        {/* ── CATEGORIES ── */}
         <section className="app-home-categories">
           {categories.map((category) => (
             <EventCategoryPill
@@ -412,15 +420,14 @@ function AppHome() {
           ))}
         </section>
 
-        {/* ── RESULTS HEADER ── */}
         <section className="app-home-section-header">
           <div>
-            <span>
-              {hasActiveFilters ? "Search results" : "Live events"}
-            </span>
+            <span>{hasActiveFilters ? "Search results" : "Live events"}</span>
             <h2>
               {hasActiveFilters
-                ? `${filteredEvents.length} event${filteredEvents.length !== 1 ? "s" : ""} found`
+                ? `${filteredEvents.length} event${
+                    filteredEvents.length !== 1 ? "s" : ""
+                  } found`
                 : "Popular Events"}
             </h2>
           </div>
@@ -452,23 +459,47 @@ function AppHome() {
         )}
 
         {!loading && !message && filteredEvents.length === 0 && (
-          <section className="app-home-empty-state">
+          <section className="app-home-empty-state contriba-empty-state">
+            <div className="contriba-empty-icon">
+              <Sparkles size={30} />
+            </div>
+
+            <span className="contriba-empty-label">
+              {hasActiveFilters
+                ? "No results found"
+                : "Start the first contribution story"}
+            </span>
+
             <h3>
-              {hasActiveFilters ? "No events match your search" : "No public events yet"}
+              {hasActiveFilters
+                ? "No events match your search"
+                : "No public events yet"}
             </h3>
+
             <p>
               {hasActiveFilters
-                ? "Try different keywords or clear your filters."
-                : "Create the first event and it will appear here."}
+                ? "Try another keyword, category or clear your filters to explore more events."
+                : "Be the first organizer to create a beautiful contribution page for a wedding, graduation, birthday, church event or fundraiser."}
             </p>
-            {hasActiveFilters ? (
-              <button type="button" onClick={clearSearch}>
-                Clear filters
-              </button>
-            ) : (
-              <Link to={isAuthenticated ? "/create-event" : "/register"}>
-                Create Event
-              </Link>
+
+            <div className="contriba-empty-actions">
+              {hasActiveFilters ? (
+                <button type="button" onClick={clearSearch}>
+                  Clear filters
+                </button>
+              ) : (
+                <Link to={isAuthenticated ? "/create-event" : "/register"}>
+                  Create First Event
+                </Link>
+              )}
+            </div>
+
+            {!hasActiveFilters && (
+              <div className="contriba-empty-trust">
+                <span>Secure contributions</span>
+                <span>Mobile money ready</span>
+                <span>Shareable event link</span>
+              </div>
             )}
           </section>
         )}
