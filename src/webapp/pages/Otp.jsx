@@ -17,13 +17,13 @@ import logoIcon from "../../assets/logo-icon.png";
 
 import "../components/auth/AuthForm.css";
 import "./Otp.css";
+import "./Register.css";
 
 function Otp() {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
 
-  // Get data passed from Register
   const { name, phone, email, pin } = location.state || {};
 
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -34,21 +34,18 @@ function Otp() {
   const [resendCooldown, setResendCooldown] = useState(60);
   const [canResend, setCanResend] = useState(false);
 
-  // ── Success modal state ──
   const [showSuccess, setShowSuccess] = useState(false);
   const [registeredName, setRegisteredName] = useState("");
   const [registeredPin, setRegisteredPin] = useState("");
 
   const inputRefs = useRef([]);
 
-  // Redirect if no state
   useEffect(() => {
     if (!email || !phone || !pin) {
       navigate("/register");
     }
   }, [email, phone, pin, navigate]);
 
-  // Countdown timer for resend
   useEffect(() => {
     if (resendCooldown <= 0) {
       setCanResend(true);
@@ -59,14 +56,10 @@ function Otp() {
   }, [resendCooldown]);
 
   function handleOtpChange(index, value) {
-    // Only allow digits
     if (value && !/^\d$/.test(value)) return;
-
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
-
-    // Auto focus next input
     if (value && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
@@ -86,7 +79,6 @@ function Otp() {
       if (i < 6) newOtp[i] = digit;
     });
     setOtp(newOtp);
-    // Focus last filled input
     const lastIndex = Math.min(pasted.length, 5);
     inputRefs.current[lastIndex]?.focus();
   }
@@ -106,18 +98,15 @@ function Otp() {
     if (!result.success) {
       setMessage(result.message || "Invalid code. Please try again.");
       setMessageType("error");
-      // Clear OTP inputs
       setOtp(["", "", "", "", "", ""]);
       inputRefs.current[0]?.focus();
       return;
     }
 
-    // Save session
     if (login) {
       await login(phone, pin);
     }
 
-    // Show success modal
     setRegisteredName(name?.split(" ")[0] || "there");
     setRegisteredPin(pin);
     setShowSuccess(true);
@@ -164,11 +153,9 @@ function Otp() {
                 <img src={logoIcon} alt="Contriba" />
                 <span>Contriba</span>
               </div>
-
               <div className="register-success-check">
                 <CheckCircle2 size={32} color="#16a34a" />
               </div>
-
               <h2>Account Created Successfully</h2>
               <p>
                 Welcome to Contriba, <strong>{registeredName}</strong>.
@@ -231,7 +218,8 @@ function Otp() {
           </h1>
 
           <p>
-            Enter the 6-digit code sent to your email to complete registration.
+            Enter the 6-digit code sent to your email.
+            The code is valid for <strong>30 minutes</strong>.
           </p>
         </div>
 
@@ -239,7 +227,6 @@ function Otp() {
           <span className="auth-mini-label">Email Verification</span>
           <h2>Check your email</h2>
 
-          {/* Email info */}
           <div className="otp-email-info">
             <Mail size={18} />
             <div>
@@ -248,7 +235,6 @@ function Otp() {
             </div>
           </div>
 
-          {/* OTP inputs */}
           <div className="otp-inputs">
             {otp.map((digit, index) => (
               <input
@@ -267,7 +253,6 @@ function Otp() {
             ))}
           </div>
 
-          {/* Message */}
           {message && (
             <div className={`otp-message ${messageType}`}>
               {messageType === "success" ? (
@@ -279,19 +264,17 @@ function Otp() {
             </div>
           )}
 
-          {/* Verify button */}
           <button
             type="button"
             className="auth-submit"
             onClick={handleVerify}
             disabled={!isComplete || loading}
           >
-            {loading ? "Verifying..." : "Verify & Create Account"}
+            {loading ? "Verifying..." : "Verify and Create Account"}
           </button>
 
-          {/* Resend */}
           <div className="otp-resend">
-            <p>Didn't receive the code?</p>
+            <p>Didn't receive the code? Check your spam folder.</p>
             <button
               type="button"
               onClick={handleResend}
