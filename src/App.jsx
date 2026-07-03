@@ -21,6 +21,7 @@ import Register from "./webapp/pages/Register";
 import Otp from "./webapp/pages/Otp";
 import AuthSuccess from "./webapp/pages/AuthSuccess";
 import ForgotPin from "./webapp/pages/ForgotPin";
+import ResetOtp from "./webapp/pages/ResetOtp";
 import ResetPin from "./webapp/pages/ResetPin";
 
 import EventDetails from "./webapp/pages/EventDetails";
@@ -83,6 +84,7 @@ function App() {
         <Route path="/otp" element={<Otp />} />
         <Route path="/success" element={<AuthSuccess />} />
         <Route path="/forgot-pin" element={<ForgotPin />} />
+        <Route path="/reset-otp" element={<ResetOtp />} />
         <Route path="/reset-pin" element={<ResetPin />} />
 
         {/* =====================================================
