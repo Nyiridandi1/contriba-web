@@ -97,7 +97,6 @@ export const changePin = (old_pin, new_pin) =>
 export const updatePushToken = (push_token) =>
   apiCall("/api/auth/update-push-token", "POST", { push_token });
 
-// ── OTP Email Verification ──
 export const sendOTP = (name, phone, email, isReset = false) =>
   apiCall("/api/auth/send-otp", "POST", {
     name,
@@ -153,13 +152,101 @@ export const initiateContribution = (data) =>
 export const getEventContributions = (eventId) =>
   apiCall(`/api/contributions/event/${eventId}`);
 
-export const getContributorsCRM = () =>
-  apiCall("/api/contributions/crm");
-
 export const confirmContribution = (id, transactionId) =>
   apiCall(`/api/contributions/${id}/confirm`, "PUT", {
     transaction_id: transactionId,
   });
+
+/* =========================
+   CONTRIBUTORS CRM
+========================= */
+
+export const getContributorsCRM = (params = {}) => {
+  const query = new URLSearchParams();
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      query.append(key, value);
+    }
+  });
+
+  const queryString = query.toString();
+
+  return apiCall(
+    queryString
+      ? `/api/contributions/crm?${queryString}`
+      : "/api/contributions/crm"
+  );
+};
+
+export const sendContributorThankYou = (id) =>
+  apiCall(`/api/contributions/${id}/thank-you`, "POST");
+
+export const getContributorReceipt = (id) =>
+  apiCall(`/api/contributions/${id}/receipt`);
+
+export const downloadContributorReceipt = (id) =>
+  apiCall(`/api/contributions/${id}/receipt/download`);
+
+export const getContributorTimeline = (id) =>
+  apiCall(`/api/contributions/${id}/timeline`);
+
+export const getContributorAIInsights = (params = {}) => {
+  const query = new URLSearchParams();
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      query.append(key, value);
+    }
+  });
+
+  const queryString = query.toString();
+
+  return apiCall(
+    queryString
+      ? `/api/contributions/ai-insights?${queryString}`
+      : "/api/contributions/ai-insights"
+  );
+};
+
+export const getContributorAnalytics = (params = {}) => {
+  const query = new URLSearchParams();
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      query.append(key, value);
+    }
+  });
+
+  const queryString = query.toString();
+
+  return apiCall(
+    queryString
+      ? `/api/contributions/analytics?${queryString}`
+      : "/api/contributions/analytics"
+  );
+};
+
+export const getContributorEvents = () =>
+  apiCall("/api/contributions/events");
+
+export const exportContributorsCSV = (params = {}) => {
+  const query = new URLSearchParams();
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      query.append(key, value);
+    }
+  });
+
+  const queryString = query.toString();
+
+  return apiCall(
+    queryString
+      ? `/api/contributions/export?${queryString}`
+      : "/api/contributions/export"
+  );
+};
 
 /* =========================
    PAYMENTS
