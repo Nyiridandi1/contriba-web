@@ -1,49 +1,31 @@
-import {
-  ChevronRight,
-  FileText,
-  Gavel,
-  HelpCircle,
-  Info,
-  Scale,
-} from "lucide-react";
+import { ChevronRight, FileText, HelpCircle, Scale } from "lucide-react";
 
 const legalItems = [
   {
     title: "Privacy Policy",
-    description: "Learn how Contriba stores and protects your data.",
+    description: "How Contriba stores and protects organizer data.",
     icon: FileText,
   },
   {
     title: "Terms & Conditions",
-    description: "Read the platform rules and user agreement.",
-    icon: Gavel,
-  },
-  {
-    title: "Licenses",
-    description: "Third-party software and open-source licenses.",
+    description: "Platform rules and organizer agreement.",
     icon: Scale,
   },
   {
-    title: "About Contriba",
-    description: "Platform version, company information and credits.",
-    icon: Info,
-  },
-  {
     title: "Help Center",
-    description: "FAQs, documentation and customer support.",
+    description: "Support for account, payments and event questions.",
     icon: HelpCircle,
   },
 ];
 
 function SettingsLegal() {
   return (
-    <section className="settings-panel">
+    <section className="settings-panel settings-support-panel">
       <div className="settings-panel-heading">
         <div>
-          <span>Legal & Support</span>
-          <h3>Policies and documentation</h3>
+          <span>Support</span>
+          <h3>Help and policies</h3>
         </div>
-
         <Scale size={22} />
       </div>
 
@@ -52,35 +34,18 @@ function SettingsLegal() {
           const Icon = item.icon;
 
           return (
-            <button
-              key={item.title}
-              className="settings-list-item"
-              type="button"
-            >
+            <button key={item.title} className="settings-list-item" type="button">
               <div className="settings-option-icon">
                 <Icon size={18} />
               </div>
-
               <span>
                 <strong>{item.title}</strong>
                 <p>{item.description}</p>
               </span>
-
               <ChevronRight size={18} />
             </button>
           );
         })}
-      </div>
-
-      <div className="settings-version-card">
-        <small>Current Version</small>
-
-        <strong>Contriba Web v2.0.0</strong>
-
-        <p>
-          Your application is running the latest available version with all
-          premium organizer dashboard features enabled.
-        </p>
       </div>
     </section>
   );

@@ -1,42 +1,17 @@
-import {
-  Activity,
-  Fingerprint,
-  KeyRound,
-  LockKeyhole,
-  ShieldCheck,
-  Smartphone,
-} from "lucide-react";
+import { KeyRound, LockKeyhole, ShieldCheck } from "lucide-react";
 
 const securityItems = [
   {
     title: "Change PIN",
-    description: "Update your Contriba account PIN.",
+    description: "Update the PIN used to access your organizer account.",
     status: "Recommended",
     icon: KeyRound,
   },
   {
     title: "Two-Factor Authentication",
-    description: "Add extra protection for withdrawals and login.",
+    description: "Add extra protection for login and withdrawals.",
     status: "Enabled",
     icon: ShieldCheck,
-  },
-  {
-    title: "Biometric Login",
-    description: "Use device biometrics on supported devices.",
-    status: "Future",
-    icon: Fingerprint,
-  },
-  {
-    title: "Trusted Devices",
-    description: "Manage devices connected to your account.",
-    status: "2 devices",
-    icon: Smartphone,
-  },
-  {
-    title: "Login History",
-    description: "Review recent login activity and locations.",
-    status: "View",
-    icon: Activity,
   },
 ];
 
@@ -46,9 +21,8 @@ function SettingsSecurity() {
       <div className="settings-panel-heading">
         <div>
           <span>Security</span>
-          <h3>Protect your organizer account</h3>
+          <h3>Protect account</h3>
         </div>
-
         <LockKeyhole size={22} />
       </div>
 
@@ -61,12 +35,10 @@ function SettingsSecurity() {
               <div className="settings-option-icon">
                 <Icon size={18} />
               </div>
-
               <span>
                 <strong>{item.title}</strong>
                 <p>{item.description}</p>
               </span>
-
               <small>{item.status}</small>
             </button>
           );

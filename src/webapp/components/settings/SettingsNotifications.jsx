@@ -1,31 +1,6 @@
-import {
-  Bell,
-  Mail,
-  Smartphone,
-  MessageSquare,
-  Wallet,
-  CalendarClock,
-} from "lucide-react";
+import { Bell, Mail, Wallet } from "lucide-react";
 
 const notifications = [
-  {
-    title: "Push Notifications",
-    description: "Receive instant alerts on your device.",
-    icon: Bell,
-    enabled: true,
-  },
-  {
-    title: "Email Notifications",
-    description: "Receive event summaries by email.",
-    icon: Mail,
-    enabled: true,
-  },
-  {
-    title: "SMS Notifications",
-    description: "Important payment confirmations.",
-    icon: Smartphone,
-    enabled: false,
-  },
   {
     title: "Contribution Alerts",
     description: "Notify whenever someone contributes.",
@@ -33,16 +8,16 @@ const notifications = [
     enabled: true,
   },
   {
-    title: "Reminder Notifications",
-    description: "Notify before reminder campaigns.",
-    icon: CalendarClock,
+    title: "Email Notifications",
+    description: "Receive receipts and event summaries by email.",
+    icon: Mail,
     enabled: true,
   },
   {
-    title: "Marketing Updates",
-    description: "Receive product news and updates.",
-    icon: MessageSquare,
-    enabled: false,
+    title: "Push Notifications",
+    description: "Receive important alerts on your device.",
+    icon: Bell,
+    enabled: true,
   },
 ];
 
@@ -51,10 +26,8 @@ function SettingsNotifications() {
     <section className="settings-panel">
       <div className="settings-panel-heading">
         <div>
-          <span>Notifications</span>
-          <h3>Control every alert</h3>
+          <h3>Alert preferences</h3>
         </div>
-
         <Bell size={22} />
       </div>
 
@@ -63,15 +36,11 @@ function SettingsNotifications() {
           const Icon = item.icon;
 
           return (
-            <div
-              className="settings-toggle-card"
-              key={item.title}
-            >
+            <div className="settings-toggle-card" key={item.title}>
               <div className="settings-toggle-left">
                 <div className="settings-option-icon">
                   <Icon size={18} />
                 </div>
-
                 <div>
                   <strong>{item.title}</strong>
                   <p>{item.description}</p>
@@ -80,9 +49,8 @@ function SettingsNotifications() {
 
               <button
                 type="button"
-                className={`settings-switch ${
-                  item.enabled ? "active" : ""
-                }`}
+                className={`settings-switch ${item.enabled ? "active" : ""}`}
+                aria-label={`${item.title} toggle`}
               >
                 <span />
               </button>

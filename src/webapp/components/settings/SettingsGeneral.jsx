@@ -1,12 +1,4 @@
-import {
-  CalendarDays,
-  Clock,
-  Coins,
-  Globe,
-  Languages,
-  MapPin,
-  SlidersHorizontal,
-} from "lucide-react";
+import { Clock, Coins, Languages, MapPin, SlidersHorizontal } from "lucide-react";
 
 const generalSettings = [
   {
@@ -33,18 +25,6 @@ const generalSettings = [
     description: "Used for reminders and reports",
     icon: Clock,
   },
-  {
-    title: "Date Format",
-    value: "DD/MM/YYYY",
-    description: "Used across reports",
-    icon: CalendarDays,
-  },
-  {
-    title: "Public Region",
-    value: "Africa",
-    description: "Recommended visibility",
-    icon: Globe,
-  },
 ];
 
 function SettingsGeneral() {
@@ -52,14 +32,12 @@ function SettingsGeneral() {
     <section className="settings-panel">
       <div className="settings-panel-heading">
         <div>
-          <span>General Settings</span>
-          <h3>Regional and account defaults</h3>
+          <h3>Account defaults</h3>
         </div>
-
         <SlidersHorizontal size={22} />
       </div>
 
-      <div className="settings-options-grid">
+      <div className="settings-options-grid compact">
         {generalSettings.map((item) => {
           const Icon = item.icon;
 
@@ -68,12 +46,10 @@ function SettingsGeneral() {
               <div className="settings-option-icon">
                 <Icon size={19} />
               </div>
-
               <div>
                 <strong>{item.title}</strong>
                 <p>{item.description}</p>
               </div>
-
               <button type="button">{item.value}</button>
             </div>
           );

@@ -82,15 +82,6 @@ function AppSidebar({ active = "dashboard" }) {
           Create Event
         </Link>
 
-        <div className="app-sidebar-card">
-          <span>Organizer Workspace</span>
-          <h3>Your Workspace</h3>
-          <p>
-            Manage your events, contributors, payments and reports from one
-            clean organizer dashboard.
-          </p>
-        </div>
-
         <div className="app-sidebar-footer">
           <p>© 2026 Contriba</p>
 
