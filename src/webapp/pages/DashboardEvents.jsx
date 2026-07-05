@@ -182,20 +182,37 @@ function DashboardEvents() {
     },
   ];
 
-  async function handleCopyLink(eventId) {
-    const link = `${window.location.origin}/events/${eventId}`;
+  async function handleShareEvent(event) {
+  const link = `${window.location.origin}/events/${event.id}`;
 
-    try {
-      await navigator.clipboard.writeText(link);
-      setCopyMessage("Event link copied.");
-    } catch (error) {
-      setCopyMessage(link);
+  try {
+    if (navigator.share) {
+      await navigator.share({
+        title: event.title,
+        text: `Support "${event.title}" on Contriba.`,
+        url: link,
+      });
+
+      return;
     }
 
-    setTimeout(() => {
-      setCopyMessage("");
-    }, 2500);
+    await navigator.clipboard.writeText(link);
+    setCopyMessage("Event link copied.");
+  } catch (error) {
+    if (error.name !== "AbortError") {
+      try {
+        await navigator.clipboard.writeText(link);
+        setCopyMessage("Event link copied.");
+      } catch {
+        setCopyMessage(link);
+      }
+    }
   }
+
+  setTimeout(() => {
+    setCopyMessage("");
+  }, 2500);
+}
 
   async function handleDeleteEvent(eventId) {
     const confirmed = window.confirm(
@@ -487,7 +504,7 @@ function DashboardEvents() {
 
                   <button
                     type="button"
-                    onClick={() => handleCopyLink(event.id)}
+                    onClick={() => handleShareEvent(event)}
                   >
                     <Share2 size={17} />
                     Share
