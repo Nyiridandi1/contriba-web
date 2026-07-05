@@ -359,11 +359,14 @@ function Contributors() {
             </div>
           </div>
 
-          <aside className="contributor-detail-panel">
-            <div className="detail-profile">
+          <aside className="contributor-detail-panel contributor-detail-panel-clean">
+            <div className="detail-profile detail-profile-clean">
               <div className="detail-avatar">{selectedContributor.avatar}</div>
-              <h3>{selectedContributor.name}</h3>
-              <p>{selectedContributor.phone}</p>
+              <div>
+                <span>Selected contributor</span>
+                <h3>{selectedContributor.name}</h3>
+                <p>{selectedContributor.phone}</p>
+              </div>
 
               <span
                 className={`contributors-status ${
@@ -389,7 +392,7 @@ function Contributors() {
               <p>{selectedContributor.contributions} contributions completed</p>
             </div>
 
-            <div className="detail-actions-grid">
+            <div className="detail-actions-grid detail-actions-grid-clean">
               <button
                 onClick={() => sendThankYou()}
                 disabled={actionLoading === "thank-you"}
@@ -417,7 +420,7 @@ function Contributors() {
               </button>
             </div>
 
-            <div className="detail-section">
+            <div className="detail-section detail-message-card">
               <div className="detail-section-head">
                 <span>Latest Message</span>
                 <HeartHandshake size={18} />
@@ -425,34 +428,14 @@ function Contributors() {
               <p>{selectedContributor.message}</p>
             </div>
 
-            <div className="detail-section">
-              <div className="detail-section-head">
-                <span>Payment Timeline</span>
-                <ShieldCheck size={18} />
-              </div>
-
-              <div className="timeline-list">
-                {timeline.map((item, index) => (
-                  <div className="timeline-item" key={`${item.title}-${index}`}>
-                    <span className={item.status}></span>
-                    <div>
-                      <strong>{item.title}</strong>
-                      <p>{item.detail}</p>
-                      <small>{formatDateTime(item.time)}</small>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="detail-ai-card">
+            <div className="detail-ai-card detail-ai-card-clean">
               <span>
                 <Sparkles size={15} />
-                AI Next Action
+                Next Best Action
               </span>
               <p>
                 {selectedContributor.status === "Success"
-                  ? "Send a personal thank-you message now. Contributors who receive a thank-you are more likely to share the event with others."
+                  ? "Send a personal thank-you message and keep this supporter engaged with your event."
                   : selectedContributor.status === "Failed"
                   ? "Follow up with this contributor and help them complete payment again."
                   : "Send a warm reminder to help this contributor complete their payment."}
@@ -467,45 +450,24 @@ function Contributors() {
               </button>
             </div>
 
-            <div className="detail-section">
+            <div className="detail-section detail-timeline-card">
               <div className="detail-section-head">
-                <span>CRM Analytics</span>
-                <TrendingUp size={18} />
+                <span>Payment Timeline</span>
+                <ShieldCheck size={18} />
               </div>
-              <p>
-                Average: {formatMoney(analytics.averageAmount)} • Best method:{" "}
-                {analytics.mostUsedMethod} • Success rate:{" "}
-                {analytics.successRate}%.
-              </p>
-            </div>
 
-            <div className="detail-section">
-              <div className="detail-section-head">
-                <span>Receipt Download</span>
-                <FileText size={18} />
+              <div className="timeline-list">
+                {timeline.slice(0, 3).map((item, index) => (
+                  <div className="timeline-item" key={`${item.title}-${index}`}>
+                    <span className={item.status}></span>
+                    <div>
+                      <strong>{item.title}</strong>
+                      <p>{item.detail}</p>
+                      <small>{formatDateTime(item.time)}</small>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <p>
-                Receipt ID: {selectedContributor.receipt_id || "Not generated yet"}
-              </p>
-              <button
-                onClick={() => downloadReceipt()}
-                disabled={actionLoading === "receipt-download"}
-                style={{
-                  width: "100%",
-                  marginTop: 12,
-                  height: 42,
-                  border: 0,
-                  borderRadius: 14,
-                  color: "white",
-                  background: "#E50914",
-                  fontWeight: 900,
-                  cursor: "pointer",
-                }}
-              >
-                {actionLoading === "receipt-download"
-                  ? "Downloading..."
-                  : "Download Receipt"}
-              </button>
             </div>
           </aside>
         </section>
