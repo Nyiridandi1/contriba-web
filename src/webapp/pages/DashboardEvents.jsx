@@ -53,8 +53,14 @@ function formatDaysLeft(value) {
 function normalizeEvent(event) {
   const raised = Number(event.total_raised || event.raised || 0);
   const goal = Number(event.goal_amount || event.goal || 0);
-  const progressNumber =
-    goal > 0 ? Math.min(100, Math.round((raised / goal) * 100)) : 0;
+
+  const rawProgress = goal > 0 ? (raised / goal) * 100 : 0;
+
+  const progressNumber = Math.min(rawProgress, 100);
+
+  // Always show at least a tiny visible bar if money has been raised.
+  const progressWidth =
+    raised > 0 ? Math.max(progressNumber, 2) : 0;
 
   return {
     id: event.id,
@@ -63,7 +69,8 @@ function normalizeEvent(event) {
     location: event.location || "Rwanda",
     collected: formatMoney(raised),
     goal: formatMoney(goal),
-    progress: `${progressNumber}%`,
+    progress: `${progressNumber.toFixed(2)}%`,
+    progressWidth: `${progressWidth}%`,
     progressNumber,
     contributors: Number(event.total_contributors || event.contributors || 0),
     status: event.status || "active",
@@ -472,8 +479,8 @@ function DashboardEvents() {
                 </div>
 
                 <div className="dashboard-event-progress">
-                  <div style={{ width: event.progress }} />
-                </div>
+  <div style={{ width: event.progressWidth }} />
+</div>
 
                 <div className="dashboard-event-meta">
                   <div>
@@ -562,24 +569,24 @@ function DashboardEvents() {
 
               <div className="dashboard-events-activity-list">
                 <p>
-                  <CheckCircle2 size={16} />
-                  Events shown above are now live on Contriba.
-                </p>
+  <CheckCircle2 size={16} />
+  Your event is now live and accepting contributions.
+</p>
 
-                <p>
-                  <Eye size={16} />
-                  Every event you create will automatically appear here.
-                </p>
+<p>
+  <Share2 size={16} />
+  Share your event with family and friends to increase visibility.
+</p>
 
-                <p>
-                  <Share2 size={16} />
-                  Share, Edit and Delete are connected. QR generation is coming soon.
-                </p>
+<p>
+  <UsersRound size={16} />
+  Every successful contribution will automatically appear in Contributors.
+</p>
 
-                <p>
-                  <Copy size={16} />
-                  Fake dashboard data has been removed.
-                </p>
+<p>
+  <WalletCards size={16} />
+  Payments and receipts are processed securely and tracked in real time.
+</p>
               </div>
             </div>
 
