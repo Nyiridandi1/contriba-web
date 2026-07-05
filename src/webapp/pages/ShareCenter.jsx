@@ -1,10 +1,8 @@
+import { useState } from "react";
 import {
   FaFacebookF,
   FaInstagram,
-  FaLinkedinIn,
-  FaTelegram,
   FaWhatsapp,
-  FaXTwitter,
 } from "react-icons/fa6";
 
 import {
@@ -14,14 +12,9 @@ import {
   Copy,
   Download,
   FileText,
-  Globe,
   Link as LinkIcon,
-  Mail,
-  Phone,
   Printer,
   QrCode,
-  RefreshCcw,
-  Send,
   Share2,
   Sparkles,
   TrendingUp,
@@ -51,7 +44,7 @@ const shareStats = [
     icon: QrCode,
   },
   {
-    title: "Expected Extra",
+    title: "Potential Revenue",
     value: "RWF 420K",
     note: "If shared tonight",
     icon: TrendingUp,
@@ -61,96 +54,85 @@ const shareStats = [
 const shareChannels = [
   {
     title: "WhatsApp",
-    description: "Best performing channel for this event.",
+    description: "Best channel for family, friends and groups.",
     performance: "61%",
+    label: "Highest converting",
     icon: FaWhatsapp,
     brand: "whatsapp",
   },
   {
-    title: "Facebook",
-    description: "Share with family, friends and groups.",
-    performance: "11%",
-    icon: FaFacebookF,
-    brand: "facebook",
-  },
-  {
     title: "Instagram",
-    description: "Post story, bio link or event poster.",
+    description: "Post your event poster, story or bio link.",
     performance: "16%",
+    label: "Strong visual reach",
     icon: FaInstagram,
     brand: "instagram",
   },
   {
-    title: "Telegram",
-    description: "Send event link to groups and communities.",
-    performance: "4%",
-    icon: FaTelegram,
-    brand: "telegram",
-  },
-  {
-    title: "X / Twitter",
-    description: "Share short updates and event milestones.",
-    performance: "2%",
-    icon: FaXTwitter,
-    brand: "twitter",
-  },
-  {
-    title: "LinkedIn",
-    description: "Share formal campaigns and community fundraisers.",
-    performance: "3%",
-    icon: FaLinkedinIn,
-    brand: "linkedin",
-  },
-  {
-    title: "Email",
-    description: "Send formal invitations and reminders.",
-    performance: "7%",
-    icon: Mail,
-    brand: "default",
-  },
-  {
-    title: "SMS",
-    description: "Reach people without social media.",
-    performance: "3%",
-    icon: Phone,
-    brand: "default",
+    title: "Facebook",
+    description: "Share with community groups and relatives.",
+    performance: "11%",
+    label: "Community reach",
+    icon: FaFacebookF,
+    brand: "facebook",
   },
   {
     title: "Direct Link",
-    description: "Copy and share the public event URL.",
+    description: "Copy the public event URL and send anywhere.",
     performance: "5%",
+    label: "Fast sharing",
     icon: LinkIcon,
     brand: "default",
   },
 ];
 
-const liveActivity = [
-  "Someone opened your public event page",
-  "A guest scanned your QR code",
-  "Grace shared your event on WhatsApp",
-  "Patrick clicked contribute from Instagram",
-  "Olivier completed a contribution",
+const campaignMetrics = [
+  { label: "Conversion", value: "64%" },
+  { label: "Share CTR", value: "29%" },
+  { label: "Visitors", value: "1,240" },
+  { label: "Shares", value: "486" },
 ];
 
-const topSharers = [
-  {
-    name: "Grace N.",
-    shares: "42 shares",
-    result: "RWF 620K generated",
-  },
-  {
-    name: "Olivier Ishimwe",
-    shares: "31 shares",
-    result: "RWF 500K generated",
-  },
-  {
-    name: "Patrick K.",
-    shares: "18 shares",
-    result: "RWF 210K generated",
-  },
+const topPromoters = [
+  { name: "Grace N.", value: "RWF 620K generated" },
+  { name: "Olivier Ishimwe", value: "RWF 500K generated" },
+  { name: "Patrick K.", value: "RWF 210K generated" },
 ];
 
 function ShareCenter() {
+  const [copied, setCopied] = useState(false);
+
+  const eventLink = "https://contriba.online/events/demo-event";
+
+  async function handleCopyLink() {
+    try {
+      await navigator.clipboard.writeText(eventLink);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      setCopied(false);
+    }
+  }
+
+  async function handleShareEvent() {
+    const shareData = {
+      title: "Contriba Event",
+      text: "Support this event on Contriba.",
+      url: eventLink,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (error) {
+        // User cancelled native share.
+      }
+      return;
+    }
+
+    handleCopyLink();
+  }
+
   return (
     <main className="share-page">
       <AppSidebar active="share" />
@@ -161,19 +143,18 @@ function ShareCenter() {
             <span>Share Center</span>
             <h1>Growth and campaign center</h1>
             <p>
-              Share your event, track visitor sources, download QR codes,
-              generate posters and use AI insights to collect more
-              contributions.
+              Share your event, copy public links, download QR assets and use smart
+              insights to reach more contributors.
             </p>
           </div>
 
           <div className="share-top-actions">
-            <button>
+            <button onClick={handleCopyLink}>
               <Copy size={18} />
               Copy Link
             </button>
 
-            <button className="red">
+            <button className="red" onClick={handleShareEvent}>
               <Share2 size={18} />
               Share Event
             </button>
@@ -190,13 +171,23 @@ function ShareCenter() {
             <h2>Share again tonight and increase contributions.</h2>
 
             <p>
-              Most contributors are coming from WhatsApp. Your audience is most
-              active between 6PM and 9PM. Sharing now could generate an
-              estimated RWF 420,000.
+              WhatsApp is your strongest channel. Your audience is most active
+              between 6PM and 9PM, so sharing again tonight can help your event
+              reach more supporters.
             </p>
 
             <div className="share-hero-actions">
-              <button className="light">
+              <button
+                className="light"
+                onClick={() =>
+                  window.open(
+                    `https://wa.me/?text=${encodeURIComponent(
+                      "Support this event on Contriba: " + eventLink
+                    )}`,
+                    "_blank"
+                  )
+                }
+              >
                 <FaWhatsapp />
                 Share on WhatsApp
               </button>
@@ -242,12 +233,12 @@ function ShareCenter() {
             <div className="share-panel-heading">
               <div>
                 <span>Share Channels</span>
-                <h3>Send your event everywhere</h3>
+                <h3>Send your event where people respond</h3>
               </div>
               <Share2 size={22} />
             </div>
 
-            <div className="share-channel-grid">
+            <div className="share-channel-grid clean">
               {shareChannels.map((item) => {
                 const Icon = item.icon;
 
@@ -260,10 +251,10 @@ function ShareCenter() {
                     <strong>{item.title}</strong>
                     <p>{item.description}</p>
 
-                    <span>
-                      {item.performance} traffic
-                      <ArrowRight size={16} />
-                    </span>
+                    <div className="channel-performance">
+                      <b>{item.performance}</b>
+                      <span>{item.label}</span>
+                    </div>
                   </button>
                 );
               })}
@@ -273,8 +264,8 @@ function ShareCenter() {
           <div className="share-panel qr-share-panel">
             <div className="share-panel-heading">
               <div>
-                <span>QR Code Center</span>
-                <h3>Scan to contribute</h3>
+                <span>QR & Assets</span>
+                <h3>Ready-to-share materials</h3>
               </div>
               <QrCode size={22} />
             </div>
@@ -285,7 +276,7 @@ function ShareCenter() {
               <span>64% conversion rate</span>
             </div>
 
-            <div className="qr-actions">
+            <div className="qr-actions assets">
               <button>
                 <Download size={17} />
                 Download QR
@@ -295,74 +286,21 @@ function ShareCenter() {
                 <Printer size={17} />
                 Print QR
               </button>
-            </div>
-          </div>
-        </section>
-
-        <section className="share-content-grid">
-          <div className="share-panel poster-panel">
-            <div className="share-panel-heading">
-              <div>
-                <span>Event Poster</span>
-                <h3>Auto-generated campaign poster</h3>
-              </div>
-              <FileText size={22} />
-            </div>
-
-            <div className="poster-preview">
-              <div className="poster-preview-card">
-                <span>Jean & Alice Wedding</span>
-                <h3>Contribute Easily</h3>
-                <p>
-                  Support Jean & Alice through MTN MoMo, Airtel Money or Card.
-                </p>
-
-                <div className="poster-qr">
-                  <QrCode size={42} />
-                </div>
-              </div>
-            </div>
-
-            <div className="poster-actions">
-              <button>
-                <Download size={17} />
-                Download PNG
-              </button>
 
               <button>
                 <FileText size={17} />
-                Download PDF
+                Poster
               </button>
 
-              <button>
-                <Printer size={17} />
-                Print Poster
+              <button onClick={handleCopyLink}>
+                <Copy size={17} />
+                Copy Link
               </button>
             </div>
           </div>
-
-          <div className="share-panel ai-share-panel">
-            <span className="share-badge dark">
-              <Sparkles size={16} />
-              AI Campaign Coach
-            </span>
-
-            <h3>Ask Grace and Olivier to share again.</h3>
-
-            <p>
-              Your top sharers are already bringing high-value contributors.
-              Sending them a personal message could increase total collection by
-              another RWF 300K–500K.
-            </p>
-
-            <button>
-              Generate Smart Message
-              <ArrowRight size={17} />
-            </button>
-          </div>
         </section>
 
-        <section className="share-content-grid">
+        <section className="share-content-grid final-grid">
           <div className="share-panel large">
             <div className="share-panel-heading">
               <div>
@@ -370,6 +308,15 @@ function ShareCenter() {
                 <h3>Traffic and conversion</h3>
               </div>
               <BarChart3 size={22} />
+            </div>
+
+            <div className="campaign-kpi-grid">
+              {campaignMetrics.map((item) => (
+                <div key={item.label}>
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                </div>
+              ))}
             </div>
 
             <div className="campaign-bars">
@@ -399,83 +346,59 @@ function ShareCenter() {
             </div>
           </div>
 
-          <div className="share-panel">
-            <div className="share-panel-heading">
+          <div className="share-panel ai-share-panel">
+            <span className="share-badge dark">
+              <Sparkles size={16} />
+              AI Growth Coach
+            </span>
+
+            <h3>WhatsApp is carrying your campaign.</h3>
+
+            <p>
+              Share again between 6PM and 9PM. Your best promoter is Grace N.,
+              and your strongest channel is WhatsApp.
+            </p>
+
+            <div className="coach-summary-list">
               <div>
-                <span>Top Sharers</span>
-                <h3>People helping growth</h3>
+                <span>Best channel</span>
+                <strong>WhatsApp</strong>
               </div>
-              <UsersRound size={22} />
-            </div>
 
-            <div className="top-sharer-list">
-              {topSharers.map((person) => (
-                <div className="top-sharer-item" key={person.name}>
-                  <div>
-                    <strong>{person.name}</strong>
-                    <span>{person.shares}</span>
-                  </div>
-
-                  <small>{person.result}</small>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="share-content-grid">
-          <div className="share-panel">
-            <div className="share-panel-heading">
               <div>
-                <span>Invite Contributors</span>
-                <h3>Reach more people</h3>
+                <span>Best time</span>
+                <strong>6PM – 9PM</strong>
               </div>
-              <Send size={22} />
-            </div>
 
-            <div className="invite-actions-grid">
-              <button>
-                <UsersRound size={18} />
-                Import Contacts
-              </button>
-
-              <button>
-                <Mail size={18} />
-                Email Invite
-              </button>
-
-              <button>
-                <Phone size={18} />
-                SMS Invite
-              </button>
-
-              <button>
-                <Globe size={18} />
-                Public Link
-              </button>
-            </div>
-          </div>
-
-          <div className="share-panel">
-            <div className="share-panel-heading">
               <div>
-                <span>Live Visitor Feed</span>
-                <h3>Happening now</h3>
+                <span>Top promoter</span>
+                <strong>Grace N.</strong>
               </div>
-              <RefreshCcw size={22} />
+
+              <div>
+                <span>Potential revenue</span>
+                <strong>RWF 420K</strong>
+              </div>
             </div>
 
-            <div className="share-activity-list">
-              {liveActivity.map((item) => (
-                <p key={item}>
-                  <CheckCircle2 size={16} />
-                  {item}
+            <div className="top-promoters-mini">
+              {topPromoters.map((person) => (
+                <p key={person.name}>
+                  <CheckCircle2 size={15} />
+                  <span>{person.name}</span>
+                  <b>{person.value}</b>
                 </p>
               ))}
             </div>
+
+            <button>
+              Generate Smart Message
+              <ArrowRight size={17} />
+            </button>
           </div>
         </section>
       </section>
+      {copied && <div className="share-toast">✓ Link copied</div>}
     </main>
   );
 }
