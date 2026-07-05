@@ -20,6 +20,18 @@ import { getUser } from "../api/api";
 import logoIcon from "../../assets/logo-icon.png";
 import "./AppSidebar.css";
 
+const protectedKeys = [
+  "dashboard",
+  "events",
+  "wallet",
+  "contributors",
+  "reports",
+  "notifications",
+  "share",
+  "profile",
+  "settings",
+];
+
 const navItems = [
   { label: "Home", icon: Home, path: "/home", key: "home" },
   { label: "Dashboard", icon: BarChart3, path: "/dashboard", key: "dashboard" },
@@ -48,6 +60,14 @@ function getUserInitials(user) {
   return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
 }
 
+function getSafePath(item, currentUser) {
+  if (!currentUser && protectedKeys.includes(item.key)) {
+    return "/login";
+  }
+
+  return item.path;
+}
+
 function AppSidebar({ active = "dashboard" }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const currentUser = getUser();
@@ -67,7 +87,7 @@ function AppSidebar({ active = "dashboard" }) {
             return (
               <Link
                 key={item.key}
-                to={item.path}
+                to={getSafePath(item, currentUser)}
                 className={active === item.key ? "active" : ""}
               >
                 <Icon size={18} />
@@ -77,7 +97,10 @@ function AppSidebar({ active = "dashboard" }) {
           })}
         </nav>
 
-        <Link to="/create-event" className="app-sidebar-create">
+        <Link
+          to={currentUser ? "/create-event" : "/login"}
+          className="app-sidebar-create"
+        >
           <Plus size={18} />
           Create Event
         </Link>
@@ -110,7 +133,7 @@ function AppSidebar({ active = "dashboard" }) {
 
         <div className="mobile-topbar-actions">
           <Link
-            to="/notifications"
+            to={currentUser ? "/notifications" : "/login"}
             className="mobile-topbar-btn"
             aria-label="Notifications"
           >
@@ -127,7 +150,10 @@ function AppSidebar({ active = "dashboard" }) {
             </Link>
           ) : null}
 
-          <Link to="/create-event" className="mobile-topbar-create">
+          <Link
+            to={currentUser ? "/create-event" : "/login"}
+            className="mobile-topbar-create"
+          >
             <Plus size={15} />
             New
           </Link>
@@ -189,7 +215,7 @@ function AppSidebar({ active = "dashboard" }) {
             return (
               <Link
                 key={item.key}
-                to={item.path}
+                to={getSafePath(item, currentUser)}
                 className={active === item.key ? "active" : ""}
                 onClick={() => setDrawerOpen(false)}
               >
@@ -201,7 +227,7 @@ function AppSidebar({ active = "dashboard" }) {
         </nav>
 
         <Link
-          to="/create-event"
+          to={currentUser ? "/create-event" : "/login"}
           className="mobile-drawer-create"
           onClick={() => setDrawerOpen(false)}
         >
@@ -216,7 +242,7 @@ function AppSidebar({ active = "dashboard" }) {
           return (
             <Link
               key={item.key}
-              to={item.path}
+              to={getSafePath(item, currentUser)}
               className={active === item.key ? "active" : ""}
             >
               <Icon size={22} />
@@ -225,7 +251,10 @@ function AppSidebar({ active = "dashboard" }) {
           );
         })}
 
-        <Link to="/create-event" className="mobile-bottom-create">
+        <Link
+          to={currentUser ? "/create-event" : "/login"}
+          className="mobile-bottom-create"
+        >
           <Plus size={22} />
         </Link>
       </nav>
