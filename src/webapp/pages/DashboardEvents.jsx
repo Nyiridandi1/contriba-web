@@ -2,23 +2,19 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowRight,
-  BarChart3,
   CalendarDays,
   CheckCircle2,
   Clock,
   Copy,
   Eye,
-  Filter,
   HeartHandshake,
   MapPin,
-  MoreHorizontal,
   Plus,
   QrCode,
   Search,
   Share2,
   Sparkles,
   Trash2,
-  TrendingUp,
   UsersRound,
   WalletCards,
 } from "lucide-react";
@@ -162,6 +158,8 @@ function DashboardEvents() {
     (event) => event.status === "active"
   ).length;
 
+  const featuredEvent = normalizedMyEvents[0] || null;
+
   const eventStats = [
     {
       title: "My Active Events",
@@ -180,12 +178,6 @@ function DashboardEvents() {
       value: String(totalContributors),
       note: "Across my events",
       icon: UsersRound,
-    },
-    {
-      title: "Success Rate",
-      value: "--",
-      note: "Analytics coming soon",
-      icon: TrendingUp,
     },
   ];
 
@@ -267,26 +259,6 @@ function DashboardEvents() {
             </p>
           </div>
 
-          <div className="dashboard-events-actions">
-            <button type="button">
-              <Search size={18} />
-              Search
-            </button>
-
-            <button type="button">
-              <Filter size={18} />
-              Filter
-            </button>
-
-            <button
-              className="red"
-              type="button"
-              onClick={() => navigate("/create-event")}
-            >
-              <Plus size={18} />
-              Create Event
-            </button>
-          </div>
         </header>
 
         <section className="dashboard-events-tabs">
@@ -318,13 +290,17 @@ function DashboardEvents() {
 
             <h2>
               {isMyEvents
-                ? "Your event command center."
+                ? "Welcome back, Olivier 👋"
                 : "Find an event to support."}
             </h2>
 
             <p>
               {isMyEvents
-                ? "Keep your organizer tools separate from public browsing. Manage progress, contributors, reports and sharing from one place."
+                ? activeEventsCount === 0
+                  ? "You're ready to create your first event. Build something memorable and start collecting contributions securely."
+                  : `You have ${activeEventsCount} active ${
+                      activeEventsCount === 1 ? "event" : "events"
+                    } receiving contributions. Keep sharing your event link and QR code to reach your goal faster.`
                 : "Discover weddings, graduations, birthdays, church events and fundraisers. Support people securely in just a few clicks."}
             </p>
 
@@ -338,27 +314,9 @@ function DashboardEvents() {
                 Create Event
               </button>
 
-              <button className="glass" type="button">
-                <BarChart3 size={18} />
-                View Analytics
-              </button>
             </div>
           </div>
 
-          <div className="dashboard-events-ai-card">
-            <Sparkles size={26} />
-            <span>{isMyEvents ? "AI Event Insight" : "Featured Event"}</span>
-            <strong>
-              {isMyEvents
-                ? "Analytics coming soon."
-                : "Public event discovery is live."}
-            </strong>
-            <p>
-              {isMyEvents
-                ? "Visitor insights, smart reminders and recommendations are coming soon."
-                : "Events shown here are live on Contriba."}
-            </p>
-          </div>
         </section>
 
         {isMyEvents && (
@@ -433,11 +391,11 @@ function DashboardEvents() {
 
         {!loading && displayedEvents.length === 0 && (
           <section className="dashboard-events-panel">
-            <h3>No events found</h3>
+            <h3>{isMyEvents ? "Your organizer workspace is ready" : "No public events found"}</h3>
             <p>
               {isMyEvents
-                ? "Create your first event and it will appear here."
-                : "No public events match this search yet."}
+                ? "Create your first event to start collecting contributions, sharing QR codes and tracking supporters from one place."
+                : "No public events match this search yet. Try another category or search term."}
             </p>
           </section>
         )}
@@ -449,9 +407,6 @@ function DashboardEvents() {
                 <div className="dashboard-event-card-top">
                   <span>{event.type}</span>
 
-                  <button type="button">
-                    <MoreHorizontal size={18} />
-                  </button>
                 </div>
 
                 <h3>{event.title}</h3>
@@ -479,8 +434,8 @@ function DashboardEvents() {
                 </div>
 
                 <div className="dashboard-event-progress">
-  <div style={{ width: event.progressWidth }} />
-</div>
+                  <div style={{ width: event.progressWidth }} />
+                </div>
 
                 <div className="dashboard-event-meta">
                   <div>
@@ -561,7 +516,7 @@ function DashboardEvents() {
               <div className="dashboard-events-panel-heading">
                 <div>
                   <span>Recent Event Activity</span>
-                  <h3>Event system ready</h3>
+                  <h3>Live event summary</h3>
                 </div>
 
                 <Clock size={22} />
@@ -569,51 +524,57 @@ function DashboardEvents() {
 
               <div className="dashboard-events-activity-list">
                 <p>
-  <CheckCircle2 size={16} />
-  Your event is now live and accepting contributions.
-</p>
+                  <CheckCircle2 size={16} />
+                  {activeEventsCount > 0
+                    ? `${activeEventsCount} active ${
+                        activeEventsCount === 1 ? "event is" : "events are"
+                      } collecting contributions.`
+                    : "Create your first event to start receiving contributions."}
+                </p>
 
-<p>
-  <Share2 size={16} />
-  Share your event with family and friends to increase visibility.
-</p>
+                <p>
+                  <UsersRound size={16} />
+                  {totalContributors} {totalContributors === 1 ? "contributor" : "contributors"} across your events.
+                </p>
 
-<p>
-  <UsersRound size={16} />
-  Every successful contribution will automatically appear in Contributors.
-</p>
+                <p>
+                  <WalletCards size={16} />
+                  {formatMoney(totalCollected)} collected so far.
+                </p>
 
-<p>
-  <WalletCards size={16} />
-  Payments and receipts are processed securely and tracked in real time.
-</p>
+                <p>
+                  <Share2 size={16} />
+                  {featuredEvent
+                    ? `${featuredEvent.progress} raised on ${featuredEvent.title}. Keep sharing the link and QR code.`
+                    : "Share your event link and QR code after creating an event."}
+                </p>
               </div>
             </div>
 
             <div className="dashboard-events-panel">
               <div className="dashboard-events-panel-heading">
                 <div>
-                  <span>Next Best Action</span>
-                  <h3>QR Generator Coming Soon</h3>
+                  <span>Organizer Workspace</span>
+                  <h3>Grow your event faster</h3>
                 </div>
 
                 <Sparkles size={22} />
               </div>
 
               <div className="dashboard-events-recommendation">
-                <strong>Edit and Delete Event are now connected.</strong>
+                <strong>Share your event link and QR code.</strong>
 
                 <p>
-                  Your dashboard can now open events for editing, delete events
-                  from your event center and copy public event links. QR generation is
-                  still coming soon.
+                  Invite family, friends and community groups to support your event.
+                  Thank contributors after every payment and keep sharing your event
+                  until you reach your goal.
                 </p>
 
                 <button
                   type="button"
-                  onClick={() => navigate("/create-event")}
+                  onClick={() => navigate("/share")}
                 >
-                  Create Another Event
+                  Open Share Center
                   <ArrowRight size={17} />
                 </button>
               </div>

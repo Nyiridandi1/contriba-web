@@ -20,18 +20,6 @@ import { getUser } from "../api/api";
 import logoIcon from "../../assets/logo-icon.png";
 import "./AppSidebar.css";
 
-const protectedKeys = [
-  "dashboard",
-  "events",
-  "wallet",
-  "contributors",
-  "reports",
-  "notifications",
-  "share",
-  "profile",
-  "settings",
-];
-
 const navItems = [
   { label: "Home", icon: Home, path: "/home", key: "home" },
   { label: "Dashboard", icon: BarChart3, path: "/dashboard", key: "dashboard" },
@@ -60,14 +48,6 @@ function getUserInitials(user) {
   return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
 }
 
-function getSafePath(item, currentUser) {
-  if (!currentUser && protectedKeys.includes(item.key)) {
-    return "/login";
-  }
-
-  return item.path;
-}
-
 function AppSidebar({ active = "dashboard" }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const currentUser = getUser();
@@ -87,7 +67,7 @@ function AppSidebar({ active = "dashboard" }) {
             return (
               <Link
                 key={item.key}
-                to={getSafePath(item, currentUser)}
+                to={item.path}
                 className={active === item.key ? "active" : ""}
               >
                 <Icon size={18} />
@@ -97,20 +77,17 @@ function AppSidebar({ active = "dashboard" }) {
           })}
         </nav>
 
-        <Link
-          to={currentUser ? "/create-event" : "/login"}
-          className="app-sidebar-create"
-        >
+        <Link to="/create-event" className="app-sidebar-create">
           <Plus size={18} />
           Create Event
         </Link>
 
         <div className="app-sidebar-card">
-          <span>Contriba OS</span>
-          <h3>Financial Operating System</h3>
+          <span>Organizer Workspace</span>
+          <h3>Your Workspace</h3>
           <p>
-            Manage events, contributors, payments, reports, reminders and
-            withdrawals from one premium command center.
+            Manage your events, contributors, payments and reports from one
+            clean organizer dashboard.
           </p>
         </div>
 
@@ -133,7 +110,7 @@ function AppSidebar({ active = "dashboard" }) {
 
         <div className="mobile-topbar-actions">
           <Link
-            to={currentUser ? "/notifications" : "/login"}
+            to="/notifications"
             className="mobile-topbar-btn"
             aria-label="Notifications"
           >
@@ -150,10 +127,7 @@ function AppSidebar({ active = "dashboard" }) {
             </Link>
           ) : null}
 
-          <Link
-            to={currentUser ? "/create-event" : "/login"}
-            className="mobile-topbar-create"
-          >
+          <Link to="/create-event" className="mobile-topbar-create">
             <Plus size={15} />
             New
           </Link>
@@ -215,7 +189,7 @@ function AppSidebar({ active = "dashboard" }) {
             return (
               <Link
                 key={item.key}
-                to={getSafePath(item, currentUser)}
+                to={item.path}
                 className={active === item.key ? "active" : ""}
                 onClick={() => setDrawerOpen(false)}
               >
@@ -227,7 +201,7 @@ function AppSidebar({ active = "dashboard" }) {
         </nav>
 
         <Link
-          to={currentUser ? "/create-event" : "/login"}
+          to="/create-event"
           className="mobile-drawer-create"
           onClick={() => setDrawerOpen(false)}
         >
@@ -242,7 +216,7 @@ function AppSidebar({ active = "dashboard" }) {
           return (
             <Link
               key={item.key}
-              to={getSafePath(item, currentUser)}
+              to={item.path}
               className={active === item.key ? "active" : ""}
             >
               <Icon size={22} />
@@ -251,10 +225,7 @@ function AppSidebar({ active = "dashboard" }) {
           );
         })}
 
-        <Link
-          to={currentUser ? "/create-event" : "/login"}
-          className="mobile-bottom-create"
-        >
+        <Link to="/create-event" className="mobile-bottom-create">
           <Plus size={22} />
         </Link>
       </nav>
