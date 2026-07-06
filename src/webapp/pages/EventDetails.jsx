@@ -488,19 +488,20 @@ function EventDetails() {
           </div>
 
           <div className="event-details-thumbs">
-            {normalizedEvent.images.slice(1, 4).map((image, index) => {
-              const realIndex = index + 1;
-              return (
+            {normalizedEvent.images
+              .map((image, index) => ({ image, index }))
+              .filter((item) => item.index !== selectedImageIndex)
+              .slice(0, 3)
+              .map(({ image, index }) => (
                 <button
+                  key={index}
                   type="button"
-                  className={`event-thumb ${selectedImageIndex === realIndex ? "active" : ""}`}
-                  key={`${image}-${realIndex}`}
-                  onClick={() => setSelectedImageIndex(realIndex)}
+                  className="event-thumb"
+                  onClick={() => setSelectedImageIndex(index)}
                 >
-                  <img src={image} alt={`${normalizedEvent.title} ${realIndex + 1}`} />
+                  <img src={image} alt={`${normalizedEvent.title} ${index + 1}`} />
                 </button>
-              );
-            })}
+              ))}
           </div>
         </div>
       </section>
