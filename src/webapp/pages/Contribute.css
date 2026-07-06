@@ -731,3 +731,160 @@
     display: none;
   }
 }
+
+/* Polished loading skeletons - keeps the page premium while event data loads */
+.contribute-skeleton-header {
+  pointer-events: none;
+}
+
+.contribute-skeleton-badge,
+.contribute-skeleton-title,
+.contribute-skeleton-copy,
+.contribute-skeleton-block,
+.contribute-skeleton-line,
+.contribute-skeleton-meta span,
+.contribute-skeleton-input,
+.contribute-skeleton-row,
+.contribute-skeleton-amount,
+.contribute-skeleton-chips span,
+.contribute-skeleton-money,
+.contribute-skeleton-button {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  background: linear-gradient(90deg, #f1f3f6 0%, #ffffff 45%, #eef1f5 100%);
+  background-size: 220% 100%;
+  animation: contributeSkeletonShimmer 1.35s ease-in-out infinite;
+}
+
+@keyframes contributeSkeletonShimmer {
+  0% { background-position: 120% 0; }
+  100% { background-position: -120% 0; }
+}
+
+.contribute-skeleton-badge {
+  width: 180px;
+  height: 36px;
+  border-radius: 999px;
+}
+
+.contribute-skeleton-title {
+  width: min(720px, 92%);
+  height: 68px;
+  margin: 20px 0 14px;
+  border-radius: 22px;
+}
+
+.contribute-skeleton-copy {
+  width: min(640px, 88%);
+  height: 18px;
+  margin-bottom: 10px;
+  border-radius: 999px;
+}
+
+.contribute-skeleton-copy.short {
+  width: min(460px, 70%);
+}
+
+.contribute-skeleton-layout {
+  pointer-events: none;
+}
+
+.contribute-skeleton-event-card .contribute-event-image::after {
+  display: none;
+}
+
+.contribute-skeleton-block {
+  min-height: 250px;
+}
+
+.contribute-skeleton-line {
+  height: 16px;
+  margin-bottom: 14px;
+  border-radius: 999px;
+}
+
+.contribute-skeleton-line.title {
+  width: 82%;
+  height: 40px;
+  border-radius: 16px;
+}
+
+.contribute-skeleton-line.medium {
+  width: 58%;
+}
+
+.contribute-skeleton-line.heading {
+  width: 245px;
+  height: 28px;
+  border-radius: 14px;
+}
+
+.contribute-skeleton-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.contribute-skeleton-meta span {
+  width: 155px;
+  height: 38px;
+  border-radius: 999px;
+}
+
+.contribute-skeleton-card {
+  min-height: 210px;
+}
+
+.contribute-skeleton-input {
+  height: 54px;
+  margin-top: 14px;
+  border-radius: 17px;
+}
+
+.contribute-skeleton-row {
+  height: 72px;
+  margin-top: 18px;
+  border-radius: 20px;
+}
+
+.contribute-skeleton-amount {
+  height: 74px;
+  border-radius: 20px;
+}
+
+.contribute-skeleton-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.contribute-skeleton-chips span {
+  width: 110px;
+  height: 46px;
+  border-radius: 15px;
+}
+
+.contribute-skeleton-money {
+  width: 78%;
+  height: 48px;
+  margin: 16px 0;
+  border-radius: 18px;
+}
+
+.contribute-skeleton-button {
+  height: 54px;
+  margin-top: 18px;
+  border-radius: 17px;
+}
+
+@media (max-width: 860px) {
+  .contribute-skeleton-event-card {
+    grid-template-columns: 1fr;
+  }
+
+  .contribute-skeleton-title {
+    height: 54px;
+  }
+}

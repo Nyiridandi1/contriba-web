@@ -331,15 +331,68 @@ function EventDetails() {
   if (loading) {
     return (
       <main className="event-details-page">
-        <section className="event-details-hero">
+        <section className="event-details-hero event-details-skeleton-hero">
           <Link to="/events" className="event-details-back">
             <ArrowLeft size={18} />
             Back to Events
           </Link>
-          <div className="event-details-card">
-            <h2>Loading event...</h2>
-            <p>Please wait while we prepare everything for you.</p>
+
+          <div className="event-details-gallery event-details-skeleton-gallery" aria-hidden="true">
+            <div className="event-details-main-image skeleton-block skeleton-main-photo"></div>
+
+            <div className="event-details-thumbs">
+              <div className="event-thumb skeleton-block"></div>
+              <div className="event-thumb skeleton-block"></div>
+              <div className="event-thumb skeleton-block"></div>
+            </div>
           </div>
+        </section>
+
+        <section className="event-details-content event-details-skeleton-content" aria-hidden="true">
+          <div className="event-details-main">
+            <div className="event-details-skeleton-title">
+              <span className="skeleton-line skeleton-label-line"></span>
+              <span className="skeleton-line skeleton-title-line"></span>
+              <span className="skeleton-line skeleton-title-line short"></span>
+            </div>
+
+            <div className="event-details-meta skeleton-meta-row">
+              <span className="skeleton-pill"></span>
+              <span className="skeleton-pill"></span>
+              <span className="skeleton-pill"></span>
+            </div>
+
+            <div className="event-details-card skeleton-card-preview">
+              <span className="skeleton-line skeleton-card-title"></span>
+              <span className="skeleton-line"></span>
+              <span className="skeleton-line"></span>
+              <span className="skeleton-line medium"></span>
+            </div>
+
+            <div className="event-details-card skeleton-card-preview">
+              <span className="skeleton-line skeleton-card-title"></span>
+              <div className="skeleton-list-preview">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          </div>
+
+          <aside className="event-details-sidebar">
+            <div className="event-sticky-card skeleton-sticky-preview">
+              <span className="skeleton-line skeleton-card-title"></span>
+              <span className="skeleton-line skeleton-money-line"></span>
+              <div className="skeleton-progress"></div>
+              <div className="skeleton-stats-grid">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <span className="skeleton-button-line"></span>
+            </div>
+          </aside>
         </section>
       </main>
     );

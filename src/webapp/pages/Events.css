@@ -604,3 +604,52 @@
     justify-content: center;
   }
 }
+
+/* Optional event card skeletons for future backend loading states */
+.events-skeleton-card {
+  min-height: 360px;
+  border-radius: 28px;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 22px 62px rgba(17, 24, 39, 0.065);
+}
+
+.events-skeleton-card span {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(90deg, #f1f3f6 0%, #ffffff 45%, #eef1f5 100%);
+  background-size: 220% 100%;
+  animation: eventsSkeletonShimmer 1.35s ease-in-out infinite;
+}
+
+@keyframes eventsSkeletonShimmer {
+  0% { background-position: 120% 0; }
+  100% { background-position: -120% 0; }
+}
+
+.events-skeleton-image {
+  height: 190px;
+}
+
+.events-skeleton-body {
+  padding: 18px;
+  display: grid;
+  gap: 12px;
+}
+
+.events-skeleton-title {
+  width: 80%;
+  height: 28px;
+  border-radius: 14px;
+}
+
+.events-skeleton-line {
+  height: 14px;
+  border-radius: 999px;
+}
+
+.events-skeleton-line.short {
+  width: 58%;
+}

@@ -208,15 +208,55 @@ function Contribute() {
             Back to event
           </Link>
 
-          <section className="contribute-header">
-            <span>
-              <Sparkles size={16} />
-              Secure contribution
-            </span>
+          <section className="contribute-header contribute-skeleton-header" aria-hidden="true">
+            <span className="contribute-skeleton-badge"></span>
+            <div className="contribute-skeleton-title"></div>
+            <div className="contribute-skeleton-copy"></div>
+            <div className="contribute-skeleton-copy short"></div>
+          </section>
 
-            <h1>Loading contribution page...</h1>
+          <section className="contribute-layout contribute-skeleton-layout" aria-hidden="true">
+            <div className="contribute-main">
+              <div className="contribute-event-card contribute-skeleton-event-card">
+                <div className="contribute-event-image contribute-skeleton-block"></div>
+                <div className="contribute-event-info">
+                  <span className="contribute-skeleton-line title"></span>
+                  <span className="contribute-skeleton-line medium"></span>
+                  <div className="contribute-skeleton-meta">
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
+              </div>
 
-            <p>Preparing event information...</p>
+              <div className="contribute-card contribute-skeleton-card">
+                <span className="contribute-skeleton-line heading"></span>
+                <span className="contribute-skeleton-input"></span>
+                <span className="contribute-skeleton-input"></span>
+                <span className="contribute-skeleton-row"></span>
+              </div>
+
+              <div className="contribute-card contribute-skeleton-card">
+                <span className="contribute-skeleton-line heading"></span>
+                <span className="contribute-skeleton-amount"></span>
+                <div className="contribute-skeleton-chips">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+            </div>
+
+            <aside className="contribute-summary">
+              <div className="summary-card contribute-skeleton-card">
+                <span className="contribute-skeleton-line heading"></span>
+                <span className="contribute-skeleton-money"></span>
+                <span className="contribute-skeleton-input"></span>
+                <span className="contribute-skeleton-input"></span>
+                <span className="contribute-skeleton-button"></span>
+              </div>
+            </aside>
           </section>
         </div>
       </main>

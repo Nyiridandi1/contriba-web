@@ -446,9 +446,25 @@ function AppHome() {
         </section>
 
         {loading && (
-          <section className="app-home-empty-state">
-            <h3>Loading events...</h3>
-            <p>Preparing public events for you...</p>
+          <section className="app-home-events-grid">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div key={index} className="app-home-skeleton-card">
+                <div className="app-home-skeleton-image shimmer"></div>
+
+                <div className="app-home-skeleton-body">
+                  <div className="app-home-skeleton-pill shimmer"></div>
+                  <div className="app-home-skeleton-title shimmer"></div>
+                  <div className="app-home-skeleton-line shimmer"></div>
+                  <div className="app-home-skeleton-line short shimmer"></div>
+                  <div className="app-home-skeleton-progress shimmer"></div>
+
+                  <div className="app-home-skeleton-footer">
+                    <div className="app-home-skeleton-avatar shimmer"></div>
+                    <div className="app-home-skeleton-small shimmer"></div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </section>
         )}
 

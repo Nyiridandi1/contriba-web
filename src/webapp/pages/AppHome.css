@@ -560,9 +560,9 @@
   box-shadow: 0 8px 18px rgba(34, 197, 94, 0.35);
   z-index: 2;
 }
-/* ═══════════════════════════════════════
-   CONTRIBA APP HOME — MOBILE RESPONSIVE
-═══════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   CONTRIBA APP HOME â€” MOBILE RESPONSIVE
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 @media (min-width: 769px) {
   .app-home-page .app-sidebar { display: none !important; }
@@ -680,7 +680,7 @@
   .app-home-main {
     padding-bottom: 90px !important;
   }
-}/* ── MOBILE TOPBAR AVATAR ── */
+}/* â”€â”€ MOBILE TOPBAR AVATAR â”€â”€ */
 @media (max-width: 768px) {
   .mobile-topbar-avatar {
     width: 36px;
@@ -710,7 +710,7 @@
     font-weight: 800;
   }
 
-  /* ── DRAWER USER INFO ── */
+  /* â”€â”€ DRAWER USER INFO â”€â”€ */
   .mobile-drawer-user {
     display: flex;
     align-items: center;
@@ -756,7 +756,7 @@
     margin-top: 2px;
   }
 
-  /* ── TOPBAR CREATE BUTTON ── */
+  /* â”€â”€ TOPBAR CREATE BUTTON â”€â”€ */
   .mobile-topbar-create {
     display: flex;
     align-items: center;
@@ -775,7 +775,7 @@
   .app-home-icon-action { display: none !important; }
   .app-home-user-avatar { display: none !important; }
   .app-home-top-actions button { display: none !important; }
-}/* ── SEARCH CLEAR BUTTON ── */
+}/* â”€â”€ SEARCH CLEAR BUTTON â”€â”€ */
 .app-home-search {
   position: relative;
 }
@@ -800,14 +800,14 @@
   background: rgba(229, 9, 20, 0.06);
 }
 
-/* ── FILTERS BUTTON ACTIVE STATE ── */
+/* â”€â”€ FILTERS BUTTON ACTIVE STATE â”€â”€ */
 .app-home-top-actions button.active {
   background: #E50914 !important;
   color: white !important;
   border-color: #E50914 !important;
 }
 
-/* ── FILTER DOT ── */
+/* â”€â”€ FILTER DOT â”€â”€ */
 .filter-dot {
   width: 7px;
   height: 7px;
@@ -817,7 +817,7 @@
   flex-shrink: 0;
 }
 
-/* ── FILTER PANEL ── */
+/* â”€â”€ FILTER PANEL â”€â”€ */
 .app-home-filter-panel {
   margin: 0 0 16px;
   animation: slideDown 0.2s ease;
@@ -907,7 +907,7 @@
   color: white;
 }
 
-/* ── CLEAR BUTTON IN SECTION HEADER ── */
+/* â”€â”€ CLEAR BUTTON IN SECTION HEADER â”€â”€ */
 .app-home-clear-btn {
   display: inline-flex;
   align-items: center;
@@ -930,7 +930,7 @@
   color: white;
 }
 
-/* ── MOBILE FILTER PANEL ── */
+/* â”€â”€ MOBILE FILTER PANEL â”€â”€ */
 @media (max-width: 768px) {
   .app-home-filter-panel {
     margin: 0 16px 16px;
@@ -950,7 +950,7 @@
     padding: 0 12px;
     font-size: 12px;
   }
-}/* ── PREMIUM EMPTY STATE ── */
+}/* â”€â”€ PREMIUM EMPTY STATE â”€â”€ */
 .contriba-empty-state {
   min-height: 360px;
   padding: 46px 28px;
@@ -1053,3 +1053,30 @@
     font-size: 28px;
   }
 }
+
+/* ===========================================
+   CONTRIBA PREMIUM EVENT SKELETON
+=========================================== */
+
+.app-home-skeleton-card{
+overflow:hidden;background:#fff;border-radius:26px;border:1px solid rgba(0,0,0,.05);box-shadow:0 18px 55px rgba(0,0,0,.05);
+}
+.shimmer{
+background:linear-gradient(90deg,#f3f4f6 0%,#ffffff 45%,#edf0f4 100%);
+background-size:220% 100%;
+animation:contribaShimmer 1.3s linear infinite;
+}
+@keyframes contribaShimmer{
+from{background-position:220% 0;}
+to{background-position:-220% 0;}
+}
+.app-home-skeleton-image{height:210px;}
+.app-home-skeleton-body{padding:18px;}
+.app-home-skeleton-pill{width:95px;height:28px;border-radius:999px;margin-bottom:18px;}
+.app-home-skeleton-title{width:78%;height:30px;border-radius:12px;margin-bottom:16px;}
+.app-home-skeleton-line{height:14px;border-radius:999px;margin-bottom:10px;}
+.app-home-skeleton-line.short{width:58%;}
+.app-home-skeleton-progress{height:9px;border-radius:999px;margin:24px 0;}
+.app-home-skeleton-footer{display:flex;align-items:center;gap:12px;}
+.app-home-skeleton-avatar{width:42px;height:42px;border-radius:50%;}
+.app-home-skeleton-small{width:130px;height:15px;border-radius:999px;}
