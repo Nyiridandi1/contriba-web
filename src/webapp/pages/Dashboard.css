@@ -1223,13 +1223,13 @@
 
 .quick-actions-grid a svg {
   color: #E50914;
-}/* ═══════════════════════════════════════
+}/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    DASHBOARD MOBILE FIXES
-═══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 @media (max-width: 768px) {
 
-  /* Hide Export and Search from mobile header — too cluttered */
+  /* Hide Export and Search from mobile header â€” too cluttered */
   .dashboard-top-actions a:first-child,
   .dashboard-top-actions button:first-child {
     display: none !important;
@@ -1443,4 +1443,162 @@
   .dashboard-stat-card strong {
     font-size: 16px !important;
   }
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   UNIFIED CONTRIBA DASHBOARD THEME
+   Dashboard now uses the same visual language as Home: white cards,
+   soft red accents, light background, one shared AppSidebar.
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.dashboard-page {
+  background:
+    radial-gradient(circle at top left, rgba(229, 9, 20, 0.06), transparent 30%),
+    radial-gradient(circle at top right, rgba(255, 95, 120, 0.055), transparent 28%),
+    #f7f8fb;
+}
+
+.dashboard-main {
+  padding: 28px 34px 70px;
+}
+
+.dashboard-topbar h1,
+.dashboard-hero-left h2,
+.panel-heading h3,
+.ai-coach-content h2 {
+  color: #111827;
+}
+
+.dashboard-hero-card {
+  color: #111827;
+  background:
+    radial-gradient(circle at 85% 12%, rgba(229, 9, 20, 0.14), transparent 30%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 245, 246, 0.92));
+  border: 1px solid rgba(229, 9, 20, 0.12);
+  box-shadow: 0 22px 60px rgba(16, 24, 40, 0.06);
+}
+
+.dashboard-hero-left p,
+.ai-coach-content p {
+  color: #667085;
+}
+
+.dashboard-progress-row div,
+.dashboard-stat-card,
+.smart-card,
+.dashboard-panel,
+.ai-coach-card,
+.ai-coach-metric {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 18px 45px rgba(16, 24, 40, 0.05);
+}
+
+.dashboard-progress-row span,
+.dashboard-progress-row strong {
+  color: #111827;
+}
+
+.dashboard-progress-track {
+  background: #e9edf5;
+}
+
+.dashboard-progress-track div {
+  background: linear-gradient(90deg, #e50914, #ff3348);
+}
+
+.dashboard-hero-actions a,
+.dashboard-top-actions .red,
+.dashboard-hero-actions .red {
+  color: #fff;
+  background: linear-gradient(135deg, #e50914, #ff3348);
+  border: 0;
+  box-shadow: 0 18px 36px rgba(229, 9, 20, 0.22);
+}
+
+.dashboard-hero-actions button,
+.dashboard-top-actions button,
+.dashboard-top-actions a:not(.red) {
+  color: #111827;
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 14px 35px rgba(16, 24, 40, 0.045);
+}
+
+.dashboard-badge {
+  background: rgba(229, 9, 20, 0.075);
+  border: 1px solid rgba(229, 9, 20, 0.1);
+}
+
+@media (max-width: 1100px) {
+  .dashboard-main {
+    padding: 24px 18px 92px;
+  }
+}
+
+@media (max-width: 760px) {
+  .dashboard-main {
+    padding: 22px 14px 92px;
+  }
+}
+
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   FINAL SIDEBAR VISIBILITY FIX
+   Keep AppSidebar visible on desktop and push this page content beside it.
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+@media (min-width: 769px) {
+  .app-sidebar {
+    display: flex !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: 260px !important;
+    height: 100vh !important;
+    z-index: 1000 !important;
+  }
+
+  .dashboard-main {
+    margin-left: 260px !important;
+    width: calc(100% - 260px) !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 992px) {
+  .app-sidebar {
+    width: 240px !important;
+  }
+
+  .dashboard-main {
+    margin-left: 240px !important;
+    width: calc(100% - 240px) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-sidebar {
+    display: none !important;
+  }
+
+  .dashboard-main {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+}
+
+
+/* FINAL SIDEBAR LAYOUT OVERRIDE */
+.dashboard-page {
+  min-height: 100vh !important;
+  display: block !important;
+  background: radial-gradient(circle at 100% 0%, rgba(229,9,20,.08), transparent 28%), #f7f8fc !important;
+}
+.dashboard-main {
+  width: 100% !important;
+  max-width: 1280px !important;
+  margin: 0 auto !important;
+  padding: 34px 40px 80px !important;
+}
+@media (max-width: 768px) {
+  .dashboard-main { padding: 24px 16px 96px !important; }
 }

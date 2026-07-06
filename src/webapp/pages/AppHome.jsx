@@ -10,7 +10,6 @@ import {
   Search,
   ShieldCheck,
   Sparkles,
-  UserRound,
   X,
 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -18,7 +17,6 @@ import { Link } from "react-router-dom";
 import { getEvents } from "../api/api";
 import { useAuth } from "../context/AuthContext";
 
-import logoIcon from "../../assets/logo-icon.png";
 import EventCard from "../components/events/EventCard";
 import EventCategoryPill from "../components/events/EventCategoryPill";
 import AppSidebar from "../components/AppSidebar";
@@ -186,81 +184,7 @@ function AppHome() {
 
   return (
     <main className="app-home-page">
-      <aside className="app-home-sidebar">
-        <div>
-          <Link to="/" className="app-home-brand">
-            <img src={logoIcon} alt="Contriba" />
-            <div>
-              <strong>Contriba</strong>
-              <span>Contribute easily</span>
-            </div>
-          </Link>
-
-          <nav className="app-home-nav">
-            <Link to="/home" className="active">
-              <Sparkles size={18} />
-              <span>Home</span>
-            </Link>
-
-            <Link to={isAuthenticated ? "/dashboard" : "/register"}>
-              <ShieldCheck size={18} />
-              <span>Dashboard</span>
-            </Link>
-
-            <Link to={isAuthenticated ? "/wallet" : "/register"}>
-              <HeartHandshake size={18} />
-              <span>Wallet</span>
-            </Link>
-
-            <Link to={isAuthenticated ? "/notifications" : "/register"}>
-              <Bell size={18} />
-              <span>Notifications</span>
-            </Link>
-
-            <Link to={isAuthenticated ? "/profile" : "/register"}>
-              <UserRound size={18} />
-              <span>Profile</span>
-            </Link>
-          </nav>
-
-          <Link
-            to={isAuthenticated ? "/create-event" : "/register"}
-            className="app-home-create"
-          >
-            + Create Event
-          </Link>
-        </div>
-
-        <div className="app-home-sidebar-bottom">
-          <div className="app-home-sidebar-card">
-            <div className="app-home-sidebar-card-icon">
-              <Sparkles size={20} />
-            </div>
-
-            <h4>{isAuthenticated ? "Organizer Mode" : "Guest Mode"}</h4>
-
-            <p>
-              {isAuthenticated
-                ? "Create events, track contributions and manage your organizer tools."
-                : "Browse public events freely. Create an account to unlock your organizer dashboard, wallet and reports."}
-            </p>
-
-            <Link to={isAuthenticated ? "/create-event" : "/register"}>
-              {isAuthenticated ? "Create Event" : "Create Free Account"}
-            </Link>
-          </div>
-
-          <div className="app-home-sidebar-footer">
-            <span>© 2026 Contriba</span>
-            <div>
-              <Link to="/privacy">Privacy</Link>
-              <Link to="/terms">Terms</Link>
-              <Link to="/contact">Support</Link>
-            </div>
-          </div>
-        </div>
-      </aside>
-
+      {/* Unified sidebar: Home now uses the same navigation system as Dashboard and every organizer page. */}
       <AppSidebar active="home" />
 
       <section className="app-home-main">
@@ -287,8 +211,9 @@ function AppHome() {
               {searchQuery && (
                 <button
                   className="app-home-search-clear"
-                  onClick={() => setSearchQuery("")}
+                  onClick={clearSearch}
                   type="button"
+                  aria-label="Clear search"
                 >
                   <X size={15} />
                 </button>
@@ -433,16 +358,7 @@ function AppHome() {
             </h2>
           </div>
 
-          {hasActiveFilters && (
-            <button
-              type="button"
-              className="app-home-clear-btn"
-              onClick={clearSearch}
-            >
-              <X size={14} />
-              Clear
-            </button>
-          )}
+
         </section>
 
         {loading && (
