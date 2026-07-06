@@ -715,3 +715,194 @@
     min-height: auto;
   }
 }
+
+
+/* =========================================================
+   WALLET FINAL POLISH + SKELETON LOADING
+   Added safely at the bottom. Backend logic untouched.
+   ========================================================= */
+
+.wallet-main {
+  padding: 34px 34px 80px;
+}
+
+/* Clean Contriba SaaS hero â€” replaces dark red hero visually */
+.wallet-hero {
+  position: relative;
+  color: #111827 !important;
+  background:
+    radial-gradient(circle at 86% 8%, rgba(229, 9, 20, 0.12), transparent 26%),
+    radial-gradient(circle at 0% 100%, rgba(229, 9, 20, 0.07), transparent 34%),
+    rgba(255, 255, 255, 0.94) !important;
+  border: 1px solid rgba(229, 9, 20, 0.1);
+  box-shadow: 0 18px 48px rgba(16, 24, 40, 0.06) !important;
+}
+
+.wallet-hero::after {
+  content: "";
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  right: -150px;
+  top: -140px;
+  border-radius: 999px;
+  background: rgba(229, 9, 20, 0.08);
+  pointer-events: none;
+}
+
+.wallet-hero-left {
+  position: relative;
+  z-index: 1;
+}
+
+.wallet-badge {
+  color: #e50914 !important;
+  background: rgba(229, 9, 20, 0.08) !important;
+}
+
+.wallet-hero-left h2 {
+  color: #111827 !important;
+}
+
+.wallet-hero-left p {
+  color: #667085 !important;
+}
+
+.wallet-hero-actions button.light {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #e50914, #ff3348) !important;
+  box-shadow: 0 14px 28px rgba(229, 9, 20, 0.18);
+}
+
+.wallet-hero-actions button.glass {
+  color: #111827 !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(17, 24, 39, 0.08) !important;
+  backdrop-filter: none !important;
+}
+
+/* Softer consistent cards */
+.wallet-stat-card,
+.wallet-panel {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border-color: rgba(17, 24, 39, 0.08) !important;
+  box-shadow: 0 18px 48px rgba(16, 24, 40, 0.06) !important;
+}
+
+.wallet-form-fields input:focus {
+  border-color: rgba(229, 9, 20, 0.28);
+  box-shadow: 0 0 0 5px rgba(229, 9, 20, 0.06);
+}
+
+.destination-list button:hover,
+.destination-list button.active {
+  background: #ffffff;
+  box-shadow: 0 18px 36px rgba(16, 24, 40, 0.07);
+}
+
+/* Skeleton loading system */
+.wallet-hero-balance-skeleton,
+.wallet-skeleton-icon,
+.wallet-skeleton-line,
+.wallet-skeleton-pill {
+  display: block;
+  border-radius: 999px;
+  background: #edf0f5;
+}
+
+.wallet-hero-balance-skeleton {
+  width: min(420px, 70vw);
+  height: clamp(48px, 7vw, 78px);
+  border-radius: 18px;
+}
+
+.wallet-skeleton-card {
+  pointer-events: none;
+}
+
+.wallet-skeleton-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 16px;
+  margin-bottom: 14px;
+}
+
+.wallet-skeleton-line {
+  height: 13px;
+}
+
+.wallet-skeleton-line-xs {
+  width: 42%;
+}
+
+.wallet-skeleton-line-sm {
+  width: 58%;
+}
+
+.wallet-skeleton-line-md {
+  width: 74%;
+  height: 20px;
+  margin-top: 10px;
+}
+
+.wallet-skeleton-pill {
+  width: 82px;
+  height: 32px;
+}
+
+.wallet-transactions-skeleton {
+  display: grid;
+  gap: 10px;
+}
+
+.wallet-withdraw-skeleton-row {
+  pointer-events: none;
+}
+
+.wallet-withdraw-skeleton-row strong,
+.wallet-withdraw-skeleton-row span,
+.wallet-withdraw-skeleton-row small {
+  margin: 0;
+}
+
+.wallet-withdraw-skeleton-row div span {
+  margin-top: 8px;
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.78),
+    transparent
+  );
+  animation: walletShimmer 1.35s infinite;
+}
+
+@keyframes walletShimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (max-width: 680px) {
+  .wallet-main {
+    padding: 20px 16px 100px;
+  }
+
+  .wallet-hero::after {
+    width: 260px;
+    height: 260px;
+    right: -130px;
+    top: -120px;
+  }
+}

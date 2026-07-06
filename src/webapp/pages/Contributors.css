@@ -1138,3 +1138,205 @@
     border-radius: 22px;
   }
 }
+
+
+/* =========================================================
+   CONTRIBUTORS FINAL POLISH + SKELETON LOADING
+   Added safely at the bottom. Backend logic untouched.
+   ========================================================= */
+
+.contributors-main {
+  padding: 34px 34px 80px;
+}
+
+.contributors-hero {
+  position: relative;
+  color: #111827 !important;
+  background:
+    radial-gradient(circle at 86% 8%, rgba(229, 9, 20, 0.12), transparent 26%),
+    radial-gradient(circle at 0% 100%, rgba(229, 9, 20, 0.07), transparent 34%),
+    rgba(255, 255, 255, 0.94) !important;
+  border: 1px solid rgba(229, 9, 20, 0.1);
+  box-shadow: 0 18px 48px rgba(16, 24, 40, 0.06) !important;
+}
+
+.contributors-hero::after {
+  content: "";
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  right: -150px;
+  top: -140px;
+  border-radius: 999px;
+  background: rgba(229, 9, 20, 0.08);
+  pointer-events: none;
+}
+
+.contributors-hero > div {
+  position: relative;
+  z-index: 1;
+}
+
+.contributors-badge {
+  color: #e50914 !important;
+  background: rgba(229, 9, 20, 0.08) !important;
+}
+
+.contributors-hero h2,
+.contributors-hero-card strong {
+  color: #111827 !important;
+}
+
+.contributors-hero p,
+.contributors-hero-card p {
+  color: #667085 !important;
+}
+
+.contributors-hero-card {
+  background: rgba(255, 255, 255, 0.76) !important;
+  border: 1px solid rgba(17, 24, 39, 0.08) !important;
+  box-shadow: 0 18px 42px rgba(16, 24, 40, 0.05);
+  backdrop-filter: blur(18px);
+}
+
+.contributors-hero-card span {
+  color: #e50914 !important;
+}
+
+.contributors-stat-card,
+.contributors-table-card,
+.contributor-detail-panel,
+.detail-profile-clean,
+.detail-section,
+.detail-ai-card {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border-color: rgba(17, 24, 39, 0.08) !important;
+  box-shadow: 0 18px 48px rgba(16, 24, 40, 0.06) !important;
+}
+
+.contributors-search:focus-within {
+  border-color: rgba(229, 9, 20, 0.28);
+  box-shadow: 0 0 0 5px rgba(229, 9, 20, 0.06), 0 14px 34px rgba(16, 24, 40, 0.05);
+}
+
+.contributors-filters button:hover,
+.contributors-actions button:hover {
+  transform: translateY(-2px);
+}
+
+.contributors-skeleton-card,
+.contributors-row-skeleton,
+.contributors-detail-skeleton,
+.contributors-panel-skeleton,
+.contributors-action-skeleton {
+  pointer-events: none;
+}
+
+.contributors-skeleton-avatar,
+.contributors-skeleton-action,
+.contributors-skeleton-line,
+.contributors-skeleton-pill {
+  display: block;
+  border-radius: 999px;
+  background: #edf0f5;
+}
+
+.contributors-skeleton-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 16px;
+  flex: 0 0 auto;
+}
+
+.contributors-skeleton-avatar-lg {
+  width: 74px;
+  height: 74px;
+  border-radius: 26px;
+}
+
+.contributors-skeleton-action {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+}
+
+.contributors-skeleton-line { height: 13px; }
+.contributors-skeleton-line-xs { width: 42%; }
+.contributors-skeleton-line-sm { width: 58%; }
+.contributors-skeleton-line-md { width: 74%; height: 18px; }
+.contributors-skeleton-line-lg { width: 82%; height: 32px; }
+.contributors-skeleton-line-full { width: 100%; }
+
+.contributors-skeleton-pill {
+  width: 86px;
+  height: 30px;
+}
+
+.contributors-row-skeleton .contributors-person > div:last-child {
+  width: 100%;
+  display: grid;
+  gap: 7px;
+}
+
+.contributors-row-skeleton .contributors-amount,
+.contributors-row-skeleton .contributors-method {
+  display: grid;
+  gap: 8px;
+}
+
+.contributors-money-skeleton {
+  background:
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.2), transparent 35%),
+    linear-gradient(135deg, #151722, #E50914) !important;
+}
+
+.contributors-money-skeleton .contributors-skeleton-line {
+  background: rgba(255, 255, 255, 0.34);
+}
+
+.contributors-action-skeleton {
+  background: #f7f8fb !important;
+  cursor: default !important;
+}
+
+.contributors-action-skeleton .contributors-skeleton-line {
+  width: 70%;
+}
+
+.contributors-panel-skeleton {
+  min-height: 170px;
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.78), transparent);
+  animation: contributorsShimmer 1.35s infinite;
+}
+
+@keyframes contributorsShimmer {
+  100% { transform: translateX(100%); }
+}
+
+@media (max-width: 680px) {
+  .contributors-main {
+    padding: 20px 16px 100px;
+  }
+
+  .contributors-hero::after {
+    width: 260px;
+    height: 260px;
+    right: -130px;
+    top: -120px;
+  }
+}

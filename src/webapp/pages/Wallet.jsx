@@ -160,7 +160,7 @@ function Wallet() {
               {balance > 0 ? "Available to withdraw" : "Wallet ready"}
             </span>
 
-            <h2>{loading ? "Loading..." : formatMoney(balance)}</h2>
+            <h2>{loading ? <span className="wallet-hero-balance-skeleton shimmer" /> : formatMoney(balance)}</h2>
 
             <p>
               {balance > 0
@@ -184,33 +184,46 @@ function Wallet() {
         </section>
 
         <section className="wallet-stats-grid">
-          <div className="wallet-stat-card">
-            <div className="wallet-stat-icon"><WalletCards size={20} /></div>
-            <span>Available Balance</span>
-            <strong>{formatMoney(balance)}</strong>
-            <p>Ready to withdraw</p>
-          </div>
+          {loading ? (
+            [1, 2, 3, 4].map((item) => (
+              <div className="wallet-stat-card wallet-skeleton-card" key={item}>
+                <div className="wallet-skeleton-icon shimmer" />
+                <span className="wallet-skeleton-line wallet-skeleton-line-sm shimmer" />
+                <strong className="wallet-skeleton-line wallet-skeleton-line-md shimmer" />
+                <p className="wallet-skeleton-line wallet-skeleton-line-xs shimmer" />
+              </div>
+            ))
+          ) : (
+            <>
+              <div className="wallet-stat-card">
+                <div className="wallet-stat-icon"><WalletCards size={20} /></div>
+                <span>Available Balance</span>
+                <strong>{formatMoney(balance)}</strong>
+                <p>Ready to withdraw</p>
+              </div>
 
-          <div className="wallet-stat-card">
-            <div className="wallet-stat-icon"><Clock size={20} /></div>
-            <span>Pending Balance</span>
-            <strong>{formatMoney(pendingBalance)}</strong>
-            <p>Waiting confirmation</p>
-          </div>
+              <div className="wallet-stat-card">
+                <div className="wallet-stat-icon"><Clock size={20} /></div>
+                <span>Pending Balance</span>
+                <strong>{formatMoney(pendingBalance)}</strong>
+                <p>Waiting confirmation</p>
+              </div>
 
-          <div className="wallet-stat-card">
-            <div className="wallet-stat-icon"><ArrowUpRight size={20} /></div>
-            <span>Withdrawn Total</span>
-            <strong>{formatMoney(totalWithdrawn)}</strong>
-            <p>Sent to your accounts</p>
-          </div>
+              <div className="wallet-stat-card">
+                <div className="wallet-stat-icon"><ArrowUpRight size={20} /></div>
+                <span>Withdrawn Total</span>
+                <strong>{formatMoney(totalWithdrawn)}</strong>
+                <p>Sent to your accounts</p>
+              </div>
 
-          <div className="wallet-stat-card">
-            <div className="wallet-stat-icon"><ShieldCheck size={20} /></div>
-            <span>Transactions</span>
-            <strong>{transactions.length}</strong>
-            <p>Wallet records</p>
-          </div>
+              <div className="wallet-stat-card">
+                <div className="wallet-stat-icon"><ShieldCheck size={20} /></div>
+                <span>Transactions</span>
+                <strong>{transactions.length}</strong>
+                <p>Wallet records</p>
+              </div>
+            </>
+          )}
         </section>
 
         <section className="wallet-content-grid wallet-primary-grid">
@@ -337,10 +350,18 @@ function Wallet() {
 
           <div className="withdraw-table">
             {loading && (
-              <div className="wallet-empty-state">
-                <Clock size={28} />
-                <strong>Loading transactions...</strong>
-                <span>Please wait while your wallet records are loaded.</span>
+              <div className="wallet-transactions-skeleton">
+                {[1, 2, 3].map((item) => (
+                  <div className="withdraw-row wallet-withdraw-skeleton-row" key={item}>
+                    <div>
+                      <strong className="wallet-skeleton-line wallet-skeleton-line-md shimmer" />
+                      <span className="wallet-skeleton-line wallet-skeleton-line-sm shimmer" />
+                    </div>
+                    <strong className="wallet-skeleton-line wallet-skeleton-line-sm shimmer" />
+                    <span className="wallet-skeleton-line wallet-skeleton-line-xs shimmer" />
+                    <small className="wallet-skeleton-pill shimmer" />
+                  </div>
+                ))}
               </div>
             )}
 

@@ -123,41 +123,53 @@ function Contributors() {
         </section>
 
         <section className="contributors-stats-grid">
-          <div className="contributors-stat-card">
-            <span>Total Contributors</span>
-            <strong>{stats.total_contributors}</strong>
-            <p>
-              <UsersRound size={15} />
-              Success rate {analytics.successRate}%
-            </p>
-          </div>
+          {loading ? (
+            [1, 2, 3, 4].map((item) => (
+              <div className="contributors-stat-card contributors-skeleton-card" key={item}>
+                <span className="contributors-skeleton-line contributors-skeleton-line-sm shimmer" />
+                <strong className="contributors-skeleton-line contributors-skeleton-line-md shimmer" />
+                <p className="contributors-skeleton-line contributors-skeleton-line-xs shimmer" />
+              </div>
+            ))
+          ) : (
+            <>
+              <div className="contributors-stat-card">
+                <span>Total Contributors</span>
+                <strong>{stats.total_contributors}</strong>
+                <p>
+                  <UsersRound size={15} />
+                  Success rate {analytics.successRate}%
+                </p>
+              </div>
 
-          <div className="contributors-stat-card">
-            <span>Total Collected</span>
-            <strong>{formatMoney(stats.total_collected)}</strong>
-            <p>
-              <TrendingUp size={15} />
-              Avg {formatMoney(analytics.averageAmount)}
-            </p>
-          </div>
+              <div className="contributors-stat-card">
+                <span>Total Collected</span>
+                <strong>{formatMoney(stats.total_collected)}</strong>
+                <p>
+                  <TrendingUp size={15} />
+                  Avg {formatMoney(analytics.averageAmount)}
+                </p>
+              </div>
 
-          <div className="contributors-stat-card">
-            <span>Thank-you Pending</span>
-            <strong>{stats.thank_you_pending}</strong>
-            <p>
-              <MessageCircle size={15} />
-              Needs action
-            </p>
-          </div>
+              <div className="contributors-stat-card">
+                <span>Thank-you Pending</span>
+                <strong>{stats.thank_you_pending}</strong>
+                <p>
+                  <MessageCircle size={15} />
+                  Needs action
+                </p>
+              </div>
 
-          <div className="contributors-stat-card">
-            <span>Failed / Pending</span>
-            <strong>{stats.failed_pending}</strong>
-            <p>
-              <Clock size={15} />
-              Follow up needed
-            </p>
-          </div>
+              <div className="contributors-stat-card">
+                <span>Failed / Pending</span>
+                <strong>{stats.failed_pending}</strong>
+                <p>
+                  <Clock size={15} />
+                  Follow up needed
+                </p>
+              </div>
+            </>
+          )}
         </section>
 
         <section className="contributors-layout">
@@ -194,7 +206,39 @@ function Contributors() {
               </div>
 
               <div className="contributors-table-body">
-                {contributors.map((person) => (
+                {loading &&
+                  [1, 2, 3, 4].map((item) => (
+                    <div className="contributors-row contributors-row-skeleton" key={item}>
+                      <div className="contributors-person">
+                        <div className="contributors-skeleton-avatar shimmer" />
+                        <div>
+                          <strong className="contributors-skeleton-line contributors-skeleton-line-md shimmer" />
+                          <span className="contributors-skeleton-line contributors-skeleton-line-sm shimmer" />
+                          <small className="contributors-skeleton-line contributors-skeleton-line-xs shimmer" />
+                        </div>
+                      </div>
+
+                      <div className="contributors-amount">
+                        <strong className="contributors-skeleton-line contributors-skeleton-line-sm shimmer" />
+                        <span className="contributors-skeleton-line contributors-skeleton-line-xs shimmer" />
+                      </div>
+
+                      <div className="contributors-method">
+                        <span className="contributors-skeleton-line contributors-skeleton-line-sm shimmer" />
+                        <small className="contributors-skeleton-line contributors-skeleton-line-xs shimmer" />
+                      </div>
+
+                      <small className="contributors-skeleton-pill shimmer" />
+
+                      <div className="contributors-actions">
+                        <span className="contributors-skeleton-action shimmer" />
+                        <span className="contributors-skeleton-action shimmer" />
+                        <span className="contributors-skeleton-action shimmer" />
+                      </div>
+                    </div>
+                  ))}
+
+                {!loading && contributors.map((person) => (
                   <div
                     className="contributors-row"
                     key={person.id}
@@ -360,6 +404,43 @@ function Contributors() {
           </div>
 
           <aside className="contributor-detail-panel contributor-detail-panel-clean">
+            {loading ? (
+              <>
+                <div className="detail-profile detail-profile-clean contributors-detail-skeleton">
+                  <div className="contributors-skeleton-avatar contributors-skeleton-avatar-lg shimmer" />
+                  <div>
+                    <span className="contributors-skeleton-line contributors-skeleton-line-sm shimmer" />
+                    <h3 className="contributors-skeleton-line contributors-skeleton-line-md shimmer" />
+                    <p className="contributors-skeleton-line contributors-skeleton-line-xs shimmer" />
+                  </div>
+                  <span className="contributors-skeleton-pill shimmer" />
+                </div>
+
+                <div className="detail-money-card contributors-money-skeleton">
+                  <span className="contributors-skeleton-line contributors-skeleton-line-sm shimmer" />
+                  <strong className="contributors-skeleton-line contributors-skeleton-line-lg shimmer" />
+                  <p className="contributors-skeleton-line contributors-skeleton-line-md shimmer" />
+                </div>
+
+                <div className="detail-actions-grid detail-actions-grid-clean">
+                  {[1, 2, 3, 4].map((item) => (
+                    <button type="button" className="contributors-action-skeleton" key={item}>
+                      <span className="contributors-skeleton-action shimmer" />
+                      <span className="contributors-skeleton-line contributors-skeleton-line-sm shimmer" />
+                    </button>
+                  ))}
+                </div>
+
+                {[1, 2, 3].map((item) => (
+                  <div className="detail-section contributors-panel-skeleton" key={item}>
+                    <div className="contributors-skeleton-line contributors-skeleton-line-sm shimmer" />
+                    <div className="contributors-skeleton-line contributors-skeleton-line-full shimmer" />
+                    <div className="contributors-skeleton-line contributors-skeleton-line-md shimmer" />
+                  </div>
+                ))}
+              </>
+            ) : (
+              <>
             <div className="detail-profile detail-profile-clean">
               <div className="detail-avatar">{selectedContributor.avatar}</div>
               <div>
@@ -469,6 +550,8 @@ function Contributors() {
                 ))}
               </div>
             </div>
+              </>
+            )}
           </aside>
         </section>
       </section>

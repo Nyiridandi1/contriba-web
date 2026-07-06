@@ -376,10 +376,62 @@ function DashboardEvents() {
         )}
 
         {loading && (
-          <section className="dashboard-events-panel">
-            <h3>Loading events...</h3>
-            <p>Preparing your events...</p>
-          </section>
+          <>
+            <section className="dashboard-events-skeleton-stats">
+              {[1, 2, 3].map((item) => (
+                <div className="dashboard-events-stat-card skeleton-card" key={item}>
+                  <div className="skeleton-icon shimmer" />
+                  <span className="skeleton-line skeleton-line-sm shimmer" />
+                  <strong className="skeleton-line skeleton-line-md shimmer" />
+                  <p className="skeleton-line skeleton-line-xs shimmer" />
+                </div>
+              ))}
+            </section>
+
+            <section className="dashboard-events-skeleton-toolbar">
+              <div className="dashboard-events-search skeleton-search shimmer" />
+              <div className="dashboard-events-skeleton-filters">
+                <span className="skeleton-chip shimmer" />
+                <span className="skeleton-chip shimmer" />
+                <span className="skeleton-chip shimmer" />
+                <span className="skeleton-chip shimmer" />
+              </div>
+            </section>
+
+            <section className="dashboard-events-grid">
+              {[1, 2, 3, 4].map((item) => (
+                <article className="dashboard-event-card dashboard-event-skeleton-card" key={item}>
+                  <div className="dashboard-event-card-top">
+                    <span className="skeleton-pill shimmer" />
+                  </div>
+
+                  <div className="skeleton-line skeleton-title shimmer" />
+                  <div className="skeleton-line skeleton-line-sm shimmer" />
+
+                  <div className="dashboard-event-metrics">
+                    <div>
+                      <small className="skeleton-line skeleton-line-xs shimmer" />
+                      <strong className="skeleton-line skeleton-line-md shimmer" />
+                    </div>
+
+                    <div>
+                      <small className="skeleton-line skeleton-line-xs shimmer" />
+                      <strong className="skeleton-line skeleton-line-md shimmer" />
+                    </div>
+                  </div>
+
+                  <div className="skeleton-line skeleton-line-full shimmer" />
+                  <div className="skeleton-progress shimmer" />
+
+                  <div className="dashboard-event-actions">
+                    <span className="skeleton-button shimmer" />
+                    <span className="skeleton-button shimmer" />
+                    <span className="skeleton-button shimmer" />
+                  </div>
+                </article>
+              ))}
+            </section>
+          </>
         )}
 
         {!loading && pageMessage && isMyEvents && (

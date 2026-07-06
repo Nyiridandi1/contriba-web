@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FaFacebookF,
   FaInstagram,
@@ -101,6 +101,12 @@ const topPromoters = [
 
 function ShareCenter() {
   const [copied, setCopied] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 650);
+    return () => clearTimeout(timer);
+  }, []);
 
   const eventLink = "https://contriba.online/events/demo-event";
 
@@ -211,21 +217,32 @@ function ShareCenter() {
         </section>
 
         <section className="share-stats-grid">
-          {shareStats.map((item) => {
-            const Icon = item.icon;
-
-            return (
-              <div className="share-stat-card" key={item.title}>
-                <div className="share-stat-icon">
-                  <Icon size={20} />
-                </div>
-
-                <span>{item.title}</span>
-                <strong>{item.value}</strong>
-                <p>{item.note}</p>
+          {loading ? (
+            [1, 2, 3, 4].map((item) => (
+              <div className="share-stat-card share-skeleton-card" key={item}>
+                <div className="share-skeleton-icon shimmer" />
+                <span className="share-skeleton-line share-skeleton-line-sm shimmer" />
+                <strong className="share-skeleton-line share-skeleton-line-md shimmer" />
+                <p className="share-skeleton-line share-skeleton-line-xs shimmer" />
               </div>
-            );
-          })}
+            ))
+          ) : (
+            shareStats.map((item) => {
+              const Icon = item.icon;
+
+              return (
+                <div className="share-stat-card" key={item.title}>
+                  <div className="share-stat-icon">
+                    <Icon size={20} />
+                  </div>
+
+                  <span>{item.title}</span>
+                  <strong>{item.value}</strong>
+                  <p>{item.note}</p>
+                </div>
+              );
+            })
+          )}
         </section>
 
         <section className="share-content-grid">
@@ -239,25 +256,39 @@ function ShareCenter() {
             </div>
 
             <div className="share-channel-grid clean">
-              {shareChannels.map((item) => {
-                const Icon = item.icon;
-
-                return (
-                  <button key={item.title}>
-                    <div className={`share-channel-icon ${item.brand}`}>
-                      <Icon />
-                    </div>
-
-                    <strong>{item.title}</strong>
-                    <p>{item.description}</p>
-
+              {loading ? (
+                [1, 2, 3, 4].map((item) => (
+                  <button className="share-channel-skeleton" key={item}>
+                    <div className="share-skeleton-icon share-channel-icon-skeleton shimmer" />
+                    <strong className="share-skeleton-line share-skeleton-line-md shimmer" />
+                    <p className="share-skeleton-line share-skeleton-line-full shimmer" />
                     <div className="channel-performance">
-                      <b>{item.performance}</b>
-                      <span>{item.label}</span>
+                      <b className="share-skeleton-line share-skeleton-line-xs shimmer" />
+                      <span className="share-skeleton-line share-skeleton-line-sm shimmer" />
                     </div>
                   </button>
-                );
-              })}
+                ))
+              ) : (
+                shareChannels.map((item) => {
+                  const Icon = item.icon;
+
+                  return (
+                    <button key={item.title}>
+                      <div className={`share-channel-icon ${item.brand}`}>
+                        <Icon />
+                      </div>
+
+                      <strong>{item.title}</strong>
+                      <p>{item.description}</p>
+
+                      <div className="channel-performance">
+                        <b>{item.performance}</b>
+                        <span>{item.label}</span>
+                      </div>
+                    </button>
+                  );
+                })
+              )}
             </div>
           </div>
 
@@ -271,9 +302,19 @@ function ShareCenter() {
             </div>
 
             <div className="share-qr-box">
-              <QrCode size={76} />
-              <strong>125 scans</strong>
-              <span>64% conversion rate</span>
+              {loading ? (
+                <>
+                  <div className="share-skeleton-qr shimmer" />
+                  <strong className="share-skeleton-line share-skeleton-line-md shimmer" />
+                  <span className="share-skeleton-line share-skeleton-line-sm shimmer" />
+                </>
+              ) : (
+                <>
+                  <QrCode size={76} />
+                  <strong>125 scans</strong>
+                  <span>64% conversion rate</span>
+                </>
+              )}
             </div>
 
             <div className="qr-actions assets">
@@ -311,12 +352,21 @@ function ShareCenter() {
             </div>
 
             <div className="campaign-kpi-grid">
-              {campaignMetrics.map((item) => (
-                <div key={item.label}>
-                  <span>{item.label}</span>
-                  <strong>{item.value}</strong>
-                </div>
-              ))}
+              {loading ? (
+                [1, 2, 3, 4].map((item) => (
+                  <div className="share-kpi-skeleton" key={item}>
+                    <span className="share-skeleton-line share-skeleton-line-sm shimmer" />
+                    <strong className="share-skeleton-line share-skeleton-line-md shimmer" />
+                  </div>
+                ))
+              ) : (
+                campaignMetrics.map((item) => (
+                  <div key={item.label}>
+                    <span>{item.label}</span>
+                    <strong>{item.value}</strong>
+                  </div>
+                ))
+              )}
             </div>
 
             <div className="campaign-bars">

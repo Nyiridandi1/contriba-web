@@ -842,3 +842,242 @@
     align-items: flex-start;
   }
 }
+
+
+/* =========================================================
+   NOTIFICATIONS FINAL POLISH + SKELETON + DELETE UI
+   Added safely at the bottom. Backend/realtime logic untouched.
+   ========================================================= */
+
+.notifications-main {
+  padding: 34px 34px 80px;
+}
+
+/* Clean Contriba SaaS hero */
+.notifications-hero {
+  position: relative;
+  color: #111827 !important;
+  background:
+    radial-gradient(circle at 86% 8%, rgba(229, 9, 20, 0.12), transparent 26%),
+    radial-gradient(circle at 0% 100%, rgba(229, 9, 20, 0.07), transparent 34%),
+    rgba(255, 255, 255, 0.94) !important;
+  border: 1px solid rgba(229, 9, 20, 0.1);
+  box-shadow: 0 18px 48px rgba(16, 24, 40, 0.06) !important;
+}
+
+.notifications-hero::after {
+  content: "";
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  right: -150px;
+  top: -140px;
+  border-radius: 999px;
+  background: rgba(229, 9, 20, 0.08);
+  pointer-events: none;
+}
+
+.notifications-hero-left,
+.notifications-hero-card {
+  position: relative;
+  z-index: 1;
+}
+
+.notifications-badge {
+  color: #e50914 !important;
+  background: rgba(229, 9, 20, 0.08) !important;
+}
+
+.notifications-hero-left h2,
+.notifications-hero-card strong {
+  color: #111827 !important;
+}
+
+.notifications-hero-left p,
+.notifications-hero-card p {
+  color: #667085 !important;
+}
+
+.notifications-hero-actions button.light {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #e50914, #ff3348) !important;
+  box-shadow: 0 14px 28px rgba(229, 9, 20, 0.18);
+}
+
+.notifications-hero-actions button.glass {
+  color: #111827 !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(17, 24, 39, 0.08) !important;
+  backdrop-filter: none !important;
+}
+
+.notifications-hero-card {
+  background: rgba(255, 255, 255, 0.76) !important;
+  border: 1px solid rgba(17, 24, 39, 0.08) !important;
+  box-shadow: 0 18px 42px rgba(16, 24, 40, 0.05);
+  backdrop-filter: blur(18px);
+}
+
+.notifications-hero-card svg,
+.notifications-hero-card span {
+  color: #e50914 !important;
+}
+
+/* Delete all button */
+.notifications-top-actions button.danger {
+  border: 1px solid rgba(229, 9, 20, 0.12);
+  color: #e50914;
+  background: rgba(229, 9, 20, 0.07);
+}
+
+.notifications-top-actions button.danger:hover:not(:disabled) {
+  background: rgba(229, 9, 20, 0.1);
+  box-shadow: 0 14px 30px rgba(229, 9, 20, 0.12);
+}
+
+/* Softer consistent cards */
+.notifications-stat-card,
+.notifications-panel,
+.notification-item,
+.notifications-empty-state,
+.notifications-check-list p {
+  background-color: rgba(255, 255, 255, 0.94) !important;
+  border-color: rgba(17, 24, 39, 0.08) !important;
+  box-shadow: 0 18px 48px rgba(16, 24, 40, 0.06) !important;
+}
+
+.notification-item {
+  background: #f7f8fb !important;
+}
+
+.notification-item:hover {
+  background: #ffffff !important;
+}
+
+.notifications-search:focus-within {
+  border-color: rgba(229, 9, 20, 0.28);
+  box-shadow: 0 0 0 5px rgba(229, 9, 20, 0.06), 0 14px 34px rgba(16, 24, 40, 0.05);
+}
+
+.notification-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+
+.notification-footer .notification-delete-btn {
+  color: #e50914;
+  background: rgba(229, 9, 20, 0.07);
+}
+
+.notification-footer .notification-delete-btn:hover {
+  background: rgba(229, 9, 20, 0.11);
+}
+
+/* Skeleton loading system */
+.notifications-skeleton-card,
+.notification-skeleton-item {
+  pointer-events: none;
+}
+
+.notifications-skeleton-icon,
+.notifications-skeleton-line,
+.notifications-skeleton-pill {
+  display: block;
+  border-radius: 999px;
+  background: #edf0f5;
+}
+
+.notifications-skeleton-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 16px;
+  margin-bottom: 14px;
+}
+
+.notification-skeleton-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 0;
+  border-radius: 18px;
+}
+
+.notifications-skeleton-line {
+  height: 13px;
+}
+
+.notifications-skeleton-line-xs {
+  width: 42%;
+}
+
+.notifications-skeleton-line-sm {
+  width: 58%;
+}
+
+.notifications-skeleton-line-md {
+  width: 74%;
+  height: 20px;
+  margin-top: 8px;
+}
+
+.notifications-skeleton-line-full {
+  width: 100%;
+  height: 13px;
+  margin: 12px 0 13px;
+}
+
+.notifications-skeleton-pill {
+  width: 86px;
+  height: 30px;
+}
+
+.notification-skeleton-item .notification-title-row > div {
+  width: 100%;
+}
+
+.notification-skeleton-item .notification-content {
+  display: grid;
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.78),
+    transparent
+  );
+  animation: notificationsShimmer 1.35s infinite;
+}
+
+@keyframes notificationsShimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (max-width: 680px) {
+  .notifications-main {
+    padding: 20px 16px 100px;
+  }
+
+  .notifications-hero::after {
+    width: 260px;
+    height: 260px;
+    right: -130px;
+    top: -120px;
+  }
+
+  .notification-footer-actions {
+    width: 100%;
+  }
+}

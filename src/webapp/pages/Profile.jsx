@@ -397,6 +397,13 @@ function ProfilePreferences() {
 }
 
 function Profile() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 650);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <main className="profile-page">
       <AppSidebar active="profile" />
@@ -412,18 +419,132 @@ function Profile() {
           </div>
         </header>
 
-        <ProfileHero />
-        <ProfileStats />
-        <ProfileInfo />
+        {loading ? (
+          <>
+            <section className="profile-hero-clean profile-skeleton-hero">
+              <div className="profile-photo-area">
+                <div className="profile-skeleton-photo shimmer" />
+                <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
+              </div>
 
-        <section className="profile-content-grid clean-profile-grid">
-          <ProfileVerification />
-          <ProfileSecurity />
-        </section>
+              <div className="profile-hero-info">
+                <div className="profile-skeleton-pill shimmer" />
+                <div className="profile-skeleton-line profile-skeleton-title shimmer" />
+                <div className="profile-skeleton-line profile-skeleton-line-full shimmer" />
+                <div className="profile-skeleton-line profile-skeleton-line-md shimmer" />
 
-        <section className="profile-content-grid clean-profile-grid single-preference-grid">
-          <ProfilePreferences />
-        </section>
+                <div className="profile-meta-grid profile-skeleton-meta">
+                  <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
+                  <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
+                  <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
+                  <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
+                </div>
+
+                <div className="profile-completion-card compact">
+                  <div className="profile-skeleton-line profile-skeleton-line-md shimmer" />
+                  <div className="profile-skeleton-progress shimmer" />
+                  <div className="completion-list">
+                    <div className="profile-skeleton-chip shimmer" />
+                    <div className="profile-skeleton-chip shimmer" />
+                    <div className="profile-skeleton-chip shimmer" />
+                    <div className="profile-skeleton-chip shimmer" />
+                  </div>
+                </div>
+              </div>
+
+              <aside className="profile-trust-card">
+                <div className="profile-skeleton-icon shimmer" />
+                <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
+                <div className="profile-skeleton-line profile-skeleton-line-md shimmer" />
+                <div className="profile-skeleton-line profile-skeleton-line-full shimmer" />
+                <div className="trust-mini-grid">
+                  <div>
+                    <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
+                    <div className="profile-skeleton-line profile-skeleton-line-md shimmer" />
+                  </div>
+                  <div>
+                    <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
+                    <div className="profile-skeleton-line profile-skeleton-line-md shimmer" />
+                  </div>
+                </div>
+              </aside>
+            </section>
+
+            <section className="profile-stats-grid clean-four">
+              {[1, 2, 3, 4].map((item) => (
+                <article className="profile-stat-card profile-skeleton-card" key={item}>
+                  <div className="profile-skeleton-icon shimmer" />
+                  <h4 className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
+                  <h2 className="profile-skeleton-line profile-skeleton-line-md shimmer" />
+                  <p className="profile-skeleton-line profile-skeleton-line-xs shimmer" />
+                </article>
+              ))}
+            </section>
+
+            <section className="profile-panel profile-info-panel">
+              <div className="profile-panel-heading">
+                <div>
+                  <span className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
+                  <h3 className="profile-skeleton-line profile-skeleton-line-md shimmer" />
+                </div>
+              </div>
+
+              <div className="personal-info-grid clean-info-grid">
+                {[1, 2, 3, 4].map((item) => (
+                  <div className="personal-info-item profile-skeleton-card" key={item}>
+                    <div className="profile-skeleton-icon shimmer" />
+                    <span>
+                      <small className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
+                      <strong className="profile-skeleton-line profile-skeleton-line-md shimmer" />
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="profile-content-grid clean-profile-grid">
+              {[1, 2].map((panel) => (
+                <section className="profile-panel profile-skeleton-panel" key={panel}>
+                  <div className="profile-panel-heading">
+                    <div>
+                      <span className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
+                      <h3 className="profile-skeleton-line profile-skeleton-line-md shimmer" />
+                    </div>
+                    <div className="profile-skeleton-icon profile-skeleton-icon-small shimmer" />
+                  </div>
+
+                  <div className="verification-list-clean">
+                    {[1, 2, 3].map((item) => (
+                      <div className="verification-row profile-skeleton-card" key={item}>
+                        <div className="profile-skeleton-icon shimmer" />
+                        <span>
+                          <strong className="profile-skeleton-line profile-skeleton-line-md shimmer" />
+                          <small className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
+                        </span>
+                        <em className="profile-skeleton-pill shimmer" />
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </section>
+          </>
+        ) : (
+          <>
+            <ProfileHero />
+            <ProfileStats />
+            <ProfileInfo />
+
+            <section className="profile-content-grid clean-profile-grid">
+              <ProfileVerification />
+              <ProfileSecurity />
+            </section>
+
+            <section className="profile-content-grid clean-profile-grid single-preference-grid">
+              <ProfilePreferences />
+            </section>
+          </>
+        )}
       </section>
     </main>
   );

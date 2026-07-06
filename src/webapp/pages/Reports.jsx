@@ -224,7 +224,7 @@ function Reports() {
             <ShieldCheck size={28} />
             <span>Report Health</span>
             <strong>
-              {loading ? "Loading..." : reportReady ? "Ready for reconciliation" : "Waiting for data"}
+              {loading ? <span className="reports-skeleton-line reports-skeleton-line-md shimmer" /> : reportReady ? "Ready for reconciliation" : "Waiting for data"}
             </strong>
             <p>
               {reportReady
@@ -235,41 +235,54 @@ function Reports() {
         </section>
 
         <section className="reports-stats-grid">
-          <div className="reports-stat-card">
-            <div className="reports-stat-icon">
-              <TrendingUp size={20} />
-            </div>
-            <span>Total Collected</span>
-            <strong>{loading ? "..." : formatMoney(totalRaised)}</strong>
-            <p>{totalEvents} event{totalEvents !== 1 ? "s" : ""}</p>
-          </div>
+          {loading ? (
+            [1, 2, 3, 4].map((item) => (
+              <div className="reports-stat-card reports-skeleton-card" key={item}>
+                <div className="reports-skeleton-icon shimmer" />
+                <span className="reports-skeleton-line reports-skeleton-line-sm shimmer" />
+                <strong className="reports-skeleton-line reports-skeleton-line-md shimmer" />
+                <p className="reports-skeleton-line reports-skeleton-line-xs shimmer" />
+              </div>
+            ))
+          ) : (
+            <>
+              <div className="reports-stat-card">
+                <div className="reports-stat-icon">
+                  <TrendingUp size={20} />
+                </div>
+                <span>Total Collected</span>
+                <strong>{formatMoney(totalRaised)}</strong>
+                <p>{totalEvents} event{totalEvents !== 1 ? "s" : ""}</p>
+              </div>
 
-          <div className="reports-stat-card">
-            <div className="reports-stat-icon">
-              <UsersRound size={20} />
-            </div>
-            <span>Contributors</span>
-            <strong>{loading ? "..." : totalContributors}</strong>
-            <p>Total supporters</p>
-          </div>
+              <div className="reports-stat-card">
+                <div className="reports-stat-icon">
+                  <UsersRound size={20} />
+                </div>
+                <span>Contributors</span>
+                <strong>{totalContributors}</strong>
+                <p>Total supporters</p>
+              </div>
 
-          <div className="reports-stat-card">
-            <div className="reports-stat-icon">
-              <WalletCards size={20} />
-            </div>
-            <span>Available Wallet</span>
-            <strong>{loading ? "..." : formatMoney(walletBalance)}</strong>
-            <p>Ready to reconcile</p>
-          </div>
+              <div className="reports-stat-card">
+                <div className="reports-stat-icon">
+                  <WalletCards size={20} />
+                </div>
+                <span>Available Wallet</span>
+                <strong>{formatMoney(walletBalance)}</strong>
+                <p>Ready to reconcile</p>
+              </div>
 
-          <div className="reports-stat-card">
-            <div className="reports-stat-icon">
-              <Clock size={20} />
-            </div>
-            <span>Needs Attention</span>
-            <strong>{loading ? "..." : attentionCount}</strong>
-            <p>Pending / failed</p>
-          </div>
+              <div className="reports-stat-card">
+                <div className="reports-stat-icon">
+                  <Clock size={20} />
+                </div>
+                <span>Needs Attention</span>
+                <strong>{attentionCount}</strong>
+                <p>Pending / failed</p>
+              </div>
+            </>
+          )}
         </section>
 
         <section className="reports-content-grid reports-primary-grid">
@@ -283,23 +296,35 @@ function Reports() {
             </div>
 
             <div className="export-card-grid">
-              {exportCards.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <button key={item.title}>
-                    <div>
-                      <Icon size={21} />
-                    </div>
-                    <small>{item.label}</small>
-                    <strong>{item.title}</strong>
-                    <p>{item.description}</p>
-                    <span>
-                      Generate
-                      <ArrowRight size={16} />
-                    </span>
+              {loading ? (
+                [1, 2, 3].map((item) => (
+                  <button className="reports-export-skeleton" key={item}>
+                    <div className="reports-skeleton-icon shimmer" />
+                    <small className="reports-skeleton-pill shimmer" />
+                    <strong className="reports-skeleton-line reports-skeleton-line-md shimmer" />
+                    <p className="reports-skeleton-line reports-skeleton-line-full shimmer" />
+                    <span className="reports-skeleton-line reports-skeleton-line-sm shimmer" />
                   </button>
-                );
-              })}
+                ))
+              ) : (
+                exportCards.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <button key={item.title}>
+                      <div>
+                        <Icon size={21} />
+                      </div>
+                      <small>{item.label}</small>
+                      <strong>{item.title}</strong>
+                      <p>{item.description}</p>
+                      <span>
+                        Generate
+                        <ArrowRight size={16} />
+                      </span>
+                    </button>
+                  );
+                })
+              )}
             </div>
           </div>
 
@@ -407,11 +432,18 @@ function Reports() {
 
             <div className="recent-export-table">
               {loading && (
-                <div className="recent-export-row">
-                  <div>
-                    <strong>Loading records...</strong>
-                    <span>Fetching report data</span>
-                  </div>
+                <div className="reports-records-skeleton">
+                  {[1, 2, 3, 4].map((item) => (
+                    <div className="recent-export-row reports-record-skeleton-row" key={item}>
+                      <div>
+                        <strong className="reports-skeleton-line reports-skeleton-line-md shimmer" />
+                        <span className="reports-skeleton-line reports-skeleton-line-sm shimmer" />
+                      </div>
+                      <strong className="reports-skeleton-line reports-skeleton-line-sm shimmer" />
+                      <span className="reports-skeleton-line reports-skeleton-line-xs shimmer" />
+                      <small className="reports-skeleton-pill shimmer" />
+                    </div>
+                  ))}
                 </div>
               )}
 

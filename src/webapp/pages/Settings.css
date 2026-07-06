@@ -469,3 +469,241 @@
     border-radius: 24px;
   }
 }
+
+
+/* =========================================================
+   SETTINGS FINAL POLISH + SKELETON LOADING
+   Added safely at the bottom. Backend/settings logic untouched.
+   ========================================================= */
+
+.settings-main {
+  padding: 34px 34px 80px;
+}
+
+/* Clean Contriba SaaS hero */
+.settings-hero {
+  position: relative;
+  color: #111827 !important;
+  background:
+    radial-gradient(circle at 86% 8%, rgba(229, 9, 20, 0.12), transparent 26%),
+    radial-gradient(circle at 0% 100%, rgba(229, 9, 20, 0.07), transparent 34%),
+    rgba(255, 255, 255, 0.94) !important;
+  border: 1px solid rgba(229, 9, 20, 0.1);
+  box-shadow: 0 18px 48px rgba(16, 24, 40, 0.06) !important;
+}
+
+.settings-hero::after {
+  content: "";
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  right: -150px;
+  top: -140px;
+  border-radius: 999px;
+  background: rgba(229, 9, 20, 0.08);
+  pointer-events: none;
+}
+
+.settings-hero-left,
+.settings-hero-summary {
+  position: relative;
+  z-index: 1;
+}
+
+.settings-badge {
+  color: #e50914 !important;
+  background: rgba(229, 9, 20, 0.08) !important;
+}
+
+.settings-hero h2,
+.settings-hero-summary h3 {
+  color: #111827 !important;
+}
+
+.settings-hero p,
+.settings-hero-summary p {
+  color: #667085 !important;
+}
+
+.settings-tags div,
+.settings-summary-list div {
+  color: #111827 !important;
+  background: #f7f8fb !important;
+  border: 1px solid rgba(17, 24, 39, 0.08) !important;
+}
+
+.settings-summary-list small {
+  color: #667085 !important;
+}
+
+.settings-hero-summary {
+  background: rgba(255, 255, 255, 0.76) !important;
+  border: 1px solid rgba(17, 24, 39, 0.08) !important;
+  box-shadow: 0 18px 42px rgba(16, 24, 40, 0.05);
+  backdrop-filter: blur(18px);
+}
+
+.settings-hero-summary > span {
+  color: #e50914 !important;
+}
+
+/* Softer consistent cards */
+.settings-panel,
+.settings-option-card,
+.settings-list-item,
+.settings-toggle-card {
+  background-color: rgba(255, 255, 255, 0.94) !important;
+  border-color: rgba(17, 24, 39, 0.08) !important;
+  box-shadow: 0 18px 48px rgba(16, 24, 40, 0.06) !important;
+}
+
+.settings-option-card,
+.settings-list-item,
+.settings-toggle-card {
+  background: #f7f8fb !important;
+  box-shadow: none !important;
+}
+
+.settings-panel:hover,
+.settings-option-card:hover,
+.settings-list-item:hover,
+.settings-toggle-card:hover {
+  transform: translateY(-3px);
+  background: #ffffff !important;
+  box-shadow: 0 24px 58px rgba(16, 24, 40, 0.09) !important;
+}
+
+.settings-logout-panel {
+  background:
+    radial-gradient(circle at top right, rgba(229, 9, 20, 0.09), transparent 34%),
+    rgba(255, 255, 255, 0.94) !important;
+}
+
+/* Skeleton loading system */
+.settings-skeleton-hero,
+.settings-skeleton-panel,
+.settings-skeleton-card {
+  pointer-events: none;
+}
+
+.settings-skeleton-icon,
+.settings-skeleton-line,
+.settings-skeleton-pill,
+.settings-skeleton-chip,
+.settings-skeleton-button {
+  display: block;
+  border-radius: 999px;
+  background: #edf0f5;
+}
+
+.settings-skeleton-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+}
+
+.settings-skeleton-icon-small {
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+}
+
+.settings-skeleton-line {
+  height: 13px;
+}
+
+.settings-skeleton-line-xs {
+  width: 42%;
+}
+
+.settings-skeleton-line-sm {
+  width: 58%;
+}
+
+.settings-skeleton-line-md {
+  width: 74%;
+  height: 20px;
+  margin-top: 8px;
+}
+
+.settings-skeleton-line-full {
+  width: 100%;
+  height: 13px;
+  margin: 12px 0 13px;
+}
+
+.settings-skeleton-title {
+  width: min(620px, 90%);
+  height: clamp(48px, 7vw, 78px);
+  border-radius: 18px;
+  margin: 18px 0 14px;
+}
+
+.settings-skeleton-pill {
+  width: 140px;
+  height: 36px;
+}
+
+.settings-skeleton-chip {
+  width: 142px;
+  height: 38px;
+}
+
+.settings-skeleton-button {
+  width: 112px;
+  height: 38px;
+  border: 0;
+}
+
+.settings-skeleton-card strong,
+.settings-skeleton-card p {
+  margin: 0;
+}
+
+.settings-skeleton-card span {
+  display: grid;
+  gap: 8px;
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.78),
+    transparent
+  );
+  animation: settingsShimmer 1.35s infinite;
+}
+
+@keyframes settingsShimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (max-width: 680px) {
+  .settings-main {
+    padding: 20px 16px 100px;
+  }
+
+  .settings-hero::after {
+    width: 260px;
+    height: 260px;
+    right: -130px;
+    top: -120px;
+  }
+
+  .settings-skeleton-button {
+    grid-column: 2;
+    justify-self: start;
+  }
+}

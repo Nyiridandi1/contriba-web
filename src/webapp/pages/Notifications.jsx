@@ -13,6 +13,7 @@ import {
   Send,
   ShieldCheck,
   Sparkles,
+  Trash2,
   WalletCards,
 } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
@@ -127,6 +128,7 @@ function Notifications() {
   const [activeFilter, setActiveFilter] = useState("All");
   const [search, setSearch] = useState("");
   const [markingRead, setMarkingRead] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const channelRef = useRef(null);
 
   const currentUser = getUser();
@@ -243,6 +245,24 @@ function Notifications() {
     );
   }
 
+  function handleDeleteNotification(id) {
+    const confirmed = window.confirm("Delete this notification from your feed?");
+    if (!confirmed) return;
+
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+  }
+
+  function handleDeleteAllNotifications() {
+    if (notifications.length === 0 || deleting) return;
+
+    const confirmed = window.confirm("Delete all notifications from this feed?");
+    if (!confirmed) return;
+
+    setDeleting(true);
+    setNotifications([]);
+    setDeleting(false);
+  }
+
   return (
     <main className="notifications-page">
       <AppSidebar active="notifications" />
@@ -275,6 +295,15 @@ function Notifications() {
             >
               <CheckCircle2 size={18} />
               {markingRead ? "Marking..." : "Mark All Read"}
+            </button>
+
+            <button
+              className="danger"
+              onClick={handleDeleteAllNotifications}
+              disabled={deleting || notifications.length === 0}
+            >
+              <Trash2 size={18} />
+              {deleting ? "Deleting..." : "Delete All"}
             </button>
           </div>
         </header>
@@ -328,41 +357,54 @@ function Notifications() {
         </section>
 
         <section className="notifications-stats-grid">
-          <div className="notifications-stat-card">
-            <div className="notifications-stat-icon">
-              <BellRing size={20} />
-            </div>
-            <span>Unread</span>
-            <strong>{unreadCount}</strong>
-            <p>{unreadCount > 0 ? "Needs review" : "All clear"}</p>
-          </div>
+          {loading ? (
+            [1, 2, 3, 4].map((item) => (
+              <div className="notifications-stat-card notifications-skeleton-card" key={item}>
+                <div className="notifications-skeleton-icon shimmer" />
+                <span className="notifications-skeleton-line notifications-skeleton-line-sm shimmer" />
+                <strong className="notifications-skeleton-line notifications-skeleton-line-md shimmer" />
+                <p className="notifications-skeleton-line notifications-skeleton-line-xs shimmer" />
+              </div>
+            ))
+          ) : (
+            <>
+              <div className="notifications-stat-card">
+                <div className="notifications-stat-icon">
+                  <BellRing size={20} />
+                </div>
+                <span>Unread</span>
+                <strong>{unreadCount}</strong>
+                <p>{unreadCount > 0 ? "Needs review" : "All clear"}</p>
+              </div>
 
-          <div className="notifications-stat-card">
-            <div className="notifications-stat-icon">
-              <Clock size={20} />
-            </div>
-            <span>Total</span>
-            <strong>{totalCount}</strong>
-            <p>All activity</p>
-          </div>
+              <div className="notifications-stat-card">
+                <div className="notifications-stat-icon">
+                  <Clock size={20} />
+                </div>
+                <span>Total</span>
+                <strong>{totalCount}</strong>
+                <p>All activity</p>
+              </div>
 
-          <div className="notifications-stat-card">
-            <div className="notifications-stat-icon">
-              <CreditCard size={20} />
-            </div>
-            <span>Payments</span>
-            <strong>{paymentCount}</strong>
-            <p>Contribution alerts</p>
-          </div>
+              <div className="notifications-stat-card">
+                <div className="notifications-stat-icon">
+                  <CreditCard size={20} />
+                </div>
+                <span>Payments</span>
+                <strong>{paymentCount}</strong>
+                <p>Contribution alerts</p>
+              </div>
 
-          <div className="notifications-stat-card">
-            <div className="notifications-stat-icon">
-              <AlertCircle size={20} />
-            </div>
-            <span>Actions</span>
-            <strong>{actionCount}</strong>
-            <p>{actionCount > 0 ? "Follow-up needed" : "No urgent action"}</p>
-          </div>
+              <div className="notifications-stat-card">
+                <div className="notifications-stat-icon">
+                  <AlertCircle size={20} />
+                </div>
+                <span>Actions</span>
+                <strong>{actionCount}</strong>
+                <p>{actionCount > 0 ? "Follow-up needed" : "No urgent action"}</p>
+              </div>
+            </>
+          )}
         </section>
 
         <section className="notifications-dashboard-grid">
@@ -408,13 +450,30 @@ function Notifications() {
             </div>
 
             <div className="notifications-timeline">
-              {loading && (
-                <div className="notifications-empty-state">
-                  <BellRing size={30} />
-                  <h4>Loading notifications...</h4>
-                  <p>Contriba is checking your latest event activity.</p>
-                </div>
-              )}
+              {loading &&
+                [1, 2, 3, 4, 5, 6].map((item) => (
+                  <article className="notification-item notification-skeleton-item" key={item}>
+                    <div className="notifications-skeleton-icon notification-skeleton-icon shimmer" />
+
+                    <div className="notification-content">
+                      <div className="notification-title-row">
+                        <div>
+                          <span className="notifications-skeleton-line notifications-skeleton-line-xs shimmer" />
+                          <h4 className="notifications-skeleton-line notifications-skeleton-line-md shimmer" />
+                        </div>
+
+                        <small className="notifications-skeleton-pill shimmer" />
+                      </div>
+
+                      <p className="notifications-skeleton-line notifications-skeleton-line-full shimmer" />
+
+                      <div className="notification-footer">
+                        <time className="notifications-skeleton-line notifications-skeleton-line-xs shimmer" />
+                        <span className="notifications-skeleton-pill shimmer" />
+                      </div>
+                    </div>
+                  </article>
+                ))}
 
               {!loading && filteredNotifications.length === 0 && (
                 <div className="notifications-empty-state">
@@ -462,19 +521,33 @@ function Notifications() {
                         <div className="notification-footer">
                           <time>{formatTimeAgo(item.created_at)}</time>
 
-                          {!item.is_read ? (
+                          <div className="notification-footer-actions">
+                            {!item.is_read ? (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleMarkRead(item.id);
+                                }}
+                              >
+                                Mark Read
+                                <ArrowRight size={15} />
+                              </button>
+                            ) : (
+                              <span className="notification-read-label">Reviewed</span>
+                            )}
+
                             <button
+                              className="notification-delete-btn"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleMarkRead(item.id);
+                                handleDeleteNotification(item.id);
                               }}
+                              title="Delete notification"
                             >
-                              Mark Read
-                              <ArrowRight size={15} />
+                              <Trash2 size={15} />
+                              Delete
                             </button>
-                          ) : (
-                            <span className="notification-read-label">Reviewed</span>
-                          )}
+                          </div>
                         </div>
                       </div>
                     </article>

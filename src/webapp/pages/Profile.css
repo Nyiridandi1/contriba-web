@@ -692,3 +692,286 @@
     grid-column: 2;
   }
 }
+
+
+/* =========================================================
+   PROFILE FINAL POLISH + SKELETON LOADING
+   Added safely at the bottom. Backend/profile logic untouched.
+   ========================================================= */
+
+.profile-main {
+  padding: 34px 34px 80px;
+}
+
+/* Clean Contriba SaaS hero */
+.profile-hero-clean {
+  position: relative;
+  color: #111827 !important;
+  background:
+    radial-gradient(circle at 86% 8%, rgba(229, 9, 20, 0.12), transparent 26%),
+    radial-gradient(circle at 0% 100%, rgba(229, 9, 20, 0.07), transparent 34%),
+    rgba(255, 255, 255, 0.94) !important;
+  border: 1px solid rgba(229, 9, 20, 0.1);
+  box-shadow: 0 18px 48px rgba(16, 24, 40, 0.06) !important;
+}
+
+.profile-hero-clean::after {
+  content: "";
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  right: -150px;
+  top: -140px;
+  border-radius: 999px;
+  background: rgba(229, 9, 20, 0.08);
+  pointer-events: none;
+}
+
+.profile-photo-area,
+.profile-hero-info,
+.profile-trust-card {
+  position: relative;
+  z-index: 1;
+}
+
+.profile-badge {
+  color: #e50914 !important;
+  background: rgba(229, 9, 20, 0.08) !important;
+}
+
+.profile-hero-info h2,
+.profile-trust-card > strong,
+.trust-mini-grid h3 {
+  color: #111827 !important;
+}
+
+.profile-hero-info p,
+.profile-trust-card > p,
+.profile-ai-header span,
+.trust-mini-grid small {
+  color: #667085 !important;
+}
+
+.profile-meta-grid div,
+.profile-completion-card.compact,
+.completion-list div,
+.trust-mini-grid div {
+  color: #111827 !important;
+  background: #f7f8fb !important;
+  border: 1px solid rgba(17, 24, 39, 0.08) !important;
+}
+
+.completion-header small {
+  color: #667085 !important;
+}
+
+.completion-header strong,
+.completion-list div {
+  color: #111827 !important;
+}
+
+.completion-bar {
+  background: #edf0f5 !important;
+}
+
+.completion-fill {
+  background: linear-gradient(90deg, #e50914, #ff3348) !important;
+}
+
+.profile-trust-card {
+  background: rgba(255, 255, 255, 0.76) !important;
+  border: 1px solid rgba(17, 24, 39, 0.08) !important;
+  box-shadow: 0 18px 42px rgba(16, 24, 40, 0.05);
+  backdrop-filter: blur(18px);
+}
+
+.profile-ai-header svg,
+.profile-meta-grid svg,
+.profile-trust-card svg {
+  color: #e50914 !important;
+}
+
+.change-photo-btn {
+  color: #111827 !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(17, 24, 39, 0.08) !important;
+}
+
+/* Softer consistent cards */
+.profile-stat-card,
+.profile-panel,
+.personal-info-item,
+.verification-row,
+.premium-preference-item,
+.security-actions-grid button {
+  background-color: rgba(255, 255, 255, 0.94) !important;
+  border-color: rgba(17, 24, 39, 0.08) !important;
+  box-shadow: 0 18px 48px rgba(16, 24, 40, 0.06) !important;
+}
+
+.personal-info-item,
+.verification-row,
+.premium-preference-item,
+.security-actions-grid button {
+  background: #f7f8fb !important;
+  box-shadow: none !important;
+}
+
+.profile-stat-card:hover,
+.profile-panel:hover,
+.security-actions-grid button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 58px rgba(16, 24, 40, 0.09) !important;
+}
+
+/* Skeleton loading system */
+.profile-skeleton-card,
+.profile-skeleton-hero,
+.profile-skeleton-panel {
+  pointer-events: none;
+}
+
+.profile-skeleton-icon,
+.profile-skeleton-photo,
+.profile-skeleton-line,
+.profile-skeleton-pill,
+.profile-skeleton-chip,
+.profile-skeleton-progress {
+  display: block;
+  border-radius: 999px;
+  background: #edf0f5;
+}
+
+.profile-skeleton-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 16px;
+}
+
+.profile-skeleton-icon-small {
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+}
+
+.profile-skeleton-photo {
+  width: 142px;
+  height: 142px;
+  border-radius: 42px;
+}
+
+.profile-skeleton-line {
+  height: 13px;
+}
+
+.profile-skeleton-line-xs {
+  width: 42%;
+}
+
+.profile-skeleton-line-sm {
+  width: 58%;
+}
+
+.profile-skeleton-line-md {
+  width: 74%;
+  height: 20px;
+  margin-top: 8px;
+}
+
+.profile-skeleton-line-full {
+  width: 100%;
+  height: 13px;
+  margin: 12px 0 13px;
+}
+
+.profile-skeleton-title {
+  width: min(520px, 88%);
+  height: clamp(42px, 6vw, 64px);
+  border-radius: 18px;
+  margin: 18px 0 14px;
+}
+
+.profile-skeleton-pill {
+  width: 120px;
+  height: 34px;
+}
+
+.profile-skeleton-chip {
+  width: 132px;
+  height: 34px;
+}
+
+.profile-skeleton-progress {
+  width: 100%;
+  height: 12px;
+  margin: 14px 0;
+}
+
+.profile-skeleton-meta div {
+  min-width: 150px;
+  height: 38px;
+}
+
+.profile-skeleton-card h4,
+.profile-skeleton-card h2,
+.profile-skeleton-card p,
+.profile-skeleton-card strong,
+.profile-skeleton-card small {
+  margin: 0;
+}
+
+.profile-skeleton-card h2 {
+  margin-top: 10px;
+}
+
+.profile-skeleton-card p {
+  margin-top: 10px;
+}
+
+.profile-skeleton-panel .verification-row span {
+  display: grid;
+  gap: 8px;
+}
+
+.profile-skeleton-panel .verification-row em {
+  width: 86px;
+  height: 30px;
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.78),
+    transparent
+  );
+  animation: profileShimmer 1.35s infinite;
+}
+
+@keyframes profileShimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (max-width: 640px) {
+  .profile-main {
+    padding: 20px 16px 100px;
+  }
+
+  .profile-hero-clean::after {
+    width: 260px;
+    height: 260px;
+    right: -130px;
+    top: -120px;
+  }
+}

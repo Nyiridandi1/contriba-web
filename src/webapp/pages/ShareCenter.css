@@ -801,3 +801,221 @@
     text-align: center;
   }
 }
+
+
+/* =========================================================
+   SHARE CENTER FINAL POLISH + SKELETON LOADING
+   Added safely at the bottom. Backend logic untouched.
+   ========================================================= */
+
+.share-main {
+  padding: 34px 34px 80px;
+}
+
+/* Clean Contriba SaaS hero */
+.share-hero {
+  position: relative;
+  color: #111827 !important;
+  background:
+    radial-gradient(circle at 86% 8%, rgba(229, 9, 20, 0.12), transparent 26%),
+    radial-gradient(circle at 0% 100%, rgba(229, 9, 20, 0.07), transparent 34%),
+    rgba(255, 255, 255, 0.94) !important;
+  border: 1px solid rgba(229, 9, 20, 0.1);
+  box-shadow: 0 18px 48px rgba(16, 24, 40, 0.06) !important;
+}
+
+.share-hero::after {
+  content: "";
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  right: -150px;
+  top: -140px;
+  border-radius: 999px;
+  background: rgba(229, 9, 20, 0.08);
+  pointer-events: none;
+}
+
+.share-hero-left,
+.share-hero-card {
+  position: relative;
+  z-index: 1;
+}
+
+.share-badge {
+  color: #e50914 !important;
+  background: rgba(229, 9, 20, 0.08) !important;
+}
+
+.share-hero-left h2,
+.share-hero-card strong {
+  color: #111827 !important;
+}
+
+.share-hero-left p,
+.share-hero-card p {
+  color: #667085 !important;
+}
+
+.share-hero-actions .light {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #e50914, #ff3348) !important;
+  box-shadow: 0 14px 28px rgba(229, 9, 20, 0.18);
+}
+
+.share-hero-actions .glass {
+  color: #111827 !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(17, 24, 39, 0.08) !important;
+  backdrop-filter: none !important;
+}
+
+.share-hero-card {
+  background: rgba(255, 255, 255, 0.76) !important;
+  border: 1px solid rgba(17, 24, 39, 0.08) !important;
+  box-shadow: 0 18px 42px rgba(16, 24, 40, 0.05);
+  backdrop-filter: blur(18px);
+}
+
+.share-hero-card svg,
+.share-hero-card span {
+  color: #e50914 !important;
+}
+
+/* Softer consistent cards */
+.share-stat-card,
+.share-panel,
+.share-channel-grid button,
+.campaign-kpi-grid div,
+.coach-summary-list div,
+.top-promoters-mini p,
+.share-qr-box {
+  background-color: rgba(255, 255, 255, 0.94) !important;
+  border-color: rgba(17, 24, 39, 0.08) !important;
+  box-shadow: 0 18px 48px rgba(16, 24, 40, 0.06) !important;
+}
+
+.qr-share-panel,
+.ai-share-panel {
+  background:
+    radial-gradient(circle at top right, rgba(229, 9, 20, 0.09), transparent 34%),
+    rgba(255, 255, 255, 0.94) !important;
+}
+
+.share-channel-grid button:hover,
+.share-stat-card:hover,
+.share-panel:hover {
+  transform: translateY(-3px);
+  background: #ffffff !important;
+  box-shadow: 0 24px 58px rgba(16, 24, 40, 0.09) !important;
+}
+
+/* Skeleton loading system */
+.share-skeleton-card,
+.share-channel-skeleton,
+.share-kpi-skeleton {
+  pointer-events: none;
+}
+
+.share-skeleton-icon,
+.share-skeleton-line,
+.share-skeleton-qr {
+  display: block;
+  border-radius: 999px;
+  background: #edf0f5;
+}
+
+.share-skeleton-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  margin-bottom: 16px;
+}
+
+.share-channel-icon-skeleton {
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+}
+
+.share-skeleton-line {
+  height: 13px;
+}
+
+.share-skeleton-line-xs {
+  width: 42%;
+}
+
+.share-skeleton-line-sm {
+  width: 58%;
+}
+
+.share-skeleton-line-md {
+  width: 74%;
+  height: 20px;
+  margin-top: 8px;
+}
+
+.share-skeleton-line-full {
+  width: 100%;
+  height: 13px;
+  margin: 12px 0 13px;
+}
+
+.share-skeleton-qr {
+  width: 82px;
+  height: 82px;
+  border-radius: 24px;
+}
+
+.share-channel-skeleton .channel-performance b,
+.share-channel-skeleton .channel-performance span {
+  margin: 0;
+}
+
+.share-channel-skeleton .channel-performance {
+  align-items: center;
+}
+
+.share-kpi-skeleton {
+  display: grid;
+  gap: 10px;
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.78),
+    transparent
+  );
+  animation: shareShimmer 1.35s infinite;
+}
+
+@keyframes shareShimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (max-width: 680px) {
+  .share-main {
+    padding: 20px 16px 100px;
+  }
+
+  .share-hero::after {
+    width: 260px;
+    height: 260px;
+    right: -130px;
+    top: -120px;
+  }
+}
