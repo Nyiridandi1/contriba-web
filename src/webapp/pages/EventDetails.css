@@ -1224,4 +1224,58 @@
   .event-details-skeleton-gallery .event-thumb {
     height: 110px;
   }
+}html[data-theme="dark"] .event-details-page {
+  background: #0d0d11 !important;
+  color: #fff !important;
+}
+
+html[data-theme="dark"] .event-details-back,
+html[data-theme="dark"] .gallery-action,
+html[data-theme="dark"] .event-share-actions button,
+html[data-theme="dark"] .event-details-meta span,
+html[data-theme="dark"] .event-details-card,
+html[data-theme="dark"] .event-live-card,
+html[data-theme="dark"] .event-sticky-card,
+html[data-theme="dark"] .organizer-card,
+html[data-theme="dark"] .event-bottom-bar {
+  background: #17171c !important;
+  border: 1px solid rgba(255,255,255,.06) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] .live-feed-item,
+html[data-theme="dark"] .contributor-item,
+html[data-theme="dark"] .comment-item,
+html[data-theme="dark"] .event-stats-grid div,
+html[data-theme="dark"] .organizer-stats div,
+html[data-theme="dark"] .comment-form input,
+html[data-theme="dark"] .comment-form textarea,
+html[data-theme="dark"] .event-bottom-bar button {
+  background: #202028 !important;
+  border: 1px solid rgba(255,255,255,.06) !important;
+  color: #fff !important;
+}
+
+html[data-theme="dark"] .event-details-title-row h1,
+html[data-theme="dark"] .event-details-card h2,
+html[data-theme="dark"] .event-live-heading strong,
+html[data-theme="dark"] .event-raised-box strong,
+html[data-theme="dark"] .event-stats-grid strong,
+html[data-theme="dark"] .organizer-card strong,
+html[data-theme="dark"] .contributor-item strong,
+html[data-theme="dark"] .comment-item strong {
+  color: #fff !important;
+}
+
+html[data-theme="dark"] .event-details-card p,
+html[data-theme="dark"] .event-raised-box span,
+html[data-theme="dark"] .event-raised-box p,
+html[data-theme="dark"] .event-secure-note,
+html[data-theme="dark"] .organizer-card p,
+html[data-theme="dark"] .event-details-meta span,
+html[data-theme="dark"] .contributor-item p,
+html[data-theme="dark"] .comment-item p,
+html[data-theme="dark"] .comment-top span {
+  color: #9ca3af !important;
 }

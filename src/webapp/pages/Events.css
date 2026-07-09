@@ -652,4 +652,68 @@
 
 .events-skeleton-line.short {
   width: 58%;
+}/* ==========================================================
+   DARK MODE ONLY
+   DO NOT TOUCH LIGHT MODE
+========================================================== */
+
+html[data-theme="dark"] .events-page{
+  background:
+    radial-gradient(circle at 12% 12%, rgba(229,9,20,.08), transparent 30%),
+    #0b0b0d;
+  color:#fff;
+}
+
+html[data-theme="dark"] .events-create-card,
+html[data-theme="dark"] .events-skeleton-card{
+    background:#17171c;
+    border:1px solid rgba(255,255,255,.06);
+    box-shadow:none;
+}
+
+html[data-theme="dark"] .events-create-card h2,
+html[data-theme="dark"] .events-section-header h2{
+    color:#fff;
+}
+
+html[data-theme="dark"] .events-create-card p,
+html[data-theme="dark"] .events-section-header p{
+    color:#9ca3af;
+}
+
+html[data-theme="dark"] .events-search{
+    background:#17171c;
+    border:1px solid rgba(255,255,255,.06);
+    box-shadow:none;
+}
+
+html[data-theme="dark"] .events-search input{
+    background:transparent;
+    color:#fff;
+}
+
+html[data-theme="dark"] .events-search input::placeholder{
+    color:#8b8b96;
+}
+
+html[data-theme="dark"] .events-search svg{
+    color:#b3b3bc;
+}
+
+html[data-theme="dark"] .events-search button{
+    background:#e50914;
+    color:#fff;
+}
+
+html[data-theme="dark"] .events-search button:hover{
+    background:#ff1d2d;
+}
+
+html[data-theme="dark"] .events-section-header h2,
+html[data-theme="dark"] .events-section-header span{
+    color:#fff;
+}
+
+html[data-theme="dark"] .events-floating-create{
+    box-shadow:0 18px 40px rgba(229,9,20,.35);
 }

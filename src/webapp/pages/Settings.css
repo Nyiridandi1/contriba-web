@@ -707,3 +707,108 @@
     justify-self: start;
   }
 }
+
+
+/* =========================================================
+   SETTINGS REAL DATA CONNECTION UI
+========================================================= */
+.settings-form-grid { display: grid; gap: 12px; }
+.settings-field { display: grid; gap: 7px; }
+.settings-field > span { color: #6f7584; font-size: 12px; font-weight: 900; }
+.settings-field > div { min-height: 50px; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; padding: 0 14px; border-radius: 17px; background: #f7f8fb; border: 1px solid rgba(20, 20, 30, 0.07); }
+.settings-field svg { color: #E50914; }
+.settings-field input, .settings-field select { width: 100%; border: 0; outline: 0; background: transparent; color: #151722; font-size: 14px; font-weight: 800; }
+.settings-field select { appearance: none; }
+.settings-save-button { width: fit-content; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 0 16px; border: 0; border-radius: 15px; color: #fff; background: linear-gradient(135deg, #E50914, #FF1F2D); font-size: 13px; font-weight: 950; cursor: pointer; box-shadow: 0 15px 30px rgba(229, 9, 20, 0.18); }
+.settings-save-button:disabled, .settings-switch:disabled, .settings-logout-button:disabled, .settings-delete-button:disabled { opacity: .6; cursor: not-allowed; }
+.settings-pin-box { display: grid; gap: 12px; margin-top: 16px; padding: 16px; border-radius: 22px; background: #f7f8fb; border: 1px solid rgba(20, 20, 30, 0.07); }
+.settings-pin-box > strong { color: #151722; font-size: 15px; font-weight: 950; }
+.settings-list-item { text-decoration: none; }
+.settings-danger-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.settings-danger-panel { background: radial-gradient(circle at top right, rgba(229, 9, 20, 0.09), transparent 34%), rgba(255, 255, 255, 0.94) !important; }
+.settings-delete-button { width: 100%; min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; border: 0; border-radius: 16px; color: #fff; background: linear-gradient(135deg, #E50914, #FF1F2D); font-size: 14px; font-weight: 950; cursor: pointer; box-shadow: 0 16px 34px rgba(229, 9, 20, 0.2); }
+.settings-toast { position: fixed; right: 28px; bottom: 28px; z-index: 9999; padding: 14px 18px; border-radius: 999px; color: #fff; background: linear-gradient(135deg, #111421, #e50914); font-size: 14px; font-weight: 950; box-shadow: 0 18px 45px rgba(229, 9, 20, 0.28); animation: settingsToastIn .25s ease both; }
+@keyframes settingsToastIn { from { opacity: 0; transform: translateY(10px) scale(.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@media (max-width: 760px) { .settings-danger-actions { grid-template-columns: 1fr; } .settings-save-button { width: 100%; } .settings-toast { right: 16px; bottom: 16px; left: 16px; text-align: center; } }/* =========================================================
+   GLOBAL THEME OVERRIDES FOR SETTINGS PAGE
+========================================================= */
+
+html[data-theme="dark"] .settings-page {
+  background:
+    radial-gradient(circle at top left, rgba(229, 9, 20, 0.12), transparent 28%),
+    radial-gradient(circle at top right, rgba(255, 85, 110, 0.08), transparent 30%),
+    var(--app-bg) !important;
+  color: var(--text-main) !important;
+}
+
+html[data-theme="dark"] .settings-main,
+html[data-theme="dark"] .settings-topbar h1,
+html[data-theme="dark"] .settings-panel-heading h3,
+html[data-theme="dark"] .settings-option-card strong,
+html[data-theme="dark"] .settings-list-item strong,
+html[data-theme="dark"] .settings-toggle-left strong,
+html[data-theme="dark"] .settings-pin-box > strong {
+  color: var(--text-main) !important;
+}
+
+html[data-theme="dark"] .settings-topbar p,
+html[data-theme="dark"] .settings-option-card p,
+html[data-theme="dark"] .settings-list-item p,
+html[data-theme="dark"] .settings-toggle-left p,
+html[data-theme="dark"] .settings-logout-copy,
+html[data-theme="dark"] .settings-field > span {
+  color: var(--text-muted) !important;
+}
+
+html[data-theme="dark"] .settings-panel,
+html[data-theme="dark"] .settings-hero,
+html[data-theme="dark"] .settings-hero-summary,
+html[data-theme="dark"] .settings-logout-panel,
+html[data-theme="dark"] .settings-danger-panel {
+  background: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35) !important;
+}
+
+html[data-theme="dark"] .settings-option-card,
+html[data-theme="dark"] .settings-list-item,
+html[data-theme="dark"] .settings-toggle-card,
+html[data-theme="dark"] .settings-field > div,
+html[data-theme="dark"] .settings-pin-box,
+html[data-theme="dark"] .settings-tags div,
+html[data-theme="dark"] .settings-summary-list div {
+  background: var(--card-bg-soft) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-main) !important;
+}
+
+html[data-theme="dark"] .settings-hero h2,
+html[data-theme="dark"] .settings-hero-summary h3 {
+  color: var(--text-main) !important;
+}
+
+html[data-theme="dark"] .settings-hero p,
+html[data-theme="dark"] .settings-hero-summary p,
+html[data-theme="dark"] .settings-summary-list small {
+  color: var(--text-muted) !important;
+}
+
+html[data-theme="dark"] .settings-field input,
+html[data-theme="dark"] .settings-field select {
+  color: var(--text-main) !important;
+}
+
+.settings-topbar span,
+.settings-panel-heading span,
+.settings-panel-heading svg,
+.settings-field svg,
+.settings-option-icon,
+.settings-list-item small {
+  color: var(--accent-color) !important;
+}
+
+.settings-save-button,
+.settings-switch.active,
+.settings-delete-button {
+  background: linear-gradient(135deg, var(--accent-color), #ff3340) !important;
+}

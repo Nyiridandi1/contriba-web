@@ -763,4 +763,124 @@
   .dashboard-goal-summary {
     grid-template-columns: 1fr;
   }
+}/* =========================================================
+   DARK MODE ONLY
+   DO NOT MODIFY LIGHT MODE
+========================================================= */
+
+html[data-theme="dark"] .dashboard-page{
+  background:
+    radial-gradient(circle at top left, rgba(229,9,20,.08), transparent 35%),
+    #0b0b0d;
+  color:#fff;
+}
+
+html[data-theme="dark"] .dashboard-main{
+  color:#fff;
+}
+
+html[data-theme="dark"] .dashboard-topbar h1,
+html[data-theme="dark"] .dashboard-command-card h2,
+html[data-theme="dark"] .dashboard-insight-card h3,
+html[data-theme="dark"] .panel-heading h3,
+html[data-theme="dark"] .dashboard-stat-card strong,
+html[data-theme="dark"] .dashboard-goal-ring strong,
+html[data-theme="dark"] .dashboard-command-progress strong,
+html[data-theme="dark"] .dashboard-goal-summary strong,
+html[data-theme="dark"] .dashboard-mini-line strong,
+html[data-theme="dark"] .contributor-row strong,
+html[data-theme="dark"] .dashboard-empty-row strong{
+    color:#fff;
+}
+
+html[data-theme="dark"] .dashboard-topbar p,
+html[data-theme="dark"] .dashboard-command-card p,
+html[data-theme="dark"] .dashboard-insight-card p,
+html[data-theme="dark"] .dashboard-stat-card span,
+html[data-theme="dark"] .dashboard-command-progress span,
+html[data-theme="dark"] .dashboard-goal-summary span,
+html[data-theme="dark"] .dashboard-mini-line span,
+html[data-theme="dark"] .dashboard-goal-ring span,
+html[data-theme="dark"] .dashboard-empty-row span,
+html[data-theme="dark"] .contributor-row span{
+    color:#9ca3af;
+}
+
+/* Main Cards */
+
+html[data-theme="dark"] .dashboard-command-card,
+html[data-theme="dark"] .dashboard-insight-card,
+html[data-theme="dark"] .dashboard-stat-card,
+html[data-theme="dark"] .dashboard-panel{
+
+    background:#17171c;
+    border:1px solid rgba(255,255,255,.06);
+    box-shadow:none;
+}
+
+/* Inner Cards */
+
+html[data-theme="dark"] .dashboard-command-progress div,
+html[data-theme="dark"] .dashboard-goal-summary div,
+html[data-theme="dark"] .dashboard-mini-line,
+html[data-theme="dark"] .contributor-row,
+html[data-theme="dark"] .dashboard-empty-row,
+html[data-theme="dark"] .health-list p,
+html[data-theme="dark"] .activity-list p,
+html[data-theme="dark"] .quick-actions-grid a{
+
+    background:#202028;
+    border:1px solid rgba(255,255,255,.05);
+    color:#fff;
+}
+
+html[data-theme="dark"] .dashboard-progress-track,
+html[data-theme="dark"] .forecast-track{
+
+    background:#2b2b34;
+}
+
+html[data-theme="dark"] .dashboard-goal-ring{
+
+    background:
+      radial-gradient(circle,#17171c 56%,transparent 58%),
+      conic-gradient(#e50914 var(--progress,0%), #2b2b34 0);
+}
+
+html[data-theme="dark"] .wallet-panel{
+
+    background:#17171c;
+}
+
+html[data-theme="dark"] .quick-actions-grid a:hover{
+
+    background:#23232d;
+}html[data-theme="dark"] .dashboard-page .wallet-panel {
+  background: #17171c !important;
+  border: 1px solid rgba(255,255,255,.06) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] .dashboard-page .wallet-panel .panel-heading h3 {
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .dashboard-page .wallet-panel .panel-heading svg {
+  color: #e50914 !important;
+}
+
+html[data-theme="dark"] .dashboard-page .wallet-balance {
+  background:
+    radial-gradient(circle at top right, rgba(255,255,255,.14), transparent 36%),
+    linear-gradient(135deg, #3a0d18, #e50914) !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .dashboard-page .wallet-balance span,
+html[data-theme="dark"] .dashboard-page .wallet-balance p {
+  color: rgba(255,255,255,.76) !important;
+}
+
+html[data-theme="dark"] .dashboard-page .wallet-balance strong {
+  color: #ffffff !important;
 }

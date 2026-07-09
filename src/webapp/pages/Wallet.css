@@ -905,4 +905,87 @@
     right: -130px;
     top: -120px;
   }
+}/* =========================================================
+   WALLET DARK MODE ONLY
+========================================================= */
+
+html[data-theme="dark"] .wallet-page{
+  background:
+    radial-gradient(circle at top left, rgba(229,9,20,.08), transparent 30%),
+    radial-gradient(circle at top right, rgba(255,85,110,.08), transparent 28%),
+    #0d0d11 !important;
+  color:#f5f5f7;
+}
+
+html[data-theme="dark"] .wallet-main{
+  background:transparent;
+}
+
+html[data-theme="dark"] .wallet-topbar h1,
+html[data-theme="dark"] .wallet-hero-left h2,
+html[data-theme="dark"] .wallet-security-card strong,
+html[data-theme="dark"] .wallet-stat-card strong,
+html[data-theme="dark"] .wallet-panel-heading h3,
+html[data-theme="dark"] .wallet-status-panel h3,
+html[data-theme="dark"] .withdraw-row strong,
+html[data-theme="dark"] .wallet-empty-state strong{
+  color:#ffffff!important;
+}
+
+html[data-theme="dark"] .wallet-topbar p,
+html[data-theme="dark"] .wallet-hero-left p,
+html[data-theme="dark"] .wallet-security-card p,
+html[data-theme="dark"] .wallet-stat-card span,
+html[data-theme="dark"] .wallet-status-panel p,
+html[data-theme="dark"] .withdraw-row span,
+html[data-theme="dark"] .destination-list small,
+html[data-theme="dark"] .wallet-empty-state span{
+  color:#9ca3af!important;
+}
+
+html[data-theme="dark"] .wallet-hero,
+html[data-theme="dark"] .wallet-stat-card,
+html[data-theme="dark"] .wallet-panel,
+html[data-theme="dark"] .wallet-status-panel,
+html[data-theme="dark"] .wallet-withdraw-panel{
+  background:#17171c!important;
+  border:1px solid rgba(255,255,255,.06)!important;
+  box-shadow:none!important;
+}
+
+html[data-theme="dark"] .wallet-security-card,
+html[data-theme="dark"] .wallet-form-fields input,
+html[data-theme="dark"] .destination-list button,
+html[data-theme="dark"] .wallet-status-list p,
+html[data-theme="dark"] .withdraw-row,
+html[data-theme="dark"] .wallet-empty-state{
+  background:#202028!important;
+  border:1px solid rgba(255,255,255,.06)!important;
+  color:#ffffff!important;
+}
+
+html[data-theme="dark"] .wallet-form-fields input{
+  color:#ffffff!important;
+}
+
+html[data-theme="dark"] .wallet-form-fields input::placeholder{
+  color:#8b8b96!important;
+}
+
+html[data-theme="dark"] .wallet-panel-heading button{
+  background:#202028!important;
+  color:#e50914!important;
+  border:1px solid rgba(255,255,255,.06)!important;
+}
+
+html[data-theme="dark"] .destination-list button:hover,
+html[data-theme="dark"] .destination-list button.active{
+  background:#262630!important;
+}
+
+html[data-theme="dark"] .withdraw-amount-card{
+  background:
+    radial-gradient(circle at top right, rgba(255,255,255,.14), transparent 36%),
+    linear-gradient(135deg,#3a0d18,#e50914)!important;
+  color:#ffffff!important;
 }

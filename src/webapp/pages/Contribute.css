@@ -887,4 +887,95 @@
   .contribute-skeleton-title {
     height: 54px;
   }
+}/* =========================================================
+   CONTRIBUTE PAGE DARK MODE ONLY
+========================================================= */
+
+html[data-theme="dark"] .contribute-page {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(229,9,20,.08), transparent 30%),
+    radial-gradient(circle at 92% 12%, rgba(229,9,20,.06), transparent 28%),
+    #0d0d11 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .contribute-back,
+html[data-theme="dark"] .contribute-event-card,
+html[data-theme="dark"] .contribute-card,
+html[data-theme="dark"] .summary-card,
+html[data-theme="dark"] .contribute-bottom-bar {
+  background: #17171c !important;
+  border: 1px solid rgba(255,255,255,.06) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] .contribute-header h1,
+html[data-theme="dark"] .contribute-event-info h2,
+html[data-theme="dark"] .contribute-owner-row strong,
+html[data-theme="dark"] .contribute-card-heading h2,
+html[data-theme="dark"] .contribute-card label,
+html[data-theme="dark"] .contribute-input span,
+html[data-theme="dark"] .contribute-visibility strong,
+html[data-theme="dark"] .payment-methods button strong,
+html[data-theme="dark"] .summary-amount strong,
+html[data-theme="dark"] .summary-line strong,
+html[data-theme="dark"] .contribute-bottom-bar strong {
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .contribute-header p,
+html[data-theme="dark"] .contribute-event-meta span,
+html[data-theme="dark"] .contribute-owner-row span,
+html[data-theme="dark"] .contribute-card-heading p,
+html[data-theme="dark"] .contribute-visibility span,
+html[data-theme="dark"] .payment-methods button span,
+html[data-theme="dark"] .summary-amount small,
+html[data-theme="dark"] .summary-line span,
+html[data-theme="dark"] .summary-flow div,
+html[data-theme="dark"] .summary-trust span,
+html[data-theme="dark"] .contribute-bottom-bar span {
+  color: #9ca3af !important;
+}
+
+html[data-theme="dark"] .contribute-event-meta span,
+html[data-theme="dark"] .contribute-owner-row,
+html[data-theme="dark"] .contribute-owner-row > div,
+html[data-theme="dark"] .contribute-input,
+html[data-theme="dark"] .contribute-visibility,
+html[data-theme="dark"] .contribute-amount-input,
+html[data-theme="dark"] .contribute-quick-grid button,
+html[data-theme="dark"] .contribute-message,
+html[data-theme="dark"] .payment-methods button,
+html[data-theme="dark"] .payment-logo,
+html[data-theme="dark"] .summary-flow,
+html[data-theme="dark"] .summary-trust span {
+  background: #202028 !important;
+  border: 1px solid rgba(255,255,255,.06) !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .contribute-input input,
+html[data-theme="dark"] .contribute-amount-input,
+html[data-theme="dark"] .contribute-message {
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .contribute-input input::placeholder,
+html[data-theme="dark"] .contribute-message::placeholder {
+  color: #8b8b96 !important;
+}
+
+html[data-theme="dark"] .contribute-visibility.active,
+html[data-theme="dark"] .payment-methods button.active,
+html[data-theme="dark"] .payment-methods button:hover,
+html[data-theme="dark"] .contribute-quick-grid button:hover,
+html[data-theme="dark"] .contribute-quick-grid button.active {
+  background: rgba(229,9,20,.10) !important;
+  border-color: rgba(229,9,20,.35) !important;
+}
+
+html[data-theme="dark"] .summary-divider,
+html[data-theme="dark"] .summary-line {
+  border-color: rgba(255,255,255,.08) !important;
 }

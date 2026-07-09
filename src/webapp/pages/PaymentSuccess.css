@@ -572,4 +572,64 @@
   .success-receipt-card {
     padding: 24px 22px 34px;
   }
+}/* ==========================================================
+   PAYMENT SUCCESS - DARK MODE
+========================================================== */
+
+html[data-theme="dark"] .payment-success-page{
+    background:
+      radial-gradient(circle at 12% 12%, rgba(34,197,94,.10), transparent 30%),
+      radial-gradient(circle at 88% 14%, rgba(229,9,20,.08), transparent 28%),
+      #0d0d11 !important;
+    color:#fff;
+}
+
+html[data-theme="dark"] .success-card-main,
+html[data-theme="dark"] .success-receipt-card{
+    background:#17171c !important;
+    border:1px solid rgba(255,255,255,.06) !important;
+    box-shadow:none !important;
+}
+
+html[data-theme="dark"] .success-card-main h1,
+html[data-theme="dark"] .receipt-heading span,
+html[data-theme="dark"] .receipt-method strong,
+html[data-theme="dark"] .receipt-list strong,
+html[data-theme="dark"] .success-amount-box strong{
+    color:#fff !important;
+}
+
+html[data-theme="dark"] .success-card-main p,
+html[data-theme="dark"] .success-amount-box span,
+html[data-theme="dark"] .receipt-method span,
+html[data-theme="dark"] .receipt-list span,
+html[data-theme="dark"] .receipt-ref span,
+html[data-theme="dark"] .receipt-trust span{
+    color:#9ca3af !important;
+}
+
+html[data-theme="dark"] .success-amount-box,
+html[data-theme="dark"] .receipt-method,
+html[data-theme="dark"] .receipt-list,
+html[data-theme="dark"] .receipt-ref,
+html[data-theme="dark"] .receipt-trust span{
+    background:#202028 !important;
+    border:1px solid rgba(255,255,255,.06) !important;
+}
+
+html[data-theme="dark"] .receipt-method-logo,
+html[data-theme="dark"] .receipt-ref button{
+    background:#2a2a34 !important;
+    border:1px solid rgba(255,255,255,.06) !important;
+    color:#fff !important;
+}
+
+html[data-theme="dark"] .success-secondary{
+    background:#202028 !important;
+    border:1px solid rgba(255,255,255,.06) !important;
+    color:#fff !important;
+}
+
+html[data-theme="dark"] .receipt-list div{
+    border-bottom:1px solid rgba(255,255,255,.06) !important;
 }

@@ -1,14 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  ArrowRight,
   BadgeCheck,
-  Bell,
+  CalendarDays,
   Camera,
   CheckCircle2,
   Globe,
-  KeyRound,
-  LockKeyhole,
   LogOut,
   Mail,
   MapPin,
@@ -17,10 +14,6 @@ import {
   Sparkles,
   Upload,
   UserRound,
-  Users,
-  Wallet,
-  CalendarDays,
-  Star,
 } from "lucide-react";
 
 import AppSidebar from "../components/AppSidebar";
@@ -163,8 +156,9 @@ function ProfileHero() {
         </div>
 
         <h2>{displayName}</h2>
+
         <p>
-          Manage your Contriba organizer account, trust details and security from one clean profile center.
+          Manage your Contriba organizer identity, profile photo and trust details from one clean profile center.
         </p>
 
         <div className="profile-meta-grid">
@@ -203,44 +197,32 @@ function ProfileHero() {
           <Sparkles size={24} />
           <span>Trust Profile</span>
         </div>
+
         <strong>Your organizer profile is ready.</strong>
-        <p>Verified account details help contributors trust your events and complete payments with confidence.</p>
+
+        <p>
+          Verified account details help contributors trust your events and complete payments with confidence.
+        </p>
+
         <div className="trust-mini-grid">
-          <div><small>Trust Score</small><h3>{profilePhoto ? "98%" : "88%"}</h3></div>
-          <div><small>Status</small><h3>Excellent</h3></div>
+          <div>
+            <small>Trust Score</small>
+            <h3>{profilePhoto ? "98%" : "88%"}</h3>
+          </div>
+
+          <div>
+            <small>Status</small>
+            <h3>Excellent</h3>
+          </div>
         </div>
       </aside>
     </section>
   );
 }
 
-function ProfileStats() {
-  const stats = [
-    { icon: CalendarDays, title: "Events Created", value: "18", sub: "+3 this month" },
-    { icon: Wallet, title: "Total Raised", value: "RWF 18.4M", sub: "Across all events" },
-    { icon: Users, title: "Contributors", value: "1,284", sub: "Growing community" },
-    { icon: Star, title: "Trust Score", value: "98%", sub: "Excellent rating" },
-  ];
-
-  return (
-    <section className="profile-stats-grid clean-four">
-      {stats.map((item) => {
-        const Icon = item.icon;
-        return (
-          <article className="profile-stat-card" key={item.title}>
-            <div className="profile-stat-icon"><Icon size={22} /></div>
-            <h4>{item.title}</h4>
-            <h2>{item.value}</h2>
-            <p>{item.sub}</p>
-          </article>
-        );
-      })}
-    </section>
-  );
-}
-
 function ProfileInfo() {
   const user = getUser();
+
   const items = [
     { label: "Full Name", value: user?.name || user?.full_name || "Contriba Organizer", icon: UserRound },
     { label: "Email Address", value: user?.email || "Email not added", icon: Mail },
@@ -261,9 +243,11 @@ function ProfileInfo() {
       <div className="personal-info-grid clean-info-grid">
         {items.map((item) => {
           const Icon = item.icon;
+
           return (
             <div className="personal-info-item" key={item.label}>
               <div><Icon size={18} /></div>
+
               <span>
                 <small>{item.label}</small>
                 <strong>{item.value}</strong>
@@ -278,9 +262,9 @@ function ProfileInfo() {
 
 function ProfileVerification() {
   const verifications = [
-    { icon: Mail, title: "Email Address", value: "Verified" },
-    { icon: Phone, title: "Phone Number", value: "Verified" },
-    { icon: UserRound, title: "National Identity", value: "Verified" },
+    { icon: Mail, title: "Email Address", value: "Verified", description: "Your email address has been confirmed." },
+    { icon: Phone, title: "Phone Number", value: "Verified", description: "Your phone number has been confirmed." },
+    { icon: UserRound, title: "National Identity", value: "Verified", description: "Your national identity has been confirmed." },
   ];
 
   return (
@@ -296,13 +280,16 @@ function ProfileVerification() {
       <div className="verification-list-clean">
         {verifications.map((item) => {
           const Icon = item.icon;
+
           return (
             <div className="verification-row" key={item.title}>
               <div className="verification-icon"><Icon size={18} /></div>
+
               <span>
                 <strong>{item.title}</strong>
-                <small>Your {item.title.toLowerCase()} has been confirmed.</small>
+                <small>{item.description}</small>
               </span>
+
               <em><CheckCircle2 size={14} />{item.value}</em>
             </div>
           );
@@ -312,13 +299,14 @@ function ProfileVerification() {
   );
 }
 
-function ProfileSecurity() {
+function ProfileLogout() {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [logoutLoading, setLogoutLoading] = useState(false);
 
   async function handleLogout() {
     setLogoutLoading(true);
+
     try {
       clearSession();
       if (logout) await logout();
@@ -327,34 +315,30 @@ function ProfileSecurity() {
       clearSession();
       navigate("/login");
     }
+
     setLogoutLoading(false);
   }
 
   return (
-    <section className="profile-panel">
+    <section className="profile-panel profile-logout-panel-clean">
       <div className="profile-panel-heading">
         <div>
-          <span>Security</span>
-          <h3>Protect account</h3>
+          <span>Session</span>
+          <h3>Account access</h3>
         </div>
-        <LockKeyhole size={22} />
+        <LogOut size={22} />
       </div>
 
-      <div className="security-actions-grid clean-security-grid">
-        <button type="button">
-          <KeyRound size={18} />
-          <strong>Change PIN</strong>
-          <span>Update your account security PIN.</span>
-        </button>
+      <p className="profile-logout-copy">
+        Logout from this device when you finish using Contriba on a shared computer.
+      </p>
 
-        <button type="button">
-          <ShieldCheck size={18} />
-          <strong>Two-Factor Auth</strong>
-          <span>Add an extra protection layer.</span>
-        </button>
-      </div>
-
-      <button className="profile-logout-btn" type="button" onClick={handleLogout} disabled={logoutLoading}>
+      <button
+        className="profile-logout-btn"
+        type="button"
+        onClick={handleLogout}
+        disabled={logoutLoading}
+      >
         <LogOut size={18} />
         {logoutLoading ? "Logging out..." : "Logout"}
       </button>
@@ -362,37 +346,58 @@ function ProfileSecurity() {
   );
 }
 
-function ProfilePreferences() {
+function ProfileSkeleton() {
   return (
-    <section className="profile-panel">
-      <div className="profile-panel-heading">
-        <div>
-          <span>Preferences</span>
-          <h3>Experience settings</h3>
-        </div>
-        <Bell size={22} />
-      </div>
-
-      <div className="preference-list premium-preference-list">
-        <div className="premium-preference-item">
-          <div className="preference-icon"><Mail size={18} /></div>
-          <span>
-            <strong>Email Notifications</strong>
-            <small>Receive reports, receipts and account updates.</small>
-          </span>
-          <em>Enabled</em>
+    <>
+      <section className="profile-hero-clean profile-skeleton-hero">
+        <div className="profile-photo-area">
+          <div className="profile-skeleton-photo shimmer" />
+          <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
         </div>
 
-        <div className="premium-preference-item">
-          <div className="preference-icon"><Globe size={18} /></div>
-          <span>
-            <strong>Language</strong>
-            <small>Preferred dashboard language.</small>
-          </span>
-          <em>English</em>
+        <div className="profile-hero-info">
+          <div className="profile-skeleton-pill shimmer" />
+          <div className="profile-skeleton-line profile-skeleton-title shimmer" />
+          <div className="profile-skeleton-line profile-skeleton-line-full shimmer" />
+          <div className="profile-skeleton-line profile-skeleton-line-md shimmer" />
+
+          <div className="profile-meta-grid profile-skeleton-meta">
+            <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
+            <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
+            <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
+            <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
+          </div>
+
+          <div className="profile-completion-card compact">
+            <div className="profile-skeleton-line profile-skeleton-line-md shimmer" />
+            <div className="profile-skeleton-progress shimmer" />
+
+            <div className="completion-list">
+              <div className="profile-skeleton-chip shimmer" />
+              <div className="profile-skeleton-chip shimmer" />
+              <div className="profile-skeleton-chip shimmer" />
+              <div className="profile-skeleton-chip shimmer" />
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
+
+        <aside className="profile-trust-card">
+          <div className="profile-skeleton-icon shimmer" />
+          <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
+          <div className="profile-skeleton-line profile-skeleton-line-md shimmer" />
+          <div className="profile-skeleton-line profile-skeleton-line-full shimmer" />
+        </aside>
+      </section>
+
+      <section className="profile-panel profile-info-panel">
+        <div className="profile-panel-heading">
+          <div>
+            <span className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
+            <h3 className="profile-skeleton-line profile-skeleton-line-md shimmer" />
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
 
@@ -413,135 +418,23 @@ function Profile() {
           <div>
             <span>Profile Center</span>
             <h1>Organizer account and trust profile</h1>
+
             <p>
-              Manage your personal details, identity status and account security from one clean profile center.
+              Manage your personal details, identity status and trust profile from one clean profile center.
             </p>
           </div>
         </header>
 
         {loading ? (
-          <>
-            <section className="profile-hero-clean profile-skeleton-hero">
-              <div className="profile-photo-area">
-                <div className="profile-skeleton-photo shimmer" />
-                <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
-              </div>
-
-              <div className="profile-hero-info">
-                <div className="profile-skeleton-pill shimmer" />
-                <div className="profile-skeleton-line profile-skeleton-title shimmer" />
-                <div className="profile-skeleton-line profile-skeleton-line-full shimmer" />
-                <div className="profile-skeleton-line profile-skeleton-line-md shimmer" />
-
-                <div className="profile-meta-grid profile-skeleton-meta">
-                  <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
-                  <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
-                  <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
-                  <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
-                </div>
-
-                <div className="profile-completion-card compact">
-                  <div className="profile-skeleton-line profile-skeleton-line-md shimmer" />
-                  <div className="profile-skeleton-progress shimmer" />
-                  <div className="completion-list">
-                    <div className="profile-skeleton-chip shimmer" />
-                    <div className="profile-skeleton-chip shimmer" />
-                    <div className="profile-skeleton-chip shimmer" />
-                    <div className="profile-skeleton-chip shimmer" />
-                  </div>
-                </div>
-              </div>
-
-              <aside className="profile-trust-card">
-                <div className="profile-skeleton-icon shimmer" />
-                <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
-                <div className="profile-skeleton-line profile-skeleton-line-md shimmer" />
-                <div className="profile-skeleton-line profile-skeleton-line-full shimmer" />
-                <div className="trust-mini-grid">
-                  <div>
-                    <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
-                    <div className="profile-skeleton-line profile-skeleton-line-md shimmer" />
-                  </div>
-                  <div>
-                    <div className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
-                    <div className="profile-skeleton-line profile-skeleton-line-md shimmer" />
-                  </div>
-                </div>
-              </aside>
-            </section>
-
-            <section className="profile-stats-grid clean-four">
-              {[1, 2, 3, 4].map((item) => (
-                <article className="profile-stat-card profile-skeleton-card" key={item}>
-                  <div className="profile-skeleton-icon shimmer" />
-                  <h4 className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
-                  <h2 className="profile-skeleton-line profile-skeleton-line-md shimmer" />
-                  <p className="profile-skeleton-line profile-skeleton-line-xs shimmer" />
-                </article>
-              ))}
-            </section>
-
-            <section className="profile-panel profile-info-panel">
-              <div className="profile-panel-heading">
-                <div>
-                  <span className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
-                  <h3 className="profile-skeleton-line profile-skeleton-line-md shimmer" />
-                </div>
-              </div>
-
-              <div className="personal-info-grid clean-info-grid">
-                {[1, 2, 3, 4].map((item) => (
-                  <div className="personal-info-item profile-skeleton-card" key={item}>
-                    <div className="profile-skeleton-icon shimmer" />
-                    <span>
-                      <small className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
-                      <strong className="profile-skeleton-line profile-skeleton-line-md shimmer" />
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="profile-content-grid clean-profile-grid">
-              {[1, 2].map((panel) => (
-                <section className="profile-panel profile-skeleton-panel" key={panel}>
-                  <div className="profile-panel-heading">
-                    <div>
-                      <span className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
-                      <h3 className="profile-skeleton-line profile-skeleton-line-md shimmer" />
-                    </div>
-                    <div className="profile-skeleton-icon profile-skeleton-icon-small shimmer" />
-                  </div>
-
-                  <div className="verification-list-clean">
-                    {[1, 2, 3].map((item) => (
-                      <div className="verification-row profile-skeleton-card" key={item}>
-                        <div className="profile-skeleton-icon shimmer" />
-                        <span>
-                          <strong className="profile-skeleton-line profile-skeleton-line-md shimmer" />
-                          <small className="profile-skeleton-line profile-skeleton-line-sm shimmer" />
-                        </span>
-                        <em className="profile-skeleton-pill shimmer" />
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              ))}
-            </section>
-          </>
+          <ProfileSkeleton />
         ) : (
           <>
             <ProfileHero />
-            <ProfileStats />
             <ProfileInfo />
 
             <section className="profile-content-grid clean-profile-grid">
               <ProfileVerification />
-              <ProfileSecurity />
-            </section>
-
-            <section className="profile-content-grid clean-profile-grid single-preference-grid">
-              <ProfilePreferences />
+              <ProfileLogout />
             </section>
           </>
         )}

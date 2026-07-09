@@ -1,7 +1,5 @@
 :root {
   font-family: Inter, system-ui, sans-serif;
-  color: #101322;
-  background: #ffffff;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -15,6 +13,33 @@
   --soft: #fff6f6;
   --line: rgba(16, 19, 34, 0.08);
   --shadow: 0 35px 100px rgba(16, 19, 34, 0.16);
+
+  --accent-color: #E50914;
+  --app-bg: #ffffff;
+  --card-bg: #ffffff;
+  --card-bg-soft: #fff6f6;
+  --text-main: #101322;
+  --text-muted: #6b7280;
+  --border-color: rgba(16, 19, 34, 0.08);
+  --sidebar-bg: #ffffff;
+  --input-bg: #ffffff;
+}
+
+html[data-theme="dark"] {
+  --app-bg: #0f0f10;
+  --card-bg: #18181b;
+  --card-bg-soft: #202024;
+  --text-main: #f5f5f5;
+  --text-muted: #a1a1aa;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --sidebar-bg: #151517;
+  --input-bg: #202024;
+
+  --dark: #f5f5f5;
+  --muted: #a1a1aa;
+  --soft: #202024;
+  --line: rgba(255, 255, 255, 0.1);
+  --shadow: 0 35px 100px rgba(0, 0, 0, 0.45);
 }
 
 * {
@@ -27,11 +52,15 @@ html {
   scroll-behavior: smooth;
 }
 
+html[data-compact="true"] {
+  font-size: 14px;
+}
+
 body {
   min-width: 320px;
   min-height: 100vh;
-  background: #ffffff;
-  color: #101322;
+  background: var(--app-bg);
+  color: var(--text-main);
   overflow-x: hidden;
 }
 
@@ -42,11 +71,54 @@ body {
 
 a {
   text-decoration: none;
+  color: inherit;
 }
 
 button,
 a {
   -webkit-tap-highlight-color: transparent;
+}
+
+button,
+.primary-btn,
+.secondary-btn,
+.download-btn {
+  font-family: inherit;
+}
+
+.primary-btn,
+.save-btn,
+button.primary {
+  background: var(--accent-color);
+}
+
+.card,
+.dashboard-card,
+.settings-card,
+.wallet-card,
+.event-card,
+.profile-card,
+.notification-card,
+.share-card,
+.report-card,
+.contributor-card {
+  background: var(--card-bg);
+  color: var(--text-main);
+  border-color: var(--border-color);
+}
+
+.sidebar,
+.organizer-sidebar {
+  background: var(--sidebar-bg);
+  border-color: var(--border-color);
+}
+
+input,
+select,
+textarea {
+  background: var(--input-bg);
+  color: var(--text-main);
+  border-color: var(--border-color);
 }
 
 /* PHASE 2 MOTION SYSTEM */
@@ -212,6 +284,14 @@ a {
   50% {
     transform: translateY(-25px);
   }
+}
+
+html[data-reduce-motion="true"] *,
+html[data-reduce-motion="true"] *::before,
+html[data-reduce-motion="true"] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

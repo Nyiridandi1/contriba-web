@@ -744,7 +744,7 @@
   padding: 34px 34px 80px;
 }
 
-/* Clean Contriba SaaS hero â€” replaces dark red hero visually */
+/* Clean Contriba SaaS hero Ã¢â‚¬â€ replaces dark red hero visually */
 .dashboard-events-hero {
   position: relative;
   color: #111827 !important;
@@ -999,4 +999,62 @@
     right: -130px;
     top: -120px;
   }
+}
+
+
+/* =========================================================
+   CONRIBA DASHBOARD EVENTS - DARK MODE
+========================================================= */
+
+[data-theme="dark"] .dashboard-events-page{
+background:radial-gradient(circle at top left,rgba(229,9,20,.08),transparent 30%),radial-gradient(circle at top right,rgba(255,85,110,.08),transparent 28%),#0d0d11;
+color:#f5f5f7;
+}
+
+[data-theme="dark"] .dashboard-events-main{background:transparent;}
+
+[data-theme="dark"] .dashboard-events-tabs,
+[data-theme="dark"] .dashboard-events-search,
+[data-theme="dark"] .dashboard-events-filters button,
+[data-theme="dark"] .dashboard-events-stat-card,
+[data-theme="dark"] .dashboard-event-card,
+[data-theme="dark"] .dashboard-events-panel,
+[data-theme="dark"] .dashboard-events-recommendation,
+[data-theme="dark"] .dashboard-event-metrics div,
+[data-theme="dark"] .dashboard-event-actions button,
+[data-theme="dark"] .dashboard-event-card-top button{
+background:#1a1a22!important;
+border-color:#2f2f3b!important;
+color:#f5f5f7!important;
+box-shadow:none!important;
+}
+
+[data-theme="dark"] .dashboard-events-hero{
+background:radial-gradient(circle at 90% 10%,rgba(229,9,20,.18),transparent 28%),#17171d!important;
+color:#fff!important;
+border:1px solid #2f2f3b;
+}
+
+[data-theme="dark"] .dashboard-events-topbar h1,
+[data-theme="dark"] .dashboard-events-topbar p,
+[data-theme="dark"] .dashboard-events-panel-heading h3,
+[data-theme="dark"] .dashboard-event-card h3,
+[data-theme="dark"] .dashboard-events-recommendation strong,
+[data-theme="dark"] .dashboard-event-location,
+[data-theme="dark"] .dashboard-event-meta,
+[data-theme="dark"] .dashboard-events-search input,
+[data-theme="dark"] .dashboard-events-hero-left h2,
+[data-theme="dark"] .dashboard-events-hero-left p{
+color:#f5f5f7!important;
+}
+
+[data-theme="dark"] .dashboard-event-progress{background:#2c2c36;}
+[data-theme="dark"] .dashboard-events-search input::placeholder{color:#9ea3b0;}[data-theme="dark"] .dashboard-events-activity-list p {
+  background: #202028 !important;
+  border: 1px solid #2f2f3b !important;
+  color: #f5f5f7 !important;
+}
+
+[data-theme="dark"] .dashboard-events-activity-list p svg {
+  color: #e50914 !important;
 }

@@ -1018,4 +1018,79 @@
     right: -130px;
     top: -120px;
   }
+}/* FIX ACTIVE EVENT SELECTOR */
+.share-event-selector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: -8px 0 20px;
+  padding: 14px 16px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 16px 38px rgba(16, 24, 40, 0.06);
+}
+
+.share-event-selector label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #667085;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.share-event-selector select {
+  height: 42px;
+  min-width: 220px;
+  padding: 0 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(17, 24, 39, 0.1);
+  background: #f8f9fc;
+  color: #111827;
+  font-weight: 900;
+  outline: none;
+}
+
+.share-event-selector a {
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #111827;
+  background: #ffffff;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.share-event-selector a:hover {
+  color: #e50914;
+  transform: translateY(-1px);
+}
+
+/* MAKE LOADING SKELETON LOOK FULL AGAIN */
+.share-skeleton-card {
+  min-height: 160px;
+}
+
+@media (max-width: 700px) {
+  .share-event-selector {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .share-event-selector label {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .share-event-selector select,
+  .share-event-selector a {
+    width: 100%;
+  }
 }

@@ -459,4 +459,74 @@
   .app-home-topbar h1 {
     white-space: normal;
   }
+}/* ==========================================================
+   CONTRIBA HOME - DARK MODE
+========================================================== */
+
+html[data-theme="dark"] .app-home-page{
+  --bg:#0d0d11;
+  --card:#17171d;
+  --text:#ffffff;
+  --muted:#a8abb7;
+  --border:#2a2a34;
+
+  background:
+    radial-gradient(circle at 100% 0%,rgba(229,9,20,.12),transparent 26%),
+    radial-gradient(circle at 0% 8%,rgba(229,9,20,.05),transparent 24%),
+    #0d0d11;
+}
+
+html[data-theme="dark"] .app-home-topbar h1,
+html[data-theme="dark"] .app-home-section-header h2{
+    color:#ffffff;
+}
+
+html[data-theme="dark"] .app-home-topbar p,
+html[data-theme="dark"] .app-home-section-header p{
+    color:#a8abb7;
+}
+
+html[data-theme="dark"] .app-home-search,
+html[data-theme="dark"] .app-home-top-actions button,
+html[data-theme="dark"] .app-home-icon-action{
+    background:#17171d;
+    color:#fff;
+    border:1px solid #2a2a34;
+    box-shadow:none;
+}
+
+html[data-theme="dark"] .app-home-search svg{
+    color:#fff;
+}
+
+html[data-theme="dark"] .app-home-search input{
+    color:#fff;
+}
+
+html[data-theme="dark"] .app-home-search input::placeholder{
+    color:#8d93a5;
+}
+
+html[data-theme="dark"] .app-home-search-clear{
+    background:#24242c!important;
+    color:#fff!important;
+}
+
+html[data-theme="dark"] .app-home-user-avatar{
+    box-shadow:0 0 30px rgba(229,9,20,.25);
+}
+
+html[data-theme="dark"] .app-home-categories button{
+    background:#17171d;
+    color:#ffffff;
+    border:1px solid #2a2a34;
+}
+
+html[data-theme="dark"] .app-home-categories button:hover{
+    border-color:#e50914;
+}
+
+html[data-theme="dark"] .app-home-categories button.active{
+    background:#e50914;
+    color:#fff;
 }

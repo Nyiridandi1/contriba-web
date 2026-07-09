@@ -1339,4 +1339,110 @@
     right: -130px;
     top: -120px;
   }
+}/* =========================================================
+   CONTRIBUTORS DARK MODE ONLY
+   DO NOT TOUCH LIGHT MODE
+========================================================= */
+
+html[data-theme="dark"] .contributors-page {
+  background:
+    radial-gradient(circle at top left, rgba(229, 9, 20, 0.08), transparent 30%),
+    radial-gradient(circle at top right, rgba(255, 85, 110, 0.08), transparent 28%),
+    #0d0d11 !important;
+  color: #f5f5f7 !important;
+}
+
+html[data-theme="dark"] .contributors-main {
+  background: transparent !important;
+}
+
+html[data-theme="dark"] .contributors-topbar h1,
+html[data-theme="dark"] .contributors-hero h2,
+html[data-theme="dark"] .contributors-hero-card strong,
+html[data-theme="dark"] .contributors-stat-card strong,
+html[data-theme="dark"] .contributors-person strong,
+html[data-theme="dark"] .contributors-amount strong,
+html[data-theme="dark"] .detail-profile h3,
+html[data-theme="dark"] .detail-profile-clean h3,
+html[data-theme="dark"] .detail-section-head span,
+html[data-theme="dark"] .timeline-item strong,
+html[data-theme="dark"] .detail-ai-card p {
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .contributors-topbar p,
+html[data-theme="dark"] .contributors-hero p,
+html[data-theme="dark"] .contributors-hero-card p,
+html[data-theme="dark"] .contributors-stat-card span,
+html[data-theme="dark"] .contributors-person span,
+html[data-theme="dark"] .contributors-person small,
+html[data-theme="dark"] .contributors-amount span,
+html[data-theme="dark"] .contributors-method span,
+html[data-theme="dark"] .contributors-method small,
+html[data-theme="dark"] .detail-profile p,
+html[data-theme="dark"] .detail-section > p,
+html[data-theme="dark"] .timeline-item p,
+html[data-theme="dark"] .timeline-item small {
+  color: #9ca3af !important;
+}
+
+html[data-theme="dark"] .contributors-hero,
+html[data-theme="dark"] .contributors-stat-card,
+html[data-theme="dark"] .contributors-table-card,
+html[data-theme="dark"] .contributor-detail-panel,
+html[data-theme="dark"] .contributor-detail-panel-clean,
+html[data-theme="dark"] .detail-profile-clean,
+html[data-theme="dark"] .detail-section,
+html[data-theme="dark"] .detail-ai-card {
+  background: #17171c !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .contributors-hero-card,
+html[data-theme="dark"] .contributors-search,
+html[data-theme="dark"] .contributors-filters button,
+html[data-theme="dark"] .contributors-table-head,
+html[data-theme="dark"] .contributors-row,
+html[data-theme="dark"] .detail-actions-grid button {
+  background: #202028 !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .contributors-search input {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .contributors-search input::placeholder {
+  color: #8b8b96 !important;
+}
+
+html[data-theme="dark"] .contributors-table-head span {
+  color: #9ca3af !important;
+}
+
+html[data-theme="dark"] .contributors-actions button {
+  background: #202028 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: #e50914 !important;
+}
+
+html[data-theme="dark"] .contributors-actions button:hover {
+  background: #e50914 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .detail-money-card {
+  background:
+    radial-gradient(circle at top right, rgba(255,255,255,.14), transparent 36%),
+    linear-gradient(135deg, #3a0d18, #e50914) !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .contributors-row:hover {
+  background: rgba(229, 9, 20, 0.08) !important;
 }

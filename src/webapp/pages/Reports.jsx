@@ -21,7 +21,12 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
-import { getDashboard, getTransactions, getWallet } from "../api/api";
+import {
+  getDashboard,
+  getTransactions,
+  getWallet,
+  getShareOverview,
+} from "../api/api";
 import AppSidebar from "../components/AppSidebar";
 import "./Reports.css";
 
@@ -36,24 +41,84 @@ function formatMoneyFull(value) {
   return `RWF ${Number(value || 0).toLocaleString()}`;
 }
 
-function formatTimeAgo(value) {
-  if (!value) return "Recently";
+function downloadTextFile(filename, content, type = "text/plain") {
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
 
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return value;
+  link.href = url;
+  link.download = filename;
 
-  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
-  if (seconds < 60) return "Just now";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
 
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes} min ago`;
+  URL.revokeObjectURL(url);
+}
 
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+function cleanFileName(value) {
+  return String(value || "contriba-report")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/&/g, "and")
+    .replace(/[^\w-]/g, "")
+    .toLowerCase();
+}
 
-  const days = Math.floor(hours / 24);
-  if (days === 1) return "Yesterday";
-  return `${days} days ago`;
+function csvEscape(value) {
+  const text = String(value ?? "");
+  if (text.includes(",") || text.includes('"') || text.includes("\n")) {
+    return `"${text.replace(/"/g, '""')}"`;
+  }
+
+  return text;
+}
+
+function buildCsvReport({ dashboard, wallet, transactions, contributions, shareData }) {
+  const rows = [];
+
+  rows.push(["Contriba Financial Report"]);
+  rows.push(["Generated At", new Date().toLocaleString()]);
+  rows.push([]);
+
+  rows.push(["SUMMARY"]);
+  rows.push(["Total Raised", Number(dashboard?.total_raised || 0)]);
+  rows.push(["Total Contributors", Number(dashboard?.total_contributors || 0)]);
+  rows.push(["Total Events", Number(dashboard?.total_events || 0)]);
+  rows.push(["Wallet Balance", Number(wallet?.balance || 0)]);
+  rows.push(["Visitors", Number(shareData?.stats?.visitors || 0)]);
+  rows.push(["Shares", Number(shareData?.stats?.shares || 0)]);
+  rows.push(["QR Scans", Number(shareData?.stats?.qr_scans || 0)]);
+  rows.push([]);
+
+  rows.push(["CONTRIBUTIONS"]);
+  rows.push(["Contributor", "Amount", "Method", "Status", "Date"]);
+
+  contributions.forEach((item) => {
+    rows.push([
+      item.is_anonymous ? "Anonymous" : item.contributor_name || "Guest",
+      Number(item.amount || 0),
+      item.payment_method || "MoMo",
+      item.status || "unknown",
+      item.created_at || "",
+    ]);
+  });
+
+  rows.push([]);
+  rows.push(["TRANSACTIONS"]);
+  rows.push(["Type", "Amount", "Status", "Date", "Reference"]);
+
+  transactions.forEach((item) => {
+    rows.push([
+      item.type || "",
+      Number(item.amount || 0),
+      item.status || "",
+      item.created_at || "",
+      item.reference || item.transaction_id || "",
+    ]);
+  });
+
+  return rows.map((row) => row.map(csvEscape).join(",")).join("\n");
 }
 
 const exportCards = [
@@ -108,6 +173,9 @@ function Reports() {
   const [wallet, setWallet] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [shareData, setShareData] = useState(null);
+const [selectedEvent, setSelectedEvent] = useState(null);
+
 
   async function loadReports() {
     setLoading(true);
@@ -118,7 +186,23 @@ function Reports() {
       getTransactions(),
     ]);
 
-    if (dashResult.success) setDashboard(dashResult.dashboard);
+    if (dashResult.success) {
+  setDashboard(dashResult.dashboard);
+
+  const events = dashResult.dashboard?.events || [];
+
+  if (events.length > 0) {
+    const eventId = events[0].id;
+
+    setSelectedEvent(eventId);
+
+    const share = await getShareOverview(eventId);
+
+    if (share.success) {
+  setShareData(share);
+}
+  }
+}
     if (walletResult.success) setWallet(walletResult.wallet);
     if (transResult.success) setTransactions(transResult.transactions || []);
 
@@ -164,6 +248,209 @@ function Reports() {
   const bestPaymentMethod = mtnTotal >= airtelTotal ? "MTN MoMo" : "Airtel Money";
   const dataQualityScore = totalRaised > 0 ? 94 : 0;
   const reportReady = totalRaised > 0;
+  function generatePdfReport() {
+  const reportHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Contriba Financial Report</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 34px;
+      color: #111827;
+    }
+
+    h1 {
+      color: #e50914;
+      margin-bottom: 4px;
+    }
+
+    h2 {
+      margin-top: 28px;
+      border-bottom: 2px solid #e50914;
+      padding-bottom: 8px;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .card {
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 14px;
+      background: #f9fafb;
+    }
+
+    .card span {
+      display: block;
+      color: #6b7280;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .card strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 22px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      font-size: 13px;
+    }
+
+    th, td {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .footer {
+      margin-top: 32px;
+      color: #6b7280;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Contriba Financial Report</h1>
+  <p>Generated on ${new Date().toLocaleString()}</p>
+
+  <div class="summary">
+    <div class="card"><span>Total Raised</span><strong>${formatMoneyFull(totalRaised)}</strong></div>
+    <div class="card"><span>Contributors</span><strong>${totalContributors}</strong></div>
+    <div class="card"><span>Wallet Balance</span><strong>${formatMoneyFull(walletBalance)}</strong></div>
+    <div class="card"><span>Needs Attention</span><strong>${attentionCount}</strong></div>
+    <div class="card"><span>Visitors</span><strong>${shareData?.stats?.visitors || 0}</strong></div>
+    <div class="card"><span>QR Scans</span><strong>${shareData?.stats?.qr_scans || 0}</strong></div>
+  </div>
+
+  <h2>Recent Contributions</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Contributor</th>
+        <th>Amount</th>
+        <th>Method</th>
+        <th>Status</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${contributions.map((item) => `
+        <tr>
+          <td>${item.is_anonymous ? "Anonymous" : item.contributor_name || "Guest"}</td>
+          <td>${formatMoneyFull(item.amount)}</td>
+          <td>${item.payment_method || "MoMo"}</td>
+          <td>${item.status || "unknown"}</td>
+          <td>${item.created_at ? new Date(item.created_at).toLocaleString() : ""}</td>
+        </tr>
+      `).join("")}
+    </tbody>
+  </table>
+
+  <h2>Wallet Transactions</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${transactions.map((item) => `
+        <tr>
+          <td>${item.type || ""}</td>
+          <td>${formatMoneyFull(item.amount)}</td>
+          <td>${item.status || ""}</td>
+          <td>${item.created_at ? new Date(item.created_at).toLocaleString() : ""}</td>
+        </tr>
+      `).join("")}
+    </tbody>
+  </table>
+
+  <p class="footer">Generated by Contriba Reports Center.</p>
+
+  <script>
+    window.onload = () => {
+      window.print();
+    };
+  </script>
+</body>
+</html>
+`;
+
+  const printWindow = window.open("", "_blank", "width=900,height=1100");
+
+  if (!printWindow) {
+    alert("Popup blocked. Please allow popups to export PDF.");
+    return;
+  }
+
+  printWindow.document.write(reportHtml);
+  printWindow.document.close();
+}
+
+function exportExcelReport() {
+  const csv = buildCsvReport({
+    dashboard,
+    wallet,
+    transactions,
+    contributions,
+    shareData,
+  });
+
+  downloadTextFile(
+    `contriba-financial-report-${new Date().toISOString().slice(0, 10)}.csv`,
+    csv,
+    "text/csv;charset=utf-8;"
+  );
+}
+
+function downloadReceiptPack() {
+  if (successfulContributions.length === 0) {
+    alert("No successful contributions available for receipt pack.");
+    return;
+  }
+
+  const receipts = successfulContributions.map((item, index) => {
+    return `
+CONTRIBA RECEIPT #${index + 1}
+--------------------------------
+Contributor: ${item.is_anonymous ? "Anonymous" : item.contributor_name || "Guest"}
+Amount: ${formatMoneyFull(item.amount)}
+Payment Method: ${item.payment_method || "MoMo"}
+Status: ${item.status || "success"}
+Date: ${item.created_at ? new Date(item.created_at).toLocaleString() : ""}
+Reference: ${item.reference || item.transaction_id || item.id || "N/A"}
+
+Thank you for your contribution.
+`;
+  }).join("\n\n");
+
+  downloadTextFile(
+    `contriba-receipt-pack-${new Date().toISOString().slice(0, 10)}.txt`,
+    receipts,
+    "text/plain;charset=utf-8;"
+  );
+}
+
 
   return (
     <main className="reports-page">
@@ -181,15 +468,15 @@ function Reports() {
           </div>
 
           <div className="reports-top-actions">
-            <button>
-              <FileSpreadsheet size={18} />
-              Export Excel
-            </button>
+            <button onClick={exportExcelReport}>
+  <FileSpreadsheet size={18} />
+  Export Excel
+</button>
 
-            <button className="red">
-              <FileText size={18} />
-              Export PDF
-            </button>
+            <button className="red" onClick={generatePdfReport}>
+  <FileText size={18} />
+  Export PDF
+</button>
           </div>
         </header>
 
@@ -208,12 +495,12 @@ function Reports() {
             </p>
 
             <div className="reports-hero-actions">
-              <button className="light">
+              <button className="light" onClick={generatePdfReport}>
                 <Download size={18} />
                 Download Report
               </button>
 
-              <button className="glass">
+              <button className="glass" onClick={downloadReceiptPack}>
                 <ReceiptText size={18} />
                 Receipt Pack
               </button>
@@ -310,7 +597,18 @@ function Reports() {
                 exportCards.map((item) => {
                   const Icon = item.icon;
                   return (
-                    <button key={item.title}>
+                    <button
+  key={item.title}
+  onClick={() => {
+    if (item.title === "PDF Report") {
+      generatePdfReport();
+    } else if (item.title === "Excel Workbook") {
+      exportExcelReport();
+    } else if (item.title === "Receipt Pack") {
+      downloadReceiptPack();
+    }
+  }}
+>
                       <div>
                         <Icon size={21} />
                       </div>

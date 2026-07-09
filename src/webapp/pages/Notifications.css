@@ -1080,4 +1080,85 @@
   .notification-footer-actions {
     width: 100%;
   }
+}/* =========================================================
+   NOTIFICATIONS DARK MODE ONLY
+========================================================= */
+
+html[data-theme="dark"] .notifications-page{
+  background:
+    radial-gradient(circle at top left, rgba(229,9,20,.08), transparent 30%),
+    radial-gradient(circle at top right, rgba(255,85,110,.08), transparent 28%),
+    #0d0d11 !important;
+  color:#f5f5f7;
+}
+
+html[data-theme="dark"] .notifications-main{
+  background:transparent;
+}
+
+html[data-theme="dark"] .notifications-topbar h1,
+html[data-theme="dark"] .notifications-hero-left h2,
+html[data-theme="dark"] .notifications-hero-card strong,
+html[data-theme="dark"] .notifications-stat-card strong,
+html[data-theme="dark"] .notifications-panel-heading h3,
+html[data-theme="dark"] .notification-title-row h4,
+html[data-theme="dark"] .notifications-summary-panel h3,
+html[data-theme="dark"] .notifications-empty-state h4{
+  color:#ffffff!important;
+}
+
+html[data-theme="dark"] .notifications-topbar p,
+html[data-theme="dark"] .notifications-hero-left p,
+html[data-theme="dark"] .notifications-hero-card p,
+html[data-theme="dark"] .notifications-stat-card span,
+html[data-theme="dark"] .notification-content p,
+html[data-theme="dark"] .notifications-summary-panel>p,
+html[data-theme="dark"] .notifications-empty-state p,
+html[data-theme="dark"] .notification-footer time{
+  color:#9ca3af!important;
+}
+
+html[data-theme="dark"] .notifications-hero,
+html[data-theme="dark"] .notifications-stat-card,
+html[data-theme="dark"] .notifications-panel,
+html[data-theme="dark"] .notifications-summary-panel{
+  background:#17171c!important;
+  border:1px solid rgba(255,255,255,.06)!important;
+  box-shadow:none!important;
+}
+
+html[data-theme="dark"] .notifications-hero-card,
+html[data-theme="dark"] .notifications-search,
+html[data-theme="dark"] .notifications-toolbar>button,
+html[data-theme="dark"] .notification-filter-row button,
+html[data-theme="dark"] .notification-item,
+html[data-theme="dark"] .notifications-empty-state,
+html[data-theme="dark"] .notifications-check-list p{
+  background:#202028!important;
+  border:1px solid rgba(255,255,255,.06)!important;
+  color:#ffffff!important;
+  box-shadow:none!important;
+}
+
+html[data-theme="dark"] .notifications-search input{
+  color:#ffffff!important;
+  background:transparent!important;
+}
+
+html[data-theme="dark"] .notifications-search input::placeholder{
+  color:#8b8b96!important;
+}
+
+html[data-theme="dark"] .notification-item.unread{
+  background:
+    linear-gradient(90deg, rgba(229,9,20,.10), transparent 42%),
+    #202028!important;
+}
+
+html[data-theme="dark"] .notification-item:hover{
+  background:#262630!important;
+}
+
+html[data-theme="dark"] .notifications-check-list p{
+  color:#ffffff!important;
 }

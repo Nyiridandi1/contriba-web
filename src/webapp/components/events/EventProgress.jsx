@@ -1,6 +1,14 @@
+import { useLanguage } from "../../../context/LanguageContext.jsx";
+import { translations } from "../../../i18n/translations.js";
 import "./EventProgress.css";
 
+function pickText(language, key, fallback) {
+  return translations?.[language]?.[key] || translations?.English?.[key] || fallback;
+}
+
 function EventProgress({ raised = 0, target = 0 }) {
+  const { language } = useLanguage();
+
   const safeRaised = Number(raised || 0);
   const safeTarget = Number(target || 0);
 
@@ -27,7 +35,7 @@ function EventProgress({ raised = 0, target = 0 }) {
 
       <div className="event-progress-details">
         <span className="event-progress-percent">
-          {displayPercent.toFixed(2)}% Funded
+          {displayPercent.toFixed(2)}% {pickText(language, "funded", "Funded")}
         </span>
 
         <strong className="event-progress-amount">

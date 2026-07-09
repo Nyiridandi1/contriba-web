@@ -1,6 +1,4 @@
-const BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  "https://contriba-backend-production.up.railway.app";
+const BASE_URL = "http://localhost:3000";
 
 async function apiCall(endpoint, method = "GET", body = null) {
   try {
@@ -331,3 +329,43 @@ export const clearSession = () => {
   localStorage.removeItem("contriba_token");
   localStorage.removeItem("contriba_user");
 };
+
+/* =========================
+   SETTINGS
+========================= */
+
+export const getSettings = () => apiCall("/api/settings");
+export const updateSettingsProfile = (data) => apiCall("/api/settings/profile", "PUT", data);
+export const updateSettingsPreferences = (data) => apiCall("/api/settings/preferences", "PUT", data);
+export const updateSettingsNotifications = (data) => apiCall("/api/settings/notifications", "PUT", data);
+export const updateSettingsSecurity = (data) => apiCall("/api/settings/security", "PUT", data);
+export const updateSettingsPayment = (data) => apiCall("/api/settings/payment", "PUT", data);
+export const updateSettingsAppearance = (data) => apiCall("/api/settings/appearance", "PUT", data);
+export const updateSettingsAI = (data) => apiCall("/api/settings/ai", "PUT", data);
+export const changeSettingsPin = (old_pin, new_pin) => apiCall("/api/settings/change-pin", "POST", { old_pin, new_pin });
+export const logoutAllSettingsSessions = () => apiCall("/api/settings/logout-all", "POST");
+export const deleteSettingsAccount = (confirm) => apiCall("/api/settings/account", "DELETE", { confirm });
+/* =========================
+   SHARE CENTER
+========================= */
+
+export const getShareOverview = (eventId) =>
+  apiCall(`/api/share/overview/${eventId}`);
+
+export const trackShare = (data) =>
+  apiCall("/api/share/track", "POST", data);
+
+export const trackVisit = (data) =>
+  apiCall("/api/share/visit", "POST", data);
+
+export const trackQrScan = (data) =>
+  apiCall("/api/share/qr-scan", "POST", data);
+
+export const getShareAnalytics = (eventId) =>
+  apiCall(`/api/share/analytics/${eventId}`);
+
+export const getSharePromoters = (eventId) =>
+  apiCall(`/api/share/promoters/${eventId}`);
+
+export const getShareInsights = (eventId) =>
+  apiCall(`/api/share/insights/${eventId}`);

@@ -644,4 +644,51 @@ body.contriba-sidebar-collapsed:has(.app-sidebar) .settings-page {
 
 .app-sidebar.collapsed .app-sidebar-brand-mini {
   display: grid;
+}html[data-theme="dark"] .app-sidebar {
+  background: #111114 !important;
+  border-right: 1px solid #26262d !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] .app-sidebar-brand,
+html[data-theme="dark"] .app-sidebar-brand span {
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .app-sidebar-brand-subtitle {
+  color: #9ca3af !important;
+}
+
+html[data-theme="dark"] .app-sidebar-toggle {
+  background: #1a1a22 !important;
+  border-color: #2c2c36 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .app-sidebar-nav a {
+  color: #b5b7c5 !important;
+}
+
+html[data-theme="dark"] .app-sidebar-nav a:hover {
+  background: #1c1c25 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .app-sidebar-nav a.active {
+  background: linear-gradient(135deg, #e50914, #ff3348) !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .app-sidebar-create {
+  background: #1a1a22 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .app-sidebar-footer,
+html[data-theme="dark"] .app-sidebar-footer p {
+  color: #7b7d88 !important;
+}
+
+html[data-theme="dark"] .app-sidebar-footer-links a {
+  color: #9ca3af !important;
 }
