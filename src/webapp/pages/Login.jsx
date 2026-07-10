@@ -12,6 +12,7 @@ import {
 
 import { useAuth } from "../context/AuthContext";
 import AuthLayout from "../layout/AuthLayout";
+import logoIcon from "../../assets/logo-icon.png";
 
 import "../components/auth/AuthForm.css";
 import "./Login.css";
@@ -56,12 +57,17 @@ function Login() {
     <AuthLayout>
       <section className="auth-intro login-intro">
         <div className="login-intro-top">
-          <Link
-            to="/"
-            className="auth-back login-back"
-            aria-label="Back to home"
-          >
+          <Link to="/" className="auth-back login-back" aria-label="Back to home">
             <ArrowLeft size={19} />
+          </Link>
+
+          <Link to="/" className="login-brand" aria-label="Contriba home">
+            <img
+              src={logoIcon}
+              alt="Contriba"
+              className="auth-logo-icon login-logo-icon"
+            />
+            <span>Contriba</span>
           </Link>
         </div>
 
@@ -113,7 +119,6 @@ function Login() {
 
           <div className="login-label-row">
             <label htmlFor="login-pin">PIN *</label>
-
             <Link to="/forgot-pin" className="login-forgot-link">
               Forgot PIN?
             </Link>
