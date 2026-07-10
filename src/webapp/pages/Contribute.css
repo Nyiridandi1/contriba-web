@@ -979,3 +979,421 @@ html[data-theme="dark"] .summary-divider,
 html[data-theme="dark"] .summary-line {
   border-color: rgba(255,255,255,.08) !important;
 }
+
+/* ==========================================================
+   CONTRIBUTE PAGE — PREMIUM MOBILE RESPONSIVE HARD FIX
+   Removes desktop sidebar offset, stabilizes event media,
+   improves mobile form flow, and prevents action-bar clashes.
+========================================================== */
+
+.contribute-event-image {
+  min-width: 0;
+}
+
+.contribute-event-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (max-width: 768px) {
+  body.contriba-sidebar-collapsed .contribute-page,
+  body.contriba-sidebar-collapsed:has(.app-sidebar) .contribute-page,
+  body:has(.app-sidebar) .contribute-page,
+  .app-sidebar ~ .contribute-page,
+  .contribute-page {
+    position: relative !important;
+    left: 0 !important;
+    right: auto !important;
+    transform: none !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+    padding-bottom: 108px !important;
+  }
+
+  body.contriba-sidebar-collapsed .contribute-shell,
+  body.contriba-sidebar-collapsed:has(.app-sidebar) .contribute-shell,
+  body:has(.app-sidebar) .contribute-shell,
+  .contribute-page > .contribute-shell,
+  .contribute-shell {
+    position: relative !important;
+    left: 0 !important;
+    transform: none !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 18px 16px 112px !important;
+    overflow-x: hidden !important;
+  }
+
+  .contribute-back {
+    height: 40px !important;
+    padding: 0 14px !important;
+    font-size: 12px !important;
+  }
+
+  .contribute-header {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 20px 0 18px !important;
+  }
+
+  .contribute-header > span {
+    padding: 8px 12px !important;
+    font-size: 10px !important;
+  }
+
+  .contribute-header h1 {
+    max-width: 100% !important;
+    margin: 14px 0 10px !important;
+    font-size: clamp(36px, 12vw, 48px) !important;
+    line-height: 0.96 !important;
+    letter-spacing: -0.07em !important;
+    overflow-wrap: anywhere;
+  }
+
+  .contribute-header p {
+    max-width: 100% !important;
+    font-size: 14px !important;
+    line-height: 1.55 !important;
+  }
+
+  .contribute-layout,
+  .contribute-main,
+  .contribute-summary,
+  .contribute-event-card,
+  .contribute-card,
+  .summary-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .contribute-layout {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .contribute-main {
+    gap: 16px !important;
+  }
+
+  .contribute-summary {
+    position: static !important;
+  }
+
+  .contribute-event-card {
+    grid-template-columns: 1fr !important;
+    border-radius: 22px !important;
+    overflow: hidden !important;
+  }
+
+  .contribute-event-image {
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    aspect-ratio: 16 / 10 !important;
+  }
+
+  .contribute-event-image img {
+    position: absolute !important;
+    inset: 0 !important;
+  }
+
+  .contribute-event-image span {
+    left: 14px !important;
+    bottom: 14px !important;
+    padding: 7px 11px !important;
+    font-size: 10px !important;
+  }
+
+  .contribute-event-info {
+    padding: 18px !important;
+  }
+
+  .contribute-event-info h2 {
+    font-size: 26px !important;
+    line-height: 1 !important;
+    letter-spacing: -0.055em !important;
+    overflow-wrap: anywhere;
+  }
+
+  .contribute-event-meta {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .contribute-event-meta span {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 38px !important;
+    padding: 9px 11px !important;
+    border-radius: 14px !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+  }
+
+  .contribute-owner-row {
+    align-items: flex-start !important;
+    padding: 13px !important;
+    border-radius: 16px !important;
+  }
+
+  .contribute-card,
+  .summary-card {
+    padding: 18px !important;
+    border-radius: 22px !important;
+  }
+
+  .contribute-card-heading {
+    gap: 12px !important;
+    margin-bottom: 18px !important;
+  }
+
+  .contribute-card-heading > span {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 12px !important;
+  }
+
+  .contribute-card-heading h2 {
+    font-size: 21px !important;
+  }
+
+  .contribute-card-heading p {
+    font-size: 12px !important;
+  }
+
+  .contribute-card label {
+    margin-top: 16px !important;
+    font-size: 13px !important;
+  }
+
+  .contribute-input {
+    height: 52px !important;
+    padding: 0 14px !important;
+    border-radius: 16px !important;
+  }
+
+  .contribute-input input {
+    font-size: 14px !important;
+  }
+
+  .contribute-visibility {
+    align-items: flex-start !important;
+    padding: 14px !important;
+    border-radius: 18px !important;
+  }
+
+  .contribute-visibility > div {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  .contribute-visibility small {
+    align-self: center !important;
+  }
+
+  .contribute-amount-input {
+    height: 66px !important;
+    padding: 0 15px !important;
+    border-radius: 18px !important;
+    font-size: 28px !important;
+  }
+
+  .contribute-quick-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 9px !important;
+  }
+
+  .contribute-quick-grid button {
+    width: 100% !important;
+    height: 44px !important;
+    padding: 0 10px !important;
+    border-radius: 14px !important;
+    font-size: 12px !important;
+  }
+
+  .contribute-message {
+    min-height: 104px !important;
+    padding: 14px !important;
+    border-radius: 16px !important;
+    font-size: 14px !important;
+  }
+
+  .payment-methods {
+    gap: 10px !important;
+  }
+
+  .payment-methods button {
+    padding: 13px !important;
+    gap: 11px !important;
+    border-radius: 18px !important;
+  }
+
+  .payment-logo {
+    width: 58px !important;
+    height: 46px !important;
+    border-radius: 12px !important;
+  }
+
+  .payment-check {
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  .summary-label {
+    margin-bottom: 16px !important;
+  }
+
+  .summary-amount {
+    margin-bottom: 16px !important;
+  }
+
+  .summary-amount strong {
+    font-size: 32px !important;
+  }
+
+  .summary-line {
+    padding: 11px 0 !important;
+  }
+
+  .summary-flow {
+    padding: 13px !important;
+    border-radius: 17px !important;
+  }
+
+  .summary-button {
+    min-height: 50px !important;
+    border-radius: 15px !important;
+  }
+
+  .summary-trust {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .summary-trust span {
+    min-height: 40px !important;
+    border-radius: 13px !important;
+  }
+
+  /* Mobile action bar: premium and safe above browser UI */
+  .contribute-bottom-bar {
+    left: 12px !important;
+    right: 12px !important;
+    bottom: calc(10px + env(safe-area-inset-bottom)) !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 64px !important;
+    padding: 8px !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr) !important;
+    gap: 8px !important;
+    border-radius: 20px !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    border: 1px solid rgba(17, 24, 39, 0.08) !important;
+    box-shadow: 0 18px 48px rgba(17, 24, 39, 0.18) !important;
+    transform: none !important;
+    backdrop-filter: blur(18px) !important;
+  }
+
+  .contribute-bottom-bar div {
+    display: block !important;
+    min-width: 0 !important;
+    padding-left: 6px !important;
+  }
+
+  .contribute-bottom-bar span {
+    font-size: 10px !important;
+  }
+
+  .contribute-bottom-bar strong {
+    font-size: 18px !important;
+    line-height: 1.05 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .contribute-bottom-bar a {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 48px !important;
+    padding: 0 10px !important;
+    border-radius: 14px !important;
+    font-size: 12px !important;
+    text-align: center !important;
+  }
+
+  .contribute-skeleton-title {
+    height: 48px !important;
+  }
+
+  .contribute-skeleton-block {
+    min-height: 0 !important;
+    aspect-ratio: 16 / 10 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body.contriba-sidebar-collapsed .contribute-shell,
+  body.contriba-sidebar-collapsed:has(.app-sidebar) .contribute-shell,
+  body:has(.app-sidebar) .contribute-shell,
+  .contribute-page > .contribute-shell,
+  .contribute-shell {
+    padding: 16px 14px 108px !important;
+  }
+
+  .contribute-header h1 {
+    font-size: 36px !important;
+  }
+
+  .contribute-event-image {
+    aspect-ratio: 4 / 3 !important;
+  }
+
+  .contribute-event-info,
+  .contribute-card,
+  .summary-card {
+    padding: 16px !important;
+  }
+
+  .contribute-event-info h2 {
+    font-size: 24px !important;
+  }
+
+  .contribute-quick-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .payment-methods button {
+    align-items: flex-start !important;
+  }
+
+  .contribute-bottom-bar {
+    left: 8px !important;
+    right: 8px !important;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.5fr) !important;
+    gap: 6px !important;
+    padding: 6px !important;
+  }
+
+  .contribute-bottom-bar strong {
+    font-size: 16px !important;
+  }
+
+  .contribute-bottom-bar a {
+    height: 46px !important;
+    font-size: 11px !important;
+  }
+}
