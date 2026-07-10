@@ -1058,3 +1058,400 @@ color:#f5f5f7!important;
 [data-theme="dark"] .dashboard-events-activity-list p svg {
   color: #e50914 !important;
 }
+
+/* ==========================================================
+   DASHBOARD EVENTS — PREMIUM MOBILE RESPONSIVE HARD FIX
+   Removes desktop sidebar offset, improves mobile event cards,
+   tabs, actions, filters, stats, and content flow.
+========================================================== */
+
+@media (max-width: 768px) {
+  body.contriba-sidebar-collapsed .dashboard-events-page,
+  body.contriba-sidebar-collapsed:has(.app-sidebar) .dashboard-events-page,
+  body:has(.app-sidebar) .dashboard-events-page,
+  .app-sidebar ~ .dashboard-events-page,
+  .dashboard-events-page {
+    position: relative !important;
+    left: 0 !important;
+    right: auto !important;
+    transform: none !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    display: block !important;
+    overflow-x: hidden !important;
+  }
+
+  body.contriba-sidebar-collapsed .dashboard-events-main,
+  body.contriba-sidebar-collapsed:has(.app-sidebar) .dashboard-events-main,
+  body:has(.app-sidebar) .dashboard-events-main,
+  .dashboard-events-page > .dashboard-events-main,
+  .dashboard-events-main {
+    position: relative !important;
+    left: 0 !important;
+    transform: none !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 20px 16px 112px !important;
+    overflow-x: hidden !important;
+  }
+
+  .dashboard-events-topbar,
+  .dashboard-events-tabs,
+  .dashboard-events-hero,
+  .dashboard-events-stats-grid,
+  .dashboard-events-toolbar,
+  .dashboard-events-grid,
+  .dashboard-events-content-grid {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .dashboard-events-topbar {
+    display: block !important;
+    margin-bottom: 16px !important;
+  }
+
+  .dashboard-events-topbar h1 {
+    max-width: 100% !important;
+    margin: 6px 0 10px !important;
+    font-size: clamp(34px, 11vw, 44px) !important;
+    line-height: 0.96 !important;
+    letter-spacing: -0.065em !important;
+    overflow-wrap: anywhere;
+  }
+
+  .dashboard-events-topbar p {
+    max-width: 100% !important;
+    font-size: 14px !important;
+    line-height: 1.55 !important;
+  }
+
+  .dashboard-events-actions {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    margin-top: 16px !important;
+  }
+
+  .dashboard-events-actions button {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 44px !important;
+    height: auto !important;
+    padding: 10px 8px !important;
+    justify-content: center !important;
+    border-radius: 14px !important;
+    font-size: 10px !important;
+    line-height: 1.15 !important;
+    text-align: center !important;
+    white-space: normal !important;
+  }
+
+  .dashboard-events-actions button svg {
+    width: 16px !important;
+    height: 16px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .dashboard-events-tabs {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 7px !important;
+    padding: 7px !important;
+    margin-bottom: 16px !important;
+    border-radius: 18px !important;
+    overflow-x: auto !important;
+    scrollbar-width: none;
+  }
+
+  .dashboard-events-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dashboard-events-tabs button {
+    flex: 0 0 auto !important;
+    min-height: 40px !important;
+    padding: 0 13px !important;
+    border-radius: 13px !important;
+    font-size: 11px !important;
+  }
+
+  .dashboard-events-hero {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    padding: 20px !important;
+    border-radius: 24px !important;
+  }
+
+  .dashboard-events-hero-left h2 {
+    max-width: 100% !important;
+    margin: 16px 0 10px !important;
+    font-size: clamp(32px, 10vw, 42px) !important;
+    line-height: 0.96 !important;
+    letter-spacing: -0.07em !important;
+    overflow-wrap: anywhere;
+  }
+
+  .dashboard-events-hero-left p {
+    max-width: 100% !important;
+    font-size: 14px !important;
+    line-height: 1.55 !important;
+  }
+
+  .dashboard-events-hero-buttons {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    margin-top: 18px !important;
+  }
+
+  .dashboard-events-hero-buttons button {
+    width: 100% !important;
+    min-height: 46px !important;
+    justify-content: center !important;
+    border-radius: 14px !important;
+  }
+
+  .dashboard-events-ai-card {
+    width: 100% !important;
+    padding: 18px !important;
+    border-radius: 20px !important;
+  }
+
+  .dashboard-events-stats-grid,
+  .dashboard-events-skeleton-stats {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .dashboard-events-stat-card {
+    min-height: 0 !important;
+    padding: 16px !important;
+    border-radius: 22px !important;
+    display: grid !important;
+    grid-template-columns: 44px 1fr !important;
+    column-gap: 14px !important;
+    align-items: center !important;
+  }
+
+  .dashboard-events-stat-card > div {
+    grid-row: span 3 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .dashboard-events-stat-card span,
+  .dashboard-events-stat-card strong,
+  .dashboard-events-stat-card p {
+    margin: 0 !important;
+  }
+
+  .dashboard-events-stat-card strong {
+    margin: 5px 0 !important;
+    font-size: 27px !important;
+  }
+
+  .dashboard-events-toolbar,
+  .dashboard-events-skeleton-toolbar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  .dashboard-events-search,
+  .skeleton-search {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 50px !important;
+    border-radius: 16px !important;
+  }
+
+  .dashboard-events-filters,
+  .dashboard-events-skeleton-filters {
+    width: 100% !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    padding-bottom: 3px !important;
+    scrollbar-width: none;
+  }
+
+  .dashboard-events-filters::-webkit-scrollbar,
+  .dashboard-events-skeleton-filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dashboard-events-filters button,
+  .skeleton-chip {
+    flex: 0 0 auto !important;
+    min-height: 42px !important;
+    padding: 0 13px !important;
+    border-radius: 13px !important;
+    font-size: 11px !important;
+  }
+
+  .dashboard-events-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .dashboard-event-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 18px !important;
+    border-radius: 22px !important;
+  }
+
+  .dashboard-event-card-top {
+    gap: 10px !important;
+  }
+
+  .dashboard-event-card h3 {
+    margin: 15px 0 9px !important;
+    font-size: 24px !important;
+    line-height: 1 !important;
+    overflow-wrap: anywhere;
+  }
+
+  .dashboard-event-location {
+    align-items: flex-start !important;
+    font-size: 12px !important;
+  }
+
+  .dashboard-event-metrics {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 9px !important;
+    margin: 15px 0 !important;
+  }
+
+  .dashboard-event-metrics div {
+    padding: 13px !important;
+    border-radius: 16px !important;
+  }
+
+  .dashboard-event-meta {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    margin: 15px 0 !important;
+  }
+
+  .dashboard-event-actions {
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  .dashboard-event-actions button {
+    min-width: 0 !important;
+    min-height: 42px !important;
+    padding: 8px 6px !important;
+    border-radius: 13px !important;
+    font-size: 10px !important;
+    line-height: 1.1 !important;
+    white-space: normal !important;
+    text-align: center !important;
+  }
+
+  .dashboard-event-actions button svg {
+    width: 15px !important;
+    height: 15px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .dashboard-events-content-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .dashboard-events-panel {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 18px !important;
+    border-radius: 22px !important;
+  }
+
+  .dashboard-events-panel-heading {
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+
+  .dashboard-events-panel-heading h3 {
+    font-size: 20px !important;
+  }
+
+  .dashboard-events-activity-list p {
+    align-items: flex-start !important;
+    padding: 13px !important;
+    border-radius: 16px !important;
+    font-size: 12px !important;
+    line-height: 1.45 !important;
+  }
+
+  .dashboard-events-recommendation {
+    padding: 16px !important;
+    border-radius: 20px !important;
+  }
+
+  .dashboard-events-recommendation strong {
+    font-size: 22px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body.contriba-sidebar-collapsed .dashboard-events-main,
+  body.contriba-sidebar-collapsed:has(.app-sidebar) .dashboard-events-main,
+  body:has(.app-sidebar) .dashboard-events-main,
+  .dashboard-events-page > .dashboard-events-main,
+  .dashboard-events-main {
+    padding: 18px 14px 108px !important;
+  }
+
+  .dashboard-events-topbar h1 {
+    font-size: 34px !important;
+  }
+
+  .dashboard-events-actions {
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 6px !important;
+  }
+
+  .dashboard-events-actions button {
+    min-height: 42px !important;
+    padding: 8px 4px !important;
+    font-size: 9px !important;
+  }
+
+  .dashboard-events-hero {
+    padding: 18px !important;
+    border-radius: 22px !important;
+  }
+
+  .dashboard-events-hero-left h2 {
+    font-size: 32px !important;
+  }
+
+  .dashboard-event-card,
+  .dashboard-events-panel {
+    padding: 16px !important;
+  }
+
+  .dashboard-event-metrics {
+    grid-template-columns: 1fr !important;
+  }
+
+  .dashboard-event-actions {
+    grid-template-columns: 1fr !important;
+  }
+
+  .dashboard-event-actions button {
+    font-size: 11px !important;
+  }
+}
