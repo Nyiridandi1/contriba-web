@@ -4,7 +4,6 @@ import {
   ArrowUpRight,
   CheckCircle2,
   Clock,
-  Download,
   FileText,
   Landmark,
   LockKeyhole,
@@ -140,17 +139,6 @@ function Wallet() {
             </p>
           </div>
 
-          <div className="wallet-top-actions">
-            <button type="button">
-              <Download size={18} />
-              Statement
-            </button>
-
-            <button type="button" className="red" onClick={scrollToWithdraw}>
-              <ArrowDownRight size={18} />
-              Withdraw
-            </button>
-          </div>
         </header>
 
         <section className="wallet-hero">
@@ -169,14 +157,14 @@ function Wallet() {
             </p>
 
             <div className="wallet-hero-actions">
-              <button type="button" className="light" onClick={scrollToWithdraw}>
-                <ArrowDownRight size={18} />
-                Withdraw Funds
-              </button>
-
               <button type="button" className="glass">
                 <FileText size={18} />
                 Statement
+              </button>
+
+              <button type="button" className="light" onClick={scrollToWithdraw}>
+                <ArrowDownRight size={18} />
+                Withdraw
               </button>
             </div>
           </div>
