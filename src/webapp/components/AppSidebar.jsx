@@ -94,7 +94,6 @@ function AppSidebar({ active = "home" }) {
         ? [
             { label: t("home", "Home"), icon: Home, path: "/home", key: "home" },
             { label: t("dashboard", "Dashboard"), icon: BarChart3, path: "/dashboard", key: "dashboard" },
-            { label: t("wallet", "Wallet"), icon: WalletCards, path: "/wallet", key: "wallet" },
             { label: t("notifications_short", "Notifs"), icon: Bell, path: "/notifications", key: "notifications" },
             { label: t("profile", "Profile"), icon: UserRound, path: "/profile", key: "profile" },
           ]
@@ -266,20 +265,34 @@ function AppSidebar({ active = "home" }) {
         </Link>
       </div>
 
-      <nav className="mobile-bottom-nav">
-        {bottomNavItems.map((item) => {
+      <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
+        {bottomNavItems.slice(0, 2).map((item) => {
           const Icon = item.icon;
           return (
             <Link key={item.key} to={item.path} className={active === item.key ? "active" : ""}>
-              <Icon size={22} />
-              {item.label}
+              <Icon size={21} />
+              <span>{item.label}</span>
             </Link>
           );
         })}
 
-        <Link to={isOrganizer ? "/create-event" : "/register"} className="mobile-bottom-create">
-          <Plus size={22} />
+        <Link
+          to={isOrganizer ? "/create-event" : "/register"}
+          className="mobile-bottom-create"
+          aria-label={isOrganizer ? t("create_event", "Create Event") : t("create_account", "Create Account")}
+        >
+          <Plus size={24} />
         </Link>
+
+        {bottomNavItems.slice(2).map((item) => {
+          const Icon = item.icon;
+          return (
+            <Link key={item.key} to={item.path} className={active === item.key ? "active" : ""}>
+              <Icon size={21} />
+              <span>{item.label}</span>
+            </Link>
+          );
+        })}
       </nav>
     </>
   );
