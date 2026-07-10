@@ -1094,3 +1094,378 @@
     width: 100%;
   }
 }
+
+/* ==========================================================
+   SHARE CENTER — PREMIUM MOBILE RESPONSIVE FINAL FIX
+   Keeps Refresh, Copy Link and Share Event horizontal,
+   removes desktop offset, and reorganizes mobile sections.
+========================================================== */
+
+@media (max-width: 768px) {
+  body.contriba-sidebar-collapsed .share-page,
+  body.contriba-sidebar-collapsed:has(.app-sidebar) .share-page,
+  body:has(.app-sidebar) .share-page,
+  .app-sidebar ~ .share-page,
+  .share-page {
+    position: relative !important;
+    left: 0 !important;
+    right: auto !important;
+    transform: none !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    display: block !important;
+    overflow-x: hidden !important;
+  }
+
+  body.contriba-sidebar-collapsed .share-main,
+  body.contriba-sidebar-collapsed:has(.app-sidebar) .share-main,
+  body:has(.app-sidebar) .share-main,
+  .share-page > .share-main,
+  .share-main {
+    position: relative !important;
+    left: 0 !important;
+    transform: none !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 20px 16px 112px !important;
+    overflow-x: hidden !important;
+  }
+
+  .share-topbar,
+  .share-event-selector,
+  .share-hero,
+  .share-stats-grid,
+  .share-content-grid,
+  .share-content-grid.final-grid {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .share-topbar {
+    display: block !important;
+    margin-bottom: 16px !important;
+  }
+
+  .share-topbar h1 {
+    max-width: 100% !important;
+    margin: 6px 0 10px !important;
+    font-size: clamp(34px, 11vw, 44px) !important;
+    line-height: 0.96 !important;
+    letter-spacing: -0.065em !important;
+    overflow-wrap: anywhere;
+  }
+
+  .share-topbar p {
+    max-width: 100% !important;
+    font-size: 14px !important;
+    line-height: 1.55 !important;
+  }
+
+  /* Compact three-button action row */
+  .share-top-actions {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    margin-top: 16px !important;
+  }
+
+  .share-top-actions button {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 46px !important;
+    height: auto !important;
+    padding: 0 7px !important;
+    justify-content: center !important;
+    border-radius: 14px !important;
+    font-size: 10px !important;
+    line-height: 1.1 !important;
+    text-align: center !important;
+    white-space: normal !important;
+  }
+
+  .share-top-actions button svg {
+    width: 15px !important;
+    height: 15px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .share-event-selector {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    margin: 0 0 16px !important;
+    padding: 14px !important;
+    border-radius: 20px !important;
+  }
+
+  .share-event-selector label {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    align-items: stretch !important;
+  }
+
+  .share-event-selector select,
+  .share-event-selector a {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 44px !important;
+    justify-content: center !important;
+    border-radius: 14px !important;
+  }
+
+  .share-hero {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    padding: 20px !important;
+    border-radius: 24px !important;
+  }
+
+  .share-hero-left h2 {
+    max-width: 100% !important;
+    margin: 15px 0 10px !important;
+    font-size: clamp(32px, 10vw, 42px) !important;
+    line-height: 0.96 !important;
+    letter-spacing: -0.07em !important;
+    overflow-wrap: anywhere;
+  }
+
+  .share-hero-left p {
+    max-width: 100% !important;
+    font-size: 14px !important;
+    line-height: 1.55 !important;
+  }
+
+  .share-hero-actions {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    margin-top: 18px !important;
+  }
+
+  .share-hero-actions button {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 48px !important;
+    justify-content: center !important;
+    padding: 0 8px !important;
+    border-radius: 15px !important;
+    font-size: 11px !important;
+    text-align: center !important;
+    white-space: normal !important;
+  }
+
+  .share-hero-card {
+    width: 100% !important;
+    padding: 18px !important;
+    border-radius: 20px !important;
+  }
+
+  .share-hero-card strong {
+    font-size: 22px !important;
+  }
+
+  .share-stats-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .share-stat-card {
+    min-height: 0 !important;
+    padding: 16px !important;
+    border-radius: 22px !important;
+    display: grid !important;
+    grid-template-columns: 44px 1fr !important;
+    column-gap: 14px !important;
+    align-items: center !important;
+  }
+
+  .share-stat-icon {
+    grid-row: span 3 !important;
+    width: 44px !important;
+    height: 44px !important;
+    margin-bottom: 0 !important;
+  }
+
+  .share-stat-card span,
+  .share-stat-card strong,
+  .share-stat-card p {
+    margin: 0 !important;
+  }
+
+  .share-stat-card strong {
+    margin: 5px 0 !important;
+    font-size: 27px !important;
+  }
+
+  .share-content-grid,
+  .share-content-grid.final-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .share-panel {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 18px !important;
+    border-radius: 22px !important;
+  }
+
+  .share-panel-heading {
+    align-items: flex-start !important;
+    gap: 10px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .share-panel-heading h3 {
+    font-size: 20px !important;
+  }
+
+  .share-channel-grid.clean {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .share-channel-grid button {
+    padding: 16px !important;
+    border-radius: 20px !important;
+  }
+
+  .share-channel-icon {
+    width: 46px !important;
+    height: 46px !important;
+    margin-bottom: 14px !important;
+    border-radius: 16px !important;
+  }
+
+  .share-qr-box {
+    min-height: 220px !important;
+    padding: 18px !important;
+    border-radius: 22px !important;
+  }
+
+  .share-qr-box strong {
+    font-size: 24px !important;
+  }
+
+  .qr-actions.assets {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .qr-actions button {
+    min-width: 0 !important;
+    height: 46px !important;
+    padding: 0 8px !important;
+    border-radius: 14px !important;
+    font-size: 10px !important;
+    text-align: center !important;
+    white-space: normal !important;
+  }
+
+  .campaign-kpi-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 9px !important;
+  }
+
+  .campaign-kpi-grid div {
+    padding: 12px !important;
+    border-radius: 16px !important;
+  }
+
+  .campaign-bars {
+    height: 210px !important;
+    gap: 7px !important;
+    padding-bottom: 28px !important;
+  }
+
+  .campaign-bars span {
+    font-size: 10px !important;
+  }
+
+  .ai-share-panel h3 {
+    font-size: 28px !important;
+  }
+
+  .ai-share-panel p {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+  }
+
+  .coach-summary-list {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 9px !important;
+  }
+
+  .coach-summary-list div {
+    padding: 12px !important;
+    border-radius: 16px !important;
+  }
+
+  .top-promoters-mini p {
+    padding: 11px !important;
+    border-radius: 15px !important;
+  }
+
+  .share-toast {
+    left: 14px !important;
+    right: 14px !important;
+    bottom: calc(88px + env(safe-area-inset-bottom)) !important;
+    text-align: center !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body.contriba-sidebar-collapsed .share-main,
+  body.contriba-sidebar-collapsed:has(.app-sidebar) .share-main,
+  body:has(.app-sidebar) .share-main,
+  .share-page > .share-main,
+  .share-main {
+    padding: 18px 14px 108px !important;
+  }
+
+  .share-topbar h1 {
+    font-size: 34px !important;
+  }
+
+  .share-top-actions {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+  }
+
+  .share-top-actions button {
+    min-height: 44px !important;
+    padding: 0 4px !important;
+    font-size: 9px !important;
+    border-radius: 13px !important;
+  }
+
+  .share-hero {
+    padding: 18px !important;
+    border-radius: 22px !important;
+  }
+
+  .share-hero-left h2 {
+    font-size: 32px !important;
+  }
+
+  .share-panel,
+  .share-stat-card {
+    padding: 16px !important;
+  }
+
+  .campaign-kpi-grid,
+  .coach-summary-list {
+    grid-template-columns: 1fr !important;
+  }
+}
