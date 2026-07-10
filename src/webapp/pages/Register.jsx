@@ -6,15 +6,14 @@ import {
   Lock,
   Mail,
   Phone,
+  ShieldCheck,
   User,
   UserPlus,
 } from "lucide-react";
-
 import { useState } from "react";
-import { sendOTP } from "../api/api";
 
+import { sendOTP } from "../api/api";
 import AuthLayout from "../layout/AuthLayout";
-import logoIcon from "../../assets/logo-icon.png";
 
 import "../components/auth/AuthForm.css";
 import "./Register.css";
@@ -45,8 +44,8 @@ function Register() {
     pin === confirmPin &&
     !loading;
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit(event) {
+    event.preventDefault();
     setMessage("");
 
     if (fullName.trim().length < 3) {
@@ -76,8 +75,11 @@ function Register() {
 
     setLoading(true);
 
-    // Send OTP to email
-    const result = await sendOTP(fullName.trim(), cleanPhone, email.trim());
+    const result = await sendOTP(
+      fullName.trim(),
+      cleanPhone,
+      email.trim()
+    );
 
     setLoading(false);
 
@@ -86,7 +88,6 @@ function Register() {
       return;
     }
 
-    // Navigate to OTP screen with all data
     navigate("/otp", {
       state: {
         name: fullName.trim(),
@@ -99,126 +100,168 @@ function Register() {
 
   return (
     <AuthLayout>
-      <div className="auth-intro">
-        <Link to="/" className="auth-back" aria-label="Back to home">
-          <ArrowLeft size={20} />
-        </Link>
+      <section className="auth-intro register-intro">
+        <div className="register-intro-top">
+          <Link
+            to="/"
+            className="auth-back register-back"
+            aria-label="Back to home"
+          >
+            <ArrowLeft size={19} />
+          </Link>
+        </div>
 
-        <img src={logoIcon} alt="Contriba" className="auth-logo-icon" />
+        <div className="register-intro-copy">
+          <span className="register-eyebrow">
+            <ShieldCheck size={15} />
+            Secure account setup
+          </span>
 
-        <h1>
-          Create
-          <br />
-          Account
-        </h1>
+          <h1>
+            Create
+            <br />
+            Account
+          </h1>
 
-        <p>
-          Start collecting event contributions beautifully,
-          securely and easily.
-        </p>
-      </div>
+          <p>
+            Start collecting event contributions beautifully, securely and
+            easily.
+          </p>
+        </div>
+      </section>
 
-      <div className="auth-form-card register-card">
+      <section className="auth-form-card register-card">
         <span className="auth-mini-label">Create Account</span>
         <h2>Create your account</h2>
 
-        <form className="auth-form" onSubmit={handleSubmit}>
-          <label>Full Name *</label>
-          <div className="auth-input">
+        <form className="auth-form register-form" onSubmit={handleSubmit}>
+          <label htmlFor="register-name">Full Name *</label>
+
+          <div className="auth-input register-input">
             <User size={20} />
             <input
+              id="register-name"
               type="text"
+              autoComplete="name"
               placeholder="Enter your full name"
               value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
+              onChange={(event) => setFullName(event.target.value)}
             />
           </div>
 
-          <label>Phone Number *</label>
-          <div className="auth-input">
+          <label htmlFor="register-phone">Phone Number *</label>
+
+          <div className="auth-input register-input">
             <Phone size={20} />
-            <span className="auth-country">+250</span>
+
+            <span className="auth-country register-country">
+              <span aria-hidden="true">🇷🇼</span>
+              +250
+            </span>
+
             <input
+              id="register-phone"
               type="tel"
+              inputMode="numeric"
+              autoComplete="tel"
               placeholder="781 234 567"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(event) => setPhone(event.target.value)}
             />
           </div>
 
-          <label>Email Address *</label>
-          <div className="auth-input">
+          <label htmlFor="register-email">Email Address *</label>
+
+          <div className="auth-input register-input">
             <Mail size={20} />
             <input
+              id="register-email"
               type="email"
+              autoComplete="email"
               placeholder="you@example.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(event) => setEmail(event.target.value)}
             />
           </div>
 
-          <div className="auth-pin-note">
+          <div className="auth-pin-note register-pin-note">
             <Lock size={16} />
-            Create a secure 4-digit PIN. You cannot recover it if lost.
+            <span>
+              Create a secure 4-digit PIN. You cannot recover it if lost.
+            </span>
           </div>
 
-          <label>Create PIN *</label>
-          <div className="auth-input">
+          <label htmlFor="register-pin">Create PIN *</label>
+
+          <div className="auth-input register-input">
             <Lock size={20} />
             <input
+              id="register-pin"
               type={showPin ? "text" : "password"}
+              inputMode="numeric"
+              autoComplete="new-password"
               placeholder="••••"
               value={pin}
               maxLength={6}
-              onChange={(e) => setPin(e.target.value)}
+              onChange={(event) => setPin(event.target.value)}
             />
+
             <button
               type="button"
               className="auth-eye-button"
-              onClick={() => setShowPin(!showPin)}
+              onClick={() => setShowPin((current) => !current)}
+              aria-label={showPin ? "Hide PIN" : "Show PIN"}
             >
               {showPin ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           </div>
 
-          <label>Confirm PIN *</label>
-          <div className="auth-input">
+          <label htmlFor="register-confirm-pin">Confirm PIN *</label>
+
+          <div className="auth-input register-input">
             <Lock size={20} />
             <input
+              id="register-confirm-pin"
               type={showConfirmPin ? "text" : "password"}
+              inputMode="numeric"
+              autoComplete="new-password"
               placeholder="••••"
               value={confirmPin}
               maxLength={6}
-              onChange={(e) => setConfirmPin(e.target.value)}
+              onChange={(event) => setConfirmPin(event.target.value)}
             />
+
             <button
               type="button"
               className="auth-eye-button"
-              onClick={() => setShowConfirmPin(!showConfirmPin)}
+              onClick={() => setShowConfirmPin((current) => !current)}
+              aria-label={showConfirmPin ? "Hide PIN" : "Show PIN"}
             >
               {showConfirmPin ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           </div>
 
           {message && (
-            <p className="auth-message">{message}</p>
+            <p className="auth-message register-message" role="alert">
+              {message}
+            </p>
           )}
 
           <button
             type="submit"
-            className="auth-submit"
+            className="auth-submit register-submit"
             disabled={!canSubmit}
           >
             <UserPlus size={20} />
             {loading ? "Sending verification code..." : "Continue"}
           </button>
 
-          <p className="auth-switch">
+          <p className="auth-switch register-switch">
             Already have an account?
             <Link to="/login">Login</Link>
           </p>
         </form>
-      </div>
+      </section>
     </AuthLayout>
   );
 }
