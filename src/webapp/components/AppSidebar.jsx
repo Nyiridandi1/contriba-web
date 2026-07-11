@@ -205,12 +205,10 @@ function AppSidebar({ active = "home" }) {
             </Link>
           )}
 
-          {isOrganizer ? (
+          {isOrganizer && (
             <Link to="/profile" className="mobile-topbar-avatar">
               {currentUser.avatar_url ? <img src={currentUser.avatar_url} alt={t("profile", "Profile")} /> : <span>{initials}</span>}
             </Link>
-          ) : (
-            <Link to="/login" className="mobile-topbar-login">{t("login", "Login")}</Link>
           )}
 
           <Link to={isOrganizer ? "/create-event" : "/register"} className="mobile-topbar-create">
