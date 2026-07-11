@@ -2,19 +2,22 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
+  ArrowRight,
+  BarChart3,
+  CheckCircle2,
   Eye,
   EyeOff,
   LockKeyhole,
-  LogIn,
   Phone,
   ShieldCheck,
+  Sparkles,
+  UsersRound,
+  WalletCards,
 } from "lucide-react";
 
 import { useAuth } from "../context/AuthContext";
-import AuthLayout from "../layout/AuthLayout";
 import logoIcon from "../../assets/logo-icon.png";
 
-import "../components/auth/AuthForm.css";
 import "./Login.css";
 
 function Login() {
@@ -54,122 +57,234 @@ function Login() {
   }
 
   return (
-    <AuthLayout>
-      <section className="auth-intro login-intro">
-        <div className="login-intro-top">
-          <Link to="/" className="auth-back login-back" aria-label="Back to home">
-            <ArrowLeft size={19} />
-          </Link>
+    <main className="million-login-page">
+      <section className="million-shell">
+        <div className="million-hero">
+          <div className="million-grid" />
+          <div className="million-orb million-orb-one" />
+          <div className="million-orb million-orb-two" />
+          <div className="million-orb million-orb-three" />
 
-          <Link to="/" className="login-brand" aria-label="Contriba home">
-            <img
-              src={logoIcon}
-              alt="Contriba"
-              className="auth-logo-icon login-logo-icon"
-            />
-            <span>Contriba</span>
-          </Link>
-        </div>
+          <div className="million-hero-inner">
+            <div className="million-mobile-hero-topbar">
+              <Link to="/" className="million-mobile-brand">
+                <span className="million-brand-mark">
+                  <img src={logoIcon} alt="" />
+                </span>
+                <span>contriba</span>
+              </Link>
 
-        <div className="login-intro-copy">
-          <span className="login-eyebrow">
-            <ShieldCheck size={15} />
-            Secure organizer access
-          </span>
+              <Link
+                to="/"
+                className="million-mobile-back"
+                aria-label="Back home"
+              >
+                <ArrowLeft size={17} />
+              </Link>
+            </div>
 
-          <h1>
-            Welcome
-            <br />
-            Back
-          </h1>
+            <div className="million-hero-topbar">
+              <Link to="/" className="million-brand">
+                <span className="million-brand-mark">
+                  <img src={logoIcon} alt="" />
+                </span>
+                <span>contriba</span>
+              </Link>
 
-          <p>
-            Login securely and continue managing your events, wallet and
-            contributions.
-          </p>
-        </div>
-      </section>
+              <Link to="/" className="million-back-link">
+                <ArrowLeft size={16} />
+                <span>Back home</span>
+              </Link>
+            </div>
 
-      <section className="auth-form-card login-card">
-        <span className="auth-mini-label">Secure Login</span>
+            <div className="million-hero-content">
+              <span className="million-eyebrow">
+                <Sparkles size={15} />
+                Built for modern communities
+              </span>
 
-        <h2>Access your account</h2>
+              <h1>
+                Manage every contribution
+                <span>from one secure workspace.</span>
+              </h1>
 
-        <form onSubmit={handleSubmit} className="auth-form login-form">
-          <label htmlFor="login-phone">Phone Number *</label>
+              <p>
+                Create events, track contributors, monitor your wallet and
+                understand your fundraising performance with confidence.
+              </p>
 
-          <div className="auth-input login-input">
-            <Phone size={20} />
+              <div className="million-feature-list">
+                <div>
+                  <CheckCircle2 size={18} />
+                  <span>Real-time wallet and contribution visibility</span>
+                </div>
 
-            <span className="auth-country login-country">
-              <span aria-hidden="true">🇷🇼</span>
-              +250
-            </span>
+                <div>
+                  <CheckCircle2 size={18} />
+                  <span>Professional contributor management</span>
+                </div>
 
-            <input
-              id="login-phone"
-              type="tel"
-              inputMode="numeric"
-              autoComplete="tel"
-              placeholder="781 234 567"
-              value={phone}
-              onChange={(event) => setPhone(event.target.value)}
-            />
-          </div>
+                <div>
+                  <CheckCircle2 size={18} />
+                  <span>Secure access for every organizer</span>
+                </div>
+              </div>
+            </div>
 
-          <div className="login-label-row">
-            <label htmlFor="login-pin">PIN *</label>
-            <Link to="/forgot-pin" className="login-forgot-link">
-              Forgot PIN?
-            </Link>
-          </div>
+            <div className="million-dashboard-preview" aria-hidden="true">
+              <div className="million-preview-top">
+                <div>
+                  <span>Organizer overview</span>
+                  <strong>Good evening, Olivier</strong>
+                </div>
+                <span className="million-status-dot">Live</span>
+              </div>
 
-          <div className="auth-input login-input">
-            <LockKeyhole size={20} />
+              <div className="million-preview-grid">
+                <div className="million-preview-card">
+                  <span className="million-preview-icon">
+                    <WalletCards size={18} />
+                  </span>
+                  <small>Wallet balance</small>
+                  <strong>RWF 2.48M</strong>
+                  <span className="million-positive">+18.4%</span>
+                </div>
 
-            <input
-              id="login-pin"
-              type={showPin ? "text" : "password"}
-              inputMode="numeric"
-              autoComplete="current-password"
-              placeholder="Enter your PIN"
-              value={pin}
-              maxLength={6}
-              onChange={(event) => setPin(event.target.value)}
-            />
+                <div className="million-preview-card">
+                  <span className="million-preview-icon">
+                    <UsersRound size={18} />
+                  </span>
+                  <small>Contributors</small>
+                  <strong>1,284</strong>
+                  <span className="million-positive">+126 this month</span>
+                </div>
 
-            <button
-              type="button"
-              className="auth-eye-button"
-              onClick={() => setShowPin((current) => !current)}
-              aria-label={showPin ? "Hide PIN" : "Show PIN"}
-            >
-              {showPin ? <EyeOff size={18} /> : <Eye size={18} />}
-            </button>
-          </div>
+                <div className="million-preview-card">
+                  <span className="million-preview-icon">
+                    <BarChart3 size={18} />
+                  </span>
+                  <small>Active events</small>
+                  <strong>12</strong>
+                  <span className="million-positive">8 performing well</span>
+                </div>
+              </div>
+            </div>
 
-          {message && (
-            <p className="auth-message login-message" role="alert">
-              {message}
+            <p className="million-hero-footer">
+              Trusted tools for organizers, families, churches and communities.
             </p>
-          )}
+          </div>
+        </div>
 
-          <button
-            type="submit"
-            className="auth-submit login-submit"
-            disabled={!canSubmit}
-          >
-            <LogIn size={20} />
-            {loading ? "Logging in..." : "Login"}
-          </button>
+        <div className="million-panel">
+          <div className="million-panel-inner">
+            <div className="million-login-card">
+              <div className="million-card-heading">
+                <span className="million-kicker">Secure organizer access</span>
+                <h2>Welcome back</h2>
+                <p>Enter your details to continue to your dashboard.</p>
+              </div>
 
-          <p className="auth-switch login-switch">
-            Don&apos;t have an account?
-            <Link to="/register">Create Account</Link>
-          </p>
-        </form>
+              <form
+                onSubmit={handleSubmit}
+                className="million-form"
+                autoComplete="off"
+                noValidate
+              >
+                <div className="million-field">
+                  <label htmlFor="million-phone">Phone number</label>
+
+                  <div className="million-input-shell">
+                    <Phone size={18} />
+                    <span className="million-code">🇷🇼 +250</span>
+
+                    <input
+                      id="million-phone"
+                      name="contriba-login-phone"
+                      type="tel"
+                      inputMode="numeric"
+                      autoComplete="off"
+                      data-lpignore="true"
+                      data-form-type="other"
+                      placeholder="781 234 567"
+                      value={phone}
+                      onChange={(event) => setPhone(event.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="million-field">
+                  <div className="million-label-row">
+                    <label htmlFor="million-pin">PIN</label>
+                    <Link to="/forgot-pin">Forgot PIN?</Link>
+                  </div>
+
+                  <div className="million-input-shell">
+                    <LockKeyhole size={18} />
+
+                    <input
+                      id="million-pin"
+                      name="contriba-login-pin"
+                      type={showPin ? "text" : "password"}
+                      inputMode="numeric"
+                      autoComplete="current-password"
+                      placeholder="Enter your PIN"
+                      value={pin}
+                      maxLength={6}
+                      onChange={(event) => setPin(event.target.value)}
+                    />
+
+                    <button
+                      type="button"
+                      className="million-eye"
+                      onClick={() => setShowPin((current) => !current)}
+                      aria-label={showPin ? "Hide PIN" : "Show PIN"}
+                    >
+                      {showPin ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
+                </div>
+
+                {message && (
+                  <p className="million-message" role="alert">
+                    {message}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  className="million-submit"
+                  disabled={!canSubmit}
+                >
+                  <span>{loading ? "Signing in..." : "Sign in securely"}</span>
+                  {!loading && <ArrowRight size={18} />}
+                </button>
+              </form>
+
+              <div className="million-trust-row">
+                <div>
+                  <ShieldCheck size={15} />
+                  <span>Protected by Contriba</span>
+                </div>
+
+                <p>
+                  New here?
+                  <Link to="/register">Create account</Link>
+                </p>
+              </div>
+            </div>
+
+            <footer className="million-footer">
+              <span>© {new Date().getFullYear()} Contriba</span>
+              <div>
+                <Link to="/privacy">Privacy</Link>
+                <Link to="/terms">Terms</Link>
+              </div>
+            </footer>
+          </div>
+        </div>
       </section>
-    </AuthLayout>
+    </main>
   );
 }
 
