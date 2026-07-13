@@ -80,8 +80,15 @@ function eventContributorCount(event) {
 }
 
 function publicEventLink(event) {
-  if (!event?.id) return window.location.origin;
-  return `${window.location.origin}/events/${event.id}`;
+  if (!event?.id) {
+    return window.location.origin;
+  }
+
+  const shareBase =
+    import.meta.env.VITE_SHARE_BASE_URL ||
+    "https://contriba-backend-production.up.railway.app";
+
+  return `${shareBase}/share/events/${event.id}`;
 }
 
 function getContributionAmount(item) {
@@ -509,25 +516,23 @@ function escapeSvg(value) {
   }
 
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=420x420&data=${encodeURIComponent(publicLink)}`;
-
   const safeTitle = escapeSvg(eventTitle(selectedEvent));
   const safeLink = escapeSvg(publicLink);
-  const safeQrUrl = escapeSvg(qrUrl);
-
-  const fileName = `${eventTitle(selectedEvent)
-    .replace(/\s+/g, "-")
-    .replace(/&/g, "and")}-qr.svg`;
 
   const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="700" height="860" viewBox="0 0 700 860">
   <rect width="700" height="860" fill="#ffffff"/>
   <text x="50" y="80" font-family="Arial" font-size="32" font-weight="900" fill="#111827">${safeTitle}</text>
-  <image href="${safeQrUrl}" x="110" y="140" width="480" height="480"/>
+  <image href="${qrUrl}" x="110" y="140" width="480" height="480"/>
   <text x="50" y="690" font-family="Arial" font-size="24" font-weight="700" fill="#667085">Scan to contribute securely on Contriba</text>
   <text x="50" y="750" font-family="Arial" font-size="20" font-weight="700" fill="#E50914">${safeLink}</text>
 </svg>`;
 
-  downloadFile(fileName, svg, "image/svg+xml");
+  downloadFile(
+    `${eventTitle(selectedEvent).replace(/\s+/g, "-").replace(/&/g, "and")}-qr.svg`,
+    svg,
+    "image/svg+xml"
+  );
 
   await recordQrScan();
   showToast("QR downloaded");

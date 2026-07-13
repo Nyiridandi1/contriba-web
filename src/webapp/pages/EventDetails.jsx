@@ -158,7 +158,9 @@ function EventDetails() {
     return normalizeEvent(event);
   }, [event]);
 
-  const shareUrl = window.location.href;
+  const shareUrl = `${
+  import.meta.env.VITE_SHARE_BASE_URL || window.location.origin
+}/share/events/${id}`;
 
   useEffect(() => {
     async function loadEventDetails() {

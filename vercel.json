@@ -1,1 +1,13 @@
-{"rewrites": [{"source": "/(.*)", "destination": "/index.html"}]}
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/share/events/:eventId",
+      "destination": "https://contriba-backend-production.up.railway.app/share/events/:eventId"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
