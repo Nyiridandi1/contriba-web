@@ -310,19 +310,22 @@ function EventDetails() {
 
   // ── COPY LINK HANDLER ──
   async function handleCopyLink() {
-    try {
-      await navigator.clipboard.writeText(shareUrl);
-    } catch {
-      const el = document.createElement("textarea");
-      el.value = shareUrl;
-      document.body.appendChild(el);
-      el.select();
-      document.execCommand("copy");
-      document.body.removeChild(el);
-    }
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
+  const shareUrl = buildFreshShareUrl();
+
+  try {
+    await navigator.clipboard.writeText(shareUrl);
+  } catch {
+    const el = document.createElement("textarea");
+    el.value = shareUrl;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
   }
+
+  setCopied(true);
+  setTimeout(() => setCopied(false), 2500);
+}
 
   // ── QR DOWNLOAD HANDLER ──
   function handleDownloadQR() {
