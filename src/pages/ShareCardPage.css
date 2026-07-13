@@ -1,11 +1,10 @@
 /*
 |--------------------------------------------------------------------------
-| Contriba EventCard screenshot page
+| Contriba Social Share Preview
 |--------------------------------------------------------------------------
 |
-| Important:
-| Everything is scoped to .share-card-page so this hidden screenshot page
-| cannot affect scrolling or layout on the rest of the Contriba website.
+| Dedicated 1200 × 630 Open Graph layout.
+| Everything is scoped so normal website pages keep scrolling normally.
 |
 */
 
@@ -16,162 +15,321 @@
   min-height: 630px;
   margin: 0;
   padding: 0;
+  overflow: hidden;
+  background: #f7f8fc;
+}
+
+.share-card-capture {
+  width: 1200px;
+  height: 630px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.social-preview {
+  width: 1200px;
+  height: 630px;
+  display: grid;
+  grid-template-columns: 68% 32%;
+  overflow: hidden;
+  background: #f8f9fc;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Photo side
+|--------------------------------------------------------------------------
+*/
+
+.social-preview-photo {
+  position: relative;
+  width: 100%;
+  height: 630px;
+  overflow: hidden;
+  background: #111827;
+}
+
+.social-preview-photo img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.social-preview-photo-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.18) 0%,
+      rgba(0, 0, 0, 0.04) 48%,
+      rgba(0, 0, 0, 0.22) 100%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.78) 0%,
+      rgba(0, 0, 0, 0.2) 42%,
+      rgba(0, 0, 0, 0.05) 72%
+    );
+}
+
+.social-preview-brand {
+  position: absolute;
+  top: 38px;
+  left: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: #ffffff;
+  font-size: 28px;
+  font-weight: 950;
+  letter-spacing: -0.8px;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.social-preview-logo {
+  width: 46px;
+  height: 46px;
   display: grid;
   place-items: center;
-  overflow: hidden;
+  border-radius: 14px;
+  background: #e50914;
+  color: #ffffff;
+  font-size: 34px;
+  font-weight: 900;
+  line-height: 1;
+  box-shadow: 0 14px 34px rgba(229, 9, 20, 0.35);
+}
+
+.social-preview-category {
+  position: absolute;
+  top: 40px;
+  right: 38px;
+  min-width: 130px;
+  height: 44px;
+  padding: 0 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(229, 9, 20, 0.95);
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 900;
+  text-transform: capitalize;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.2);
+}
+
+.social-preview-photo-title {
+  position: absolute;
+  left: 42px;
+  right: 42px;
+  bottom: 42px;
+  color: #ffffff;
+}
+
+.social-preview-photo-title h1 {
+  max-width: 680px;
+  margin: 0 0 12px;
+  font-size: 72px;
+    line-height: 0.95;
+  font-weight: 950;
+  letter-spacing: -2.6px;
+  text-shadow: 0 5px 24px rgba(0, 0, 0, 0.5);
+}
+
+.social-preview-photo-title p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 20px;
+  line-height: 1.4;
+  font-weight: 700;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.42);
+}
+
+/*
+|--------------------------------------------------------------------------
+| Information panel
+|--------------------------------------------------------------------------
+*/
+
+.social-preview-panel {
+  height: 630px;
+  padding: 44px 38px 34px;
+  display: flex;
+  flex-direction: column;
   background:
     radial-gradient(
       circle at 100% 0%,
       rgba(229, 9, 20, 0.08),
-      transparent 28%
+      transparent 36%
     ),
-    radial-gradient(
-      circle at 0% 10%,
-      rgba(229, 9, 20, 0.045),
-      transparent 26%
-    ),
-    #f7f8fc;
+    #ffffff;
+  color: #111827;
+  box-sizing: border-box;
 }
 
-.share-card-capture {
-  width: 1120px;
-  height: 590px;
-  margin: 0;
-  padding: 0;
-  transform: none;
-}
-
-.share-card-capture .event-card {
-  width: 1120px;
-  height: 590px;
-  margin: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-.share-card-capture .event-card:hover {
-  transform: none;
-  border-color: rgba(17, 24, 39, 0.08);
-  box-shadow: 0 10px 30px rgba(17, 24, 39, 0.06);
-}
-
-.share-card-capture
-  .event-card:hover
-  .event-card-media
-  img {
-  transform: none;
-}
-
-.share-card-capture .event-card-image-link,
-.share-card-capture .event-card-title,
-.share-card-capture .event-card-button {
-  pointer-events: none;
-}
-
-/*
-|--------------------------------------------------------------------------
-| Loading state
-|--------------------------------------------------------------------------
-*/
-
-.share-card-loading {
-  width: 380px;
-  overflow: hidden;
-  border-radius: 20px;
-  background: #ffffff;
-  border: 1px solid rgba(17, 24, 39, 0.08);
-  box-shadow: 0 10px 30px rgba(17, 24, 39, 0.06);
-}
-
-.share-card-loading-image {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  background:
-    linear-gradient(
-      90deg,
-      #f0f1f4,
-      #ffffff,
-      #eceef2
-    );
-}
-
-.share-card-loading-body {
-  padding: 16px;
-}
-
-.share-card-loading-title,
-.share-card-loading-line,
-.share-card-loading-progress,
-.share-card-loading-button {
-  border-radius: 999px;
-  background:
-    linear-gradient(
-      90deg,
-      #f0f1f4,
-      #ffffff,
-      #eceef2
-    );
-}
-
-.share-card-loading-title {
-  width: 68%;
-  height: 22px;
-  margin-bottom: 12px;
-}
-
-.share-card-loading-line {
-  width: 84%;
-  height: 12px;
-  margin-bottom: 10px;
-}
-
-.share-card-loading-line.short {
-  width: 54%;
-}
-
-.share-card-loading-progress {
-  width: 100%;
-  height: 7px;
-  margin: 18px 0 12px;
-}
-
-.share-card-loading-button {
-  width: 100%;
-  height: 40px;
-  border-radius: 12px;
-}
-
-/*
-|--------------------------------------------------------------------------
-| Error state
-|--------------------------------------------------------------------------
-*/
-
-.share-card-error {
-  width: 380px;
-  min-height: 280px;
-  padding: 30px;
+.social-preview-panel-top {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  text-align: center;
-  border-radius: 20px;
-  background: #ffffff;
+}
+
+.social-preview-eyebrow {
+  margin-bottom: 14px;
+  color: #e50914;
+  font-size: 13px;
+  font-weight: 950;
+  letter-spacing: 1.3px;
+}
+
+.social-preview-panel h2 {
+  margin: 0 0 20px;
+  font-size: 34px;
+  line-height: 1.05;
+  font-weight: 950;
+  letter-spacing: -1.4px;
   color: #111827;
-  border: 1px solid rgba(17, 24, 39, 0.08);
-  box-shadow: 0 10px 30px rgba(17, 24, 39, 0.06);
 }
 
-.share-card-error strong {
+.social-preview-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: #667085;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.social-preview-meta span {
+  display: block;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Funding section
+|--------------------------------------------------------------------------
+*/
+
+.social-preview-funding {
+  margin-top: 34px;
+  padding: 24px;
+  border-radius: 22px;
+  background: #f8f9fc;
+  border: 1px solid rgba(17, 24, 39, 0.07);
+}
+
+.social-preview-funding-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.social-preview-funding-row small {
+  display: block;
+  margin-bottom: 8px;
+  color: #98a2b3;
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: 1.1px;
+}
+
+.social-preview-funding-row strong {
+  display: block;
+  color: #111827;
+  font-size: 29px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: -0.9px;
+}
+
+.social-preview-progress-value {
+  padding: 11px 16px;
+  border-radius: 999px;
+  background: #fff0f1;
+  color: #e50914;
   font-size: 22px;
-  font-weight: 900;
+  font-weight: 950;
+  white-space: nowrap;
 }
 
-.share-card-error span {
-  color: #6b7280;
-  font-size: 14px;
-  font-weight: 600;
+.social-preview-progress {
+  width: 100%;
+  height: 12px;
+  margin-top: 22px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e8ebf0;
+}
+
+.social-preview-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #e50914 0%, #ff4b55 100%);
+}
+
+.social-preview-goal {
+  margin-top: 12px;
+  color: #667085;
+  font-size: 15px;
+  font-weight: 750;
+}
+
+/*
+|--------------------------------------------------------------------------
+| CTA
+|--------------------------------------------------------------------------
+*/
+
+.social-preview-button {
+  height: 58px;
+  margin-top: auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 18px;
+  background: #e50914;
+  color: #ffffff;
+  font-size: 19px;
+  font-weight: 950;
+  box-shadow: 0 18px 38px rgba(229, 9, 20, 0.23);
+}
+
+.social-preview-button span {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.social-preview-footer {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: #98a2b3;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Loading / error state
+|--------------------------------------------------------------------------
+*/
+
+.social-preview-state {
+  width: 1200px;
+  height: 630px;
+  display: grid;
+  place-items: center;
+  background: #f7f8fc;
+  color: #667085;
+  font-size: 24px;
+  font-weight: 850;
 }
 
 /*
@@ -183,27 +341,17 @@
 .share-card-page *,
 .share-card-page *::before,
 .share-card-page *::after {
+  box-sizing: border-box;
   animation: none !important;
   transition: none !important;
   caret-color: transparent !important;
 }
 
 @media print {
-  .share-card-page {
+  .share-card-page,
+  .share-card-capture,
+  .social-preview {
     width: 1200px;
     height: 630px;
   }
-}.share-card-capture .event-card-media {
-  height: 360px;
-  aspect-ratio: auto;
-}
-
-.share-card-capture .event-card-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.share-card-capture .event-card-body {
-  min-height: 230px;
 }

@@ -8,16 +8,29 @@ import {
   useParams,
 } from "react-router-dom";
 
-import EventCard from "../webapp/components/events/EventCard";
-
 import "./ShareCardPage.css";
 
 const FALLBACK_IMAGE =
-  "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80";
+  "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=90";
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
   "https://contriba-backend-production.up.railway.app";
+
+function number(value) {
+  const parsed =
+    Number(value || 0);
+
+  return Number.isFinite(parsed)
+    ? parsed
+    : 0;
+}
+
+function formatMoney(value) {
+  return `RWF ${Math.round(
+    number(value)
+  ).toLocaleString("en-US")}`;
+}
 
 function formatDaysLeft(value) {
   if (!value) {
@@ -83,8 +96,35 @@ function formatDaysLeft(value) {
 }
 
 function normalizeEvent(event) {
+  const raised =
+    number(
+      event.total_raised ||
+        event.raised ||
+        event.amount_raised
+    );
+
+  const target =
+    number(
+      event.goal_amount ||
+        event.goal ||
+        event.target
+    );
+
+  const progress =
+    target > 0
+      ? Math.min(
+          (
+            raised /
+            target
+          ) *
+            100,
+          100
+        )
+      : 0;
+
   return {
-    id: event.id,
+    id:
+      event.id,
 
     title:
       event.title ||
@@ -99,26 +139,18 @@ function normalizeEvent(event) {
       event.location ||
       "Rwanda",
 
-    raised: Number(
-      event.total_raised ||
-        event.raised ||
-        event.amount_raised ||
-        0
-    ),
+    raised,
 
-    target: Number(
-      event.goal_amount ||
-        event.goal ||
-        event.target ||
-        0
-    ),
+    target,
 
-    contributors: Number(
-      event.total_contributors ||
-        event.contributors ||
-        event.contributors_count ||
-        0
-    ),
+    progress,
+
+    contributors:
+      number(
+        event.total_contributors ||
+          event.contributors ||
+          event.contributors_count
+      ),
 
     daysLeft:
       formatDaysLeft(
@@ -135,7 +167,7 @@ function normalizeEvent(event) {
   };
 }
 
-function markShareCardReady() {
+function markReady() {
   document.documentElement.setAttribute(
     "data-share-card-ready",
     "true"
@@ -150,7 +182,7 @@ function markShareCardReady() {
     true;
 }
 
-function markShareCardFailed() {
+function markFailed() {
   document.documentElement.setAttribute(
     "data-share-card-error",
     "true"
@@ -166,30 +198,154 @@ function markShareCardFailed() {
 }
 
 function waitForImage(imageUrl) {
-  return new Promise((resolve) => {
-    if (!imageUrl) {
-      resolve();
-      return;
+  return new Promise(
+    (resolve) => {
+      const image =
+        new Image();
+
+      image.onload =
+        resolve;
+
+      image.onerror =
+        resolve;
+
+      image.src =
+        imageUrl;
+
+      if (image.complete) {
+        resolve();
+      }
     }
+  );
+}
 
-    const image =
-      new Image();
+function SharePreview({
+  event,
+}) {
+  return (
+    <article className="social-preview">
+      <div className="social-preview-photo">
+        <img
+          src={event.image}
+          alt=""
+        />
 
-    image.onload = () => {
-      resolve();
-    };
+        <div className="social-preview-photo-shade" />
 
-    image.onerror = () => {
-      resolve();
-    };
+        <div className="social-preview-brand">
+          <span className="social-preview-logo">
+            ∞
+          </span>
 
-    image.src =
-      imageUrl;
+          <span>
+            Contriba
+          </span>
+        </div>
 
-    if (image.complete) {
-      resolve();
-    }
-  });
+        <div className="social-preview-category">
+          {event.category}
+        </div>
+
+        <div className="social-preview-photo-title">
+          <h1>
+            {event.title}
+          </h1>
+
+          <p>
+            Support this event securely
+            with Contriba.
+          </p>
+        </div>
+      </div>
+
+      <div className="social-preview-panel">
+        <div className="social-preview-panel-top">
+          <span className="social-preview-eyebrow">
+            PUBLIC EVENT
+          </span>
+
+          <h2>
+            {event.title}
+          </h2>
+
+          <div className="social-preview-meta">
+            <span>
+              📍 {event.location}
+            </span>
+
+            <span>
+              👥 {event.contributors} Contributors
+            </span>
+
+            <span>
+              ⏱ {event.daysLeft}
+            </span>
+          </div>
+        </div>
+
+        <div className="social-preview-funding">
+          <div className="social-preview-funding-row">
+            <div>
+              <small>
+                RAISED
+              </small>
+
+              <strong>
+                {formatMoney(
+                  event.raised
+                )}
+              </strong>
+            </div>
+
+            <div className="social-preview-progress-value">
+              {event.progress.toFixed(
+                1
+              )}
+              %
+            </div>
+          </div>
+
+          <div className="social-preview-progress">
+            <div
+              className="social-preview-progress-fill"
+              style={{
+                width: `${Math.max(
+                  event.progress,
+                  event.progress > 0
+                    ? 1.5
+                    : 0
+                )}%`,
+              }}
+            />
+          </div>
+
+          <div className="social-preview-goal">
+            Goal:{" "}
+            {formatMoney(
+              event.target
+            )}
+          </div>
+        </div>
+
+        <div className="social-preview-button">
+          Contribute Now
+          <span>
+            →
+          </span>
+        </div>
+
+        <div className="social-preview-footer">
+          <span>
+            contriba.online
+          </span>
+
+          <span>
+            Secure contributions
+          </span>
+        </div>
+      </div>
+    </article>
+  );
 }
 
 function ShareCardPage() {
@@ -227,8 +383,6 @@ function ShareCardPage() {
               eventId
             )}`,
             {
-              method: "GET",
-
               headers: {
                 Accept:
                   "application/json",
@@ -272,21 +426,19 @@ function ShareCardPage() {
         requestAnimationFrame(
           () => {
             requestAnimationFrame(
-              () => {
-                markShareCardReady();
-              }
+              markReady
             );
           }
         );
       } catch (loadError) {
-        console.error(
-          "Share card event load failed:",
-          loadError
-        );
-
         if (cancelled) {
           return;
         }
+
+        console.error(
+          "Share preview load failed:",
+          loadError
+        );
 
         setError(
           loadError.message ||
@@ -295,18 +447,16 @@ function ShareCardPage() {
 
         setLoading(false);
 
-        markShareCardFailed();
+        markFailed();
       }
     }
 
     if (!eventId) {
+      setLoading(false);
       setError(
         "Event ID is missing"
       );
-
-      setLoading(false);
-
-      markShareCardFailed();
+      markFailed();
 
       return undefined;
     }
@@ -323,16 +473,8 @@ function ShareCardPage() {
     useMemo(() => {
       if (loading) {
         return (
-          <div className="share-card-loading">
-            <div className="share-card-loading-image" />
-
-            <div className="share-card-loading-body">
-              <div className="share-card-loading-title" />
-              <div className="share-card-loading-line" />
-              <div className="share-card-loading-line short" />
-              <div className="share-card-loading-progress" />
-              <div className="share-card-loading-button" />
-            </div>
+          <div className="social-preview-state">
+            Loading event preview…
           </div>
         );
       }
@@ -342,21 +484,15 @@ function ShareCardPage() {
         !event
       ) {
         return (
-          <div className="share-card-error">
-            <strong>
-              Event unavailable
-            </strong>
-
-            <span>
-              {error ||
-                "This event could not be loaded."}
-            </span>
+          <div className="social-preview-state">
+            {error ||
+              "Event unavailable"}
           </div>
         );
       }
 
       return (
-        <EventCard
+        <SharePreview
           event={event}
         />
       );
