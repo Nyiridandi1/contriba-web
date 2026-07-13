@@ -158,9 +158,13 @@ function EventDetails() {
     return normalizeEvent(event);
   }, [event]);
 
-  const shareUrl = `${
-  import.meta.env.VITE_SHARE_BASE_URL || window.location.origin
-}/share/events/${id}`;
+  function buildFreshShareUrl() {
+  const baseUrl =
+    import.meta.env.VITE_SHARE_BASE_URL ||
+    "https://www.contriba.online";
+
+  return `${baseUrl.replace(/\/+$/, "")}/share/events/${id}?v=${Date.now()}`;
+}
 
   useEffect(() => {
     async function loadEventDetails() {
@@ -288,6 +292,7 @@ function EventDetails() {
 
   // ── SHARE HANDLER ──
   async function handleShare() {
+    const shareUrl = buildFreshShareUrl();
     const shareTitle = normalizedEvent?.title || "Check out this event";
     const shareText = `Support "${shareTitle}" on Contriba 🙌`;
 
