@@ -1,0 +1,240 @@
+/*
+|--------------------------------------------------------------------------
+| Contriba EventCard screenshot page
+|--------------------------------------------------------------------------
+|
+| This page does not redesign EventCard.
+| It only creates a clean screenshot canvas around the real component.
+|
+*/
+
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+html {
+  background: #f7f8fc;
+}
+
+body {
+  overflow: hidden;
+  background: #f7f8fc;
+}
+
+.share-card-page {
+  width: 1200px;
+  height: 630px;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(229, 9, 20, 0.08),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 0% 10%,
+      rgba(229, 9, 20, 0.045),
+      transparent 26%
+    ),
+    #f7f8fc;
+}
+
+.share-card-capture {
+  width: 380px;
+  margin: 0;
+  padding: 0;
+  transform: scale(1.45);
+  transform-origin: center;
+}
+
+.share-card-capture .event-card {
+  width: 380px;
+  margin: 0;
+  pointer-events: none;
+}
+
+.share-card-capture .event-card:hover {
+  transform: none;
+  border-color: rgba(
+    17,
+    24,
+    39,
+    0.08
+  );
+  box-shadow:
+    0 10px 30px
+    rgba(
+      17,
+      24,
+      39,
+      0.06
+    );
+}
+
+.share-card-capture
+  .event-card:hover
+  .event-card-media
+  img {
+  transform: none;
+}
+
+.share-card-capture
+  .event-card-image-link,
+.share-card-capture
+  .event-card-title,
+.share-card-capture
+  .event-card-button {
+  pointer-events: none;
+}
+
+.share-card-loading {
+  width: 380px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #ffffff;
+  border: 1px solid
+    rgba(
+      17,
+      24,
+      39,
+      0.08
+    );
+  box-shadow:
+    0 10px 30px
+    rgba(
+      17,
+      24,
+      39,
+      0.06
+    );
+}
+
+.share-card-loading-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background:
+    linear-gradient(
+      90deg,
+      #f0f1f4,
+      #ffffff,
+      #eceef2
+    );
+}
+
+.share-card-loading-body {
+  padding: 16px;
+}
+
+.share-card-loading-title,
+.share-card-loading-line,
+.share-card-loading-progress,
+.share-card-loading-button {
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      90deg,
+      #f0f1f4,
+      #ffffff,
+      #eceef2
+    );
+}
+
+.share-card-loading-title {
+  width: 68%;
+  height: 22px;
+  margin-bottom: 12px;
+}
+
+.share-card-loading-line {
+  width: 84%;
+  height: 12px;
+  margin-bottom: 10px;
+}
+
+.share-card-loading-line.short {
+  width: 54%;
+}
+
+.share-card-loading-progress {
+  width: 100%;
+  height: 7px;
+  margin:
+    18px 0 12px;
+}
+
+.share-card-loading-button {
+  width: 100%;
+  height: 40px;
+  border-radius: 12px;
+}
+
+.share-card-error {
+  width: 380px;
+  min-height: 280px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  border-radius: 20px;
+  background: #ffffff;
+  color: #111827;
+  border: 1px solid
+    rgba(
+      17,
+      24,
+      39,
+      0.08
+    );
+  box-shadow:
+    0 10px 30px
+    rgba(
+      17,
+      24,
+      39,
+      0.06
+    );
+}
+
+.share-card-error strong {
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.share-card-error span {
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Screenshot stability
+|--------------------------------------------------------------------------
+*/
+
+.share-card-page *,
+.share-card-page *::before,
+.share-card-page *::after {
+  animation: none !important;
+  transition: none !important;
+  caret-color: transparent !important;
+}
+
+@media print {
+  .share-card-page {
+    width: 1200px;
+    height: 630px;
+  }
+}

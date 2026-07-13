@@ -13,6 +13,7 @@ import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
+import ShareCardPage from "./pages/ShareCardPage";
 
 import AppHome from "./webapp/pages/AppHome";
 
@@ -134,6 +135,11 @@ function App() {
         <Route path="/share" element={<ShareCenter />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
+
+        <Route
+          path="/share-card/:eventId"
+          element={<ShareCardPage />}
+        />
 
         {/* =====================================================
             404
