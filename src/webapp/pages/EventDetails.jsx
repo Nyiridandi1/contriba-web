@@ -163,7 +163,7 @@ function EventDetails() {
     import.meta.env.VITE_SHARE_BASE_URL ||
     "https://www.contriba.online";
 
-  return `${baseUrl.replace(/\/+$/, "")}/share/events/${id}?v=${Date.now()}`;
+  return `${baseUrl.replace(/\/+$/, "")}/share/events/${id}`;
 }
 
   useEffect(() => {
