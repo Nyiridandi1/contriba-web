@@ -3,32 +3,17 @@
 | Contriba EventCard screenshot page
 |--------------------------------------------------------------------------
 |
-| This page does not redesign EventCard.
-| It only creates a clean screenshot canvas around the real component.
+| Important:
+| Everything is scoped to .share-card-page so this hidden screenshot page
+| cannot affect scrolling or layout on the rest of the Contriba website.
 |
 */
-
-html,
-body,
-#root {
-  width: 100%;
-  min-width: 100%;
-  min-height: 100%;
-  margin: 0;
-}
-
-html {
-  background: #f7f8fc;
-}
-
-body {
-  overflow: hidden;
-  background: #f7f8fc;
-}
 
 .share-card-page {
   width: 1200px;
   height: 630px;
+  min-width: 1200px;
+  min-height: 630px;
   margin: 0;
   padding: 0;
   display: grid;
@@ -64,20 +49,8 @@ body {
 
 .share-card-capture .event-card:hover {
   transform: none;
-  border-color: rgba(
-    17,
-    24,
-    39,
-    0.08
-  );
-  box-shadow:
-    0 10px 30px
-    rgba(
-      17,
-      24,
-      39,
-      0.06
-    );
+  border-color: rgba(17, 24, 39, 0.08);
+  box-shadow: 0 10px 30px rgba(17, 24, 39, 0.06);
 }
 
 .share-card-capture
@@ -87,35 +60,25 @@ body {
   transform: none;
 }
 
-.share-card-capture
-  .event-card-image-link,
-.share-card-capture
-  .event-card-title,
-.share-card-capture
-  .event-card-button {
+.share-card-capture .event-card-image-link,
+.share-card-capture .event-card-title,
+.share-card-capture .event-card-button {
   pointer-events: none;
 }
+
+/*
+|--------------------------------------------------------------------------
+| Loading state
+|--------------------------------------------------------------------------
+*/
 
 .share-card-loading {
   width: 380px;
   overflow: hidden;
   border-radius: 20px;
   background: #ffffff;
-  border: 1px solid
-    rgba(
-      17,
-      24,
-      39,
-      0.08
-    );
-  box-shadow:
-    0 10px 30px
-    rgba(
-      17,
-      24,
-      39,
-      0.06
-    );
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 10px 30px rgba(17, 24, 39, 0.06);
 }
 
 .share-card-loading-image {
@@ -167,8 +130,7 @@ body {
 .share-card-loading-progress {
   width: 100%;
   height: 7px;
-  margin:
-    18px 0 12px;
+  margin: 18px 0 12px;
 }
 
 .share-card-loading-button {
@@ -176,6 +138,12 @@ body {
   height: 40px;
   border-radius: 12px;
 }
+
+/*
+|--------------------------------------------------------------------------
+| Error state
+|--------------------------------------------------------------------------
+*/
 
 .share-card-error {
   width: 380px;
@@ -190,21 +158,8 @@ body {
   border-radius: 20px;
   background: #ffffff;
   color: #111827;
-  border: 1px solid
-    rgba(
-      17,
-      24,
-      39,
-      0.08
-    );
-  box-shadow:
-    0 10px 30px
-    rgba(
-      17,
-      24,
-      39,
-      0.06
-    );
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: 0 10px 30px rgba(17, 24, 39, 0.06);
 }
 
 .share-card-error strong {
