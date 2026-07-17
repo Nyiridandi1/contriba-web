@@ -161,10 +161,26 @@ function EventDetails() {
   function buildFreshShareUrl() {
   const baseUrl =
     import.meta.env.VITE_SHARE_BASE_URL ||
-    "https://www.contriba.online";
+    "https://contriba-backend-production.up.railway.app";
 
-  return `${baseUrl.replace(/\/+$/, "")}/share/events/${id}`;
+  const rawVersion =
+    event?.updated_at ||
+    event?.created_at ||
+    event?.date ||
+    Date.now();
+
+  const parsedVersion = new Date(rawVersion).getTime();
+
+  const version = Number.isNaN(parsedVersion)
+    ? Date.now()
+    : parsedVersion;
+
+  return `${baseUrl.replace(
+    /\/+$/,
+    ""
+  )}/share/events/${encodeURIComponent(id)}?v=${version}`;
 }
+const shareUrl = buildFreshShareUrl();
 
   useEffect(() => {
     async function loadEventDetails() {
