@@ -140,12 +140,14 @@ function Footer() {
       </div>
 
       <div className="contriba-footer-bottom">
-        <span>
-          © 2026 <strong>Contriba.</strong> All rights reserved.
-        </span>
+  <span>
+    © 2026 <strong>Contriba.</strong> All rights reserved.
+  </span>
 
-        <span>Built with ❤️ in Kigali, Rwanda.</span>
-      </div>
+  <span>
+    Powered by <strong>Ndiho</strong>
+  </span>
+</div>
     </footer>
   );
 }
