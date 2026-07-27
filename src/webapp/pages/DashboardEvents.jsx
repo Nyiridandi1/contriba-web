@@ -19,7 +19,7 @@ import {
   WalletCards,
 } from "lucide-react";
 
-import { deleteEvent, getEvents, getMyEvents } from "../api/api";
+import { deleteEvent, getEvents, getMyEvents, getUser } from "../api/api";
 
 import AppSidebar from "../components/AppSidebar";
 import "./DashboardEvents.css";
@@ -88,6 +88,14 @@ function DashboardEvents() {
   const [deletingId, setDeletingId] = useState(null);
   const [pageMessage, setPageMessage] = useState("");
   const [copyMessage, setCopyMessage] = useState("");
+
+  const currentUser = getUser();
+
+  const firstName =
+    currentUser?.first_name ||
+    currentUser?.firstname ||
+    currentUser?.name?.trim().split(/\s+/)[0] ||
+    "Organizer";
 
   const isMyEvents = activeTab === "my";
 
@@ -290,7 +298,7 @@ function DashboardEvents() {
 
             <h2>
               {isMyEvents
-                ? "Welcome back, Olivier 👋"
+                ? `Welcome back, ${firstName} 👋`
                 : "Find an event to support."}
             </h2>
 
