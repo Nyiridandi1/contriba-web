@@ -1,7 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
-  CheckCircle2,
   Mail,
   RefreshCcw,
   ShieldAlert,
@@ -9,7 +8,6 @@ import {
 } from "lucide-react";
 
 import { useEffect, useRef, useState } from "react";
-import { useAuth } from "../context/AuthContext";
 import { sendOTP, verifyOTP } from "../api/api";
 
 import AuthLayout from "../layout/AuthLayout";
@@ -22,7 +20,6 @@ import "./Register.css";
 function Otp() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth();
 
   const { name, phone, email, pin } = location.state || {};
 
@@ -30,19 +27,16 @@ function Otp() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("error");
+
   const [resendLoading, setResendLoading] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(60);
   const [canResend, setCanResend] = useState(false);
-
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [registeredName, setRegisteredName] = useState("");
-  const [registeredPin, setRegisteredPin] = useState("");
 
   const inputRefs = useRef([]);
 
   useEffect(() => {
     if (!email || !phone || !pin) {
-      navigate("/register");
+      navigate("/register", { replace: true });
     }
   }, [email, phone, pin, navigate]);
 
@@ -51,35 +45,53 @@ function Otp() {
       setCanResend(true);
       return;
     }
-    const timer = setTimeout(() => setResendCooldown(c => c - 1), 1000);
+
+    const timer = setTimeout(() => {
+      setResendCooldown((current) => current - 1);
+    }, 1000);
+
     return () => clearTimeout(timer);
   }, [resendCooldown]);
 
   function handleOtpChange(index, value) {
     if (value && !/^\d$/.test(value)) return;
+
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
+
     if (value && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
   }
 
-  function handleKeyDown(index, e) {
-    if (e.key === "Backspace" && !otp[index] && index > 0) {
+  function handleKeyDown(index, event) {
+    if (event.key === "Backspace" && !otp[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
   }
 
-  function handlePaste(e) {
-    e.preventDefault();
-    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
-    const newOtp = [...otp];
-    pasted.split("").forEach((digit, i) => {
-      if (i < 6) newOtp[i] = digit;
+  function handlePaste(event) {
+    event.preventDefault();
+
+    const pasted = event.clipboardData
+      .getData("text")
+      .replace(/\D/g, "")
+      .slice(0, 6);
+
+    if (!pasted) return;
+
+    const newOtp = ["", "", "", "", "", ""];
+
+    pasted.split("").forEach((digit, index) => {
+      if (index < 6) {
+        newOtp[index] = digit;
+      }
     });
+
     setOtp(newOtp);
-    const lastIndex = Math.min(pasted.length, 5);
+
+    const lastIndex = Math.min(pasted.length - 1, 5);
     inputRefs.current[lastIndex]?.focus();
   }
 
@@ -87,216 +99,223 @@ function Otp() {
   const isComplete = otpValue.length === 6;
 
   async function handleVerify() {
-    if (!isComplete) return;
+    if (!isComplete || loading) return;
+
     setLoading(true);
     setMessage("");
 
-    const result = await verifyOTP(email, otpValue, name, phone, pin);
+    try {
+      const result = await verifyOTP(
+        email,
+        otpValue,
+        name,
+        phone,
+        pin
+      );
 
-    setLoading(false);
+      if (!result.success) {
+        setMessage(
+          result.message || "Invalid code. Please try again."
+        );
+        setMessageType("error");
+        setOtp(["", "", "", "", "", ""]);
 
-    if (!result.success) {
-      setMessage(result.message || "Invalid code. Please try again.");
+        requestAnimationFrame(() => {
+          inputRefs.current[0]?.focus();
+        });
+
+        return;
+      }
+
+      navigate("/login", {
+        replace: true,
+        state: {
+          accountCreated: true,
+          firstName: name?.split(" ")[0] || "",
+          phone,
+        },
+      });
+    } catch (error) {
+      console.error("OTP verification error:", error);
+
+      setMessage(
+        "Something went wrong while creating your account. Please try again."
+      );
       setMessageType("error");
       setOtp(["", "", "", "", "", ""]);
-      inputRefs.current[0]?.focus();
-      return;
-    }
 
-    if (login) {
-      await login(phone, pin);
+      requestAnimationFrame(() => {
+        inputRefs.current[0]?.focus();
+      });
+    } finally {
+      setLoading(false);
     }
-
-    setRegisteredName(name?.split(" ")[0] || "there");
-    setRegisteredPin(pin);
-    setShowSuccess(true);
   }
 
   async function handleResend() {
     if (!canResend || resendLoading) return;
+
     setResendLoading(true);
     setMessage("");
 
-    const result = await sendOTP(name, phone, email);
+    try {
+      const result = await sendOTP(name, phone, email);
 
-    setResendLoading(false);
+      if (!result.success) {
+        setMessage(result.message || "Failed to resend code.");
+        setMessageType("error");
+        return;
+      }
 
-    if (!result.success) {
-      setMessage(result.message || "Failed to resend code.");
+      setMessage("New verification code sent to your email!");
+      setMessageType("success");
+      setOtp(["", "", "", "", "", ""]);
+      setResendCooldown(60);
+      setCanResend(false);
+
+      requestAnimationFrame(() => {
+        inputRefs.current[0]?.focus();
+      });
+    } catch (error) {
+      console.error("OTP resend error:", error);
+
+      setMessage(
+        "Something went wrong while resending the code. Please try again."
+      );
       setMessageType("error");
-      return;
+    } finally {
+      setResendLoading(false);
     }
-
-    setMessage("New verification code sent to your email!");
-    setMessageType("success");
-    setOtp(["", "", "", "", "", ""]);
-    inputRefs.current[0]?.focus();
-    setResendCooldown(60);
-    setCanResend(false);
   }
 
-  function handleContinue() {
-    setShowSuccess(false);
-    navigate("/home");
+  if (!email || !phone || !pin) {
+    return null;
   }
-
-  if (!email) return null;
 
   return (
-    <>
-      {/* ── SUCCESS MODAL ── */}
-      {showSuccess && (
-        <div className="register-success-overlay">
-          <div className="register-success-modal">
-            <div className="register-success-header">
-              <div className="register-success-brand">
-                <img src={logoIcon} alt="Contriba" />
-                <span>Contriba</span>
-              </div>
-              <div className="register-success-check">
-                <CheckCircle2 size={32} color="#16a34a" />
-              </div>
-              <h2>Account Created Successfully</h2>
-              <p>
-                Welcome to Contriba, <strong>{registeredName}</strong>.
-                Your organizer account is ready.
-              </p>
-            </div>
+    <AuthLayout>
+      <div className="auth-intro">
+        <Link to="/register" className="auth-back" aria-label="Back">
+          <ArrowLeft size={20} />
+        </Link>
 
-            <div className="register-success-body">
-              <div className="register-pin-warning">
-                <div className="register-pin-warning-header">
-                  <ShieldAlert size={18} color="#E50914" />
-                  <strong>Save Your PIN — No Recovery Option</strong>
-                </div>
-                <p>
-                  Your PIN is <strong>{registeredPin}</strong>. Contriba has
-                  <strong> no OTP, no email reset</strong> and no way to
-                  recover a forgotten PIN.
-                </p>
-                <div className="register-pin-tips">
-                  <p>+ Write it down somewhere safe</p>
-                  <p>+ Save it in your phone notes</p>
-                  <p>+ Tell a trusted person</p>
-                  <p>- Never share with anyone</p>
-                </div>
-              </div>
+        <img
+          src={logoIcon}
+          alt="Contriba"
+          className="auth-logo-icon"
+        />
 
-              <div className="register-pin-display">
-                <span>Your PIN</span>
-                <strong>{registeredPin}</strong>
-              </div>
+        <h1>
+          Verify
+          <br />
+          Email
+        </h1>
 
-              <button
-                type="button"
-                className="register-continue-btn"
-                onClick={handleContinue}
-              >
-                I have saved my PIN — Continue
-              </button>
+        <p>
+          Enter the 6-digit code sent to your email. The code is valid
+          for <strong>30 minutes</strong>.
+        </p>
+      </div>
 
-              <p className="register-success-note">
-                You will need this PIN every time you log in to Contriba.
-              </p>
-            </div>
+      <div className="auth-form-card">
+        <span className="auth-mini-label">Email Verification</span>
+
+        <h2>Check your email</h2>
+
+        <div className="otp-email-info">
+          <Mail size={18} />
+
+          <div>
+            <p>Code sent to</p>
+            <strong>{email}</strong>
           </div>
         </div>
-      )}
 
-      <AuthLayout>
-        <div className="auth-intro">
-          <Link to="/register" className="auth-back" aria-label="Back">
-            <ArrowLeft size={20} />
-          </Link>
+        <div className="otp-inputs">
+          {otp.map((digit, index) => (
+            <input
+              key={index}
+              ref={(element) => {
+                inputRefs.current[index] = element;
+              }}
+              type="text"
+              inputMode="numeric"
+              autoComplete={
+                index === 0 ? "one-time-code" : "off"
+              }
+              maxLength={1}
+              value={digit}
+              onChange={(event) =>
+                handleOtpChange(index, event.target.value)
+              }
+              onKeyDown={(event) =>
+                handleKeyDown(index, event)
+              }
+              onPaste={handlePaste}
+              className={`otp-input ${
+                digit ? "filled" : ""
+              }`}
+              autoFocus={index === 0}
+              aria-label={`Verification code digit ${
+                index + 1
+              }`}
+            />
+          ))}
+        </div>
 
-          <img src={logoIcon} alt="Contriba" className="auth-logo-icon" />
+        {message && (
+          <div
+            className={`otp-message ${messageType}`}
+            role="alert"
+          >
+            {messageType === "success" ? (
+              <ShieldCheck size={16} />
+            ) : (
+              <ShieldAlert size={16} />
+            )}
 
-          <h1>
-            Verify
-            <br />
-            Email
-          </h1>
+            <span>{message}</span>
+          </div>
+        )}
 
+        <button
+          type="button"
+          className="auth-submit"
+          onClick={handleVerify}
+          disabled={!isComplete || loading}
+        >
+          {loading
+            ? "Creating your account..."
+            : "Verify and Create Account"}
+        </button>
+
+        <div className="otp-resend">
           <p>
-            Enter the 6-digit code sent to your email.
-            The code is valid for <strong>30 minutes</strong>.
+            Didn&apos;t receive the code? Check your spam folder.
           </p>
-        </div>
-
-        <div className="auth-form-card">
-          <span className="auth-mini-label">Email Verification</span>
-          <h2>Check your email</h2>
-
-          <div className="otp-email-info">
-            <Mail size={18} />
-            <div>
-              <p>Code sent to</p>
-              <strong>{email}</strong>
-            </div>
-          </div>
-
-          <div className="otp-inputs">
-            {otp.map((digit, index) => (
-              <input
-                key={index}
-                ref={(el) => (inputRefs.current[index] = el)}
-                type="text"
-                inputMode="numeric"
-                maxLength={1}
-                value={digit}
-                onChange={(e) => handleOtpChange(index, e.target.value)}
-                onKeyDown={(e) => handleKeyDown(index, e)}
-                onPaste={handlePaste}
-                className={`otp-input ${digit ? "filled" : ""}`}
-                autoFocus={index === 0}
-              />
-            ))}
-          </div>
-
-          {message && (
-            <div className={`otp-message ${messageType}`}>
-              {messageType === "success" ? (
-                <ShieldCheck size={16} />
-              ) : (
-                <ShieldAlert size={16} />
-              )}
-              {message}
-            </div>
-          )}
 
           <button
             type="button"
-            className="auth-submit"
-            onClick={handleVerify}
-            disabled={!isComplete || loading}
+            onClick={handleResend}
+            disabled={!canResend || resendLoading}
+            className={canResend ? "active" : ""}
           >
-            {loading ? "Verifying..." : "Verify and Create Account"}
+            <RefreshCcw size={14} />
+
+            {resendLoading
+              ? "Sending..."
+              : canResend
+              ? "Resend code"
+              : `Resend in ${resendCooldown}s`}
           </button>
-
-          <div className="otp-resend">
-            <p>Didn't receive the code? Check your spam folder.</p>
-            <button
-              type="button"
-              onClick={handleResend}
-              disabled={!canResend || resendLoading}
-              className={canResend ? "active" : ""}
-            >
-              <RefreshCcw size={14} />
-              {resendLoading
-                ? "Sending..."
-                : canResend
-                ? "Resend code"
-                : `Resend in ${resendCooldown}s`}
-            </button>
-          </div>
-
-          <p className="auth-switch">
-            Wrong details?
-            <Link to="/register">Go back</Link>
-          </p>
         </div>
-      </AuthLayout>
-    </>
+
+        <p className="auth-switch">
+          Wrong details?
+          <Link to="/register">Go back</Link>
+        </p>
+      </div>
+    </AuthLayout>
   );
 }
 
