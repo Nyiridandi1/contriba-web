@@ -16,6 +16,8 @@ import {
 import { createClient } from "@supabase/supabase-js";
 
 import {
+  deleteAllNotifications,
+  deleteNotification,
   getNotifications,
   markAllNotificationsRead,
   markNotificationRead,
@@ -257,21 +259,36 @@ function Notifications() {
     );
   }
 
-  function handleDeleteNotification(id) {
+  async function handleDeleteNotification(id) {
     const confirmed = window.confirm("Delete this notification from your feed?");
     if (!confirmed) return;
 
-    setNotifications((prev) => prev.filter((n) => n.id !== id));
+    const result = await deleteNotification(id);
+
+    if (result.success) {
+      setNotifications((prev) => prev.filter((n) => n.id !== id));
+      return;
+    }
+
+    window.alert(result.message || "Failed to delete notification. Please try again.");
   }
 
-  function handleDeleteAllNotifications() {
+  async function handleDeleteAllNotifications() {
     if (notifications.length === 0 || deleting) return;
 
     const confirmed = window.confirm("Delete all notifications from this feed?");
     if (!confirmed) return;
 
     setDeleting(true);
-    setNotifications([]);
+
+    const result = await deleteAllNotifications();
+
+    if (result.success) {
+      setNotifications([]);
+    } else {
+      window.alert(result.message || "Failed to delete notifications. Please try again.");
+    }
+
     setDeleting(false);
   }
 
