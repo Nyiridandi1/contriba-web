@@ -916,3 +916,40 @@ html[data-theme="dark"] .mobile-bottom-nav > a:not(.mobile-bottom-create).active
   color: #fff;
   background: rgba(229, 9, 20, 0.16);
 }
+
+/* =========================================================
+   MOBILE DRAWER SCROLL LOCK
+   Locks the page behind the drawer and keeps drawer scrolling
+   independent on phones and tablets.
+========================================================= */
+@media (max-width: 768px) {
+  html:has(.mobile-menu-drawer.open),
+  body:has(.mobile-menu-drawer.open) {
+    height: 100%;
+    overflow: hidden !important;
+    overscroll-behavior: none;
+  }
+
+  .mobile-menu-overlay.open {
+    touch-action: none;
+    overscroll-behavior: none;
+  }
+
+  .mobile-menu-drawer {
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
+
+  .mobile-drawer-nav {
+    flex: 0 0 auto;
+  }
+
+  .mobile-drawer-create {
+    flex-shrink: 0;
+  }
+}
