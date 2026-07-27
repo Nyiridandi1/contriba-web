@@ -1,17 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AlertCircle,
-  ArrowRight,
   Bell,
   BellRing,
+  Check,
   CheckCircle2,
-  Clock,
   CreditCard,
-  Filter,
   RefreshCcw,
   Search,
   Send,
-  ShieldCheck,
   Sparkles,
   Trash2,
   WalletCards,
@@ -34,7 +31,15 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
-const filters = ["All", "Payments", "Reminders", "Withdrawals", "Reports", "AI"];
+const filters = [
+  "All",
+  "Unread",
+  "Payments",
+  "Reminders",
+  "Withdrawals",
+  "Reports",
+  "AI",
+];
 
 function normalizeType(type = "") {
   return String(type || "").toLowerCase();
@@ -57,11 +62,11 @@ function getTypeLabel(type) {
   const t = normalizeType(type);
 
   if (t.includes("payment") || t.includes("contribution")) return "Contribution";
-  if (t.includes("withdraw")) return "Wallet";
+  if (t.includes("withdraw")) return "Withdrawal";
   if (t.includes("reminder")) return "Reminder";
   if (t.includes("ai") || t.includes("insight")) return "AI Insight";
   if (t.includes("report")) return "Report";
-  if (t.includes("fail") || t.includes("error")) return "Action";
+  if (t.includes("fail") || t.includes("error")) return "Action needed";
 
   return type || "Notification";
 }
@@ -77,30 +82,6 @@ function getTypeClass(type) {
   if (t.includes("fail") || t.includes("error")) return "action";
 
   return "default";
-}
-
-function getStatus(notification) {
-  if (notification?.is_read) return "Read";
-
-  const t = normalizeType(notification?.type);
-
-  if (t.includes("fail") || t.includes("error") || t.includes("pending")) return "Action";
-  if (t.includes("payment") || t.includes("contribution")) return "Success";
-  if (t.includes("withdraw")) return "Wallet";
-  if (t.includes("reminder")) return "Reminder";
-  if (t.includes("ai") || t.includes("insight")) return "AI";
-  if (t.includes("report")) return "Report";
-
-  return "New";
-}
-
-function getStatusClass(status) {
-  if (["Success", "Wallet", "Read", "Report"].includes(status)) return "success";
-  if (status === "Action") return "failed";
-  if (status === "Reminder") return "reminder";
-  if (status === "AI") return "insight";
-
-  return "new";
 }
 
 function formatTimeAgo(value) {
@@ -119,8 +100,35 @@ function formatTimeAgo(value) {
   if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
 
   const days = Math.floor(hours / 24);
-  return `${days} day${days > 1 ? "s" : ""} ago`;
+  if (days < 7) return `${days} day${days > 1 ? "s" : ""} ago`;
+
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: date.getFullYear() !== new Date().getFullYear() ? "numeric" : undefined,
+  });
 }
+
+function startOfDay(date) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function getDateGroup(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Earlier";
+
+  const today = startOfDay(new Date());
+  const notificationDay = startOfDay(date);
+  const dayDifference = Math.floor((today - notificationDay) / 86400000);
+
+  if (dayDifference <= 0) return "Today";
+  if (dayDifference === 1) return "Yesterday";
+  if (dayDifference <= 7) return "Earlier this week";
+  if (dayDifference <= 14) return "Last week";
+  return "Earlier";
+}
+
+const groupOrder = ["Today", "Yesterday", "Earlier this week", "Last week", "Earlier"];
 
 function Notifications() {
   const [notifications, setNotifications] = useState([]);
@@ -132,19 +140,7 @@ function Notifications() {
   const channelRef = useRef(null);
 
   const currentUser = getUser();
-
   const unreadCount = notifications.filter((n) => !n.is_read).length;
-  const totalCount = notifications.length;
-
-  const paymentCount = notifications.filter((n) => {
-    const type = normalizeType(n.type);
-    return type.includes("payment") || type.includes("contribution");
-  }).length;
-
-  const actionCount = notifications.filter((n) => {
-    const type = normalizeType(n.type);
-    return !n.is_read && (type.includes("fail") || type.includes("pending") || type.includes("reminder"));
-  }).length;
 
   const filteredNotifications = useMemo(() => {
     return notifications.filter((n) => {
@@ -152,11 +148,14 @@ function Notifications() {
 
       const matchesFilter =
         activeFilter === "All" ||
-        (activeFilter === "Payments" && (type.includes("payment") || type.includes("contribution"))) ||
+        (activeFilter === "Unread" && !n.is_read) ||
+        (activeFilter === "Payments" &&
+          (type.includes("payment") || type.includes("contribution"))) ||
         (activeFilter === "Reminders" && type.includes("reminder")) ||
         (activeFilter === "Withdrawals" && type.includes("withdraw")) ||
         (activeFilter === "Reports" && type.includes("report")) ||
-        (activeFilter === "AI" && (type.includes("ai") || type.includes("insight")));
+        (activeFilter === "AI" &&
+          (type.includes("ai") || type.includes("insight")));
 
       const keyword = search.trim().toLowerCase();
       const matchesSearch =
@@ -168,6 +167,19 @@ function Notifications() {
       return matchesFilter && matchesSearch;
     });
   }, [activeFilter, notifications, search]);
+
+  const groupedNotifications = useMemo(() => {
+    const groups = filteredNotifications.reduce((acc, notification) => {
+      const group = getDateGroup(notification.created_at);
+      if (!acc[group]) acc[group] = [];
+      acc[group].push(notification);
+      return acc;
+    }, {});
+
+    return groupOrder
+      .filter((group) => groups[group]?.length)
+      .map((group) => ({ label: group, items: groups[group] }));
+  }, [filteredNotifications]);
 
   async function loadNotifications() {
     setLoading(true);
@@ -268,164 +280,67 @@ function Notifications() {
       <AppSidebar active="notifications" />
 
       <section className="notifications-main">
-        <header className="notifications-topbar">
-          <div>
-            <span>Notifications Center</span>
-            <div className="notifications-title-row-main">
-              <h1>Financial activity feed</h1>
-              <span className="notifications-live-pill">
-                <i /> Live
-              </span>
+        <header className="notifications-header">
+          <div className="notifications-heading-copy">
+            <div className="notifications-eyebrow">
+              <span className="notifications-live-dot" />
+              Live notification center
             </div>
-            <p>
-              Review contributions, reminders, withdrawals and system updates from one clean activity center.
-            </p>
+
+            <div className="notifications-heading-row">
+              <div>
+                <h1>Notifications</h1>
+                <p>Everything important from your events, payments, and wallet—organized in one place.</p>
+              </div>
+
+              {unreadCount > 0 && (
+                <span className="notifications-unread-badge">
+                  {unreadCount} unread
+                </span>
+              )}
+            </div>
           </div>
 
-          <div className="notifications-top-actions">
-            <button onClick={loadNotifications}>
+          <div className="notifications-header-actions">
+            <button className="notifications-icon-action" onClick={loadNotifications} title="Refresh notifications">
               <RefreshCcw size={18} />
-              Refresh
+              <span>Refresh</span>
             </button>
 
             <button
-              className="red"
+              className="notifications-primary-action"
               onClick={handleMarkAllRead}
               disabled={markingRead || unreadCount === 0}
             >
               <CheckCircle2 size={18} />
-              {markingRead ? "Marking..." : "Mark All Read"}
+              <span>{markingRead ? "Marking..." : "Mark all as read"}</span>
             </button>
 
             <button
-              className="danger"
+              className="notifications-delete-all"
               onClick={handleDeleteAllNotifications}
               disabled={deleting || notifications.length === 0}
+              title="Delete all notifications"
             >
               <Trash2 size={18} />
-              {deleting ? "Deleting..." : "Delete All"}
+              <span>{deleting ? "Deleting..." : "Delete all"}</span>
             </button>
           </div>
         </header>
 
-        <section className="notifications-hero">
-          <div className="notifications-hero-left">
-            <span className="notifications-badge">
-              <BellRing size={16} />
-              Live Activity
-            </span>
+        <section className="notifications-inbox">
+          <div className="notifications-controls">
+            <label className="notifications-search">
+              <Search size={18} />
+              <input
+                type="search"
+                placeholder="Search notifications..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </label>
 
-            <h2>
-              {unreadCount > 0
-                ? `${unreadCount} update${unreadCount > 1 ? "s" : ""} need your attention.`
-                : "You're all caught up."}
-            </h2>
-
-            <p>
-              {unreadCount > 0
-                ? "Take quick action on payments, reminders and important event updates without leaving your organizer workspace."
-                : "Great job. Everything is up to date. We'll notify you instantly when someone contributes, withdraws money or needs your attention."}
-            </p>
-
-            <div className="notifications-hero-actions">
-              <button className="light" onClick={handleMarkAllRead} disabled={markingRead || unreadCount === 0}>
-                <CheckCircle2 size={18} />
-                Clear Unread
-              </button>
-
-              <button className="glass" onClick={loadNotifications}>
-                <RefreshCcw size={18} />
-                Refresh Feed
-              </button>
-            </div>
-          </div>
-
-          <div className="notifications-hero-card">
-            <Sparkles size={28} />
-            <span>Realtime Status</span>
-            <strong>
-              {totalCount > 0
-                ? `${totalCount} total notification${totalCount > 1 ? "s" : ""}`
-                : "Feed ready"}
-            </strong>
-            <p>
-              {paymentCount > 0
-                ? `${paymentCount} payment update${paymentCount > 1 ? "s" : ""} recorded.`
-                : "Payment alerts will appear after your next contribution."}
-            </p>
-          </div>
-        </section>
-
-        <section className="notifications-stats-grid">
-          {loading ? (
-            [1, 2, 3, 4].map((item) => (
-              <div className="notifications-stat-card notifications-skeleton-card" key={item}>
-                <div className="notifications-skeleton-icon shimmer" />
-                <span className="notifications-skeleton-line notifications-skeleton-line-sm shimmer" />
-                <strong className="notifications-skeleton-line notifications-skeleton-line-md shimmer" />
-                <p className="notifications-skeleton-line notifications-skeleton-line-xs shimmer" />
-              </div>
-            ))
-          ) : (
-            <>
-              <div className="notifications-stat-card">
-                <div className="notifications-stat-icon">
-                  <BellRing size={20} />
-                </div>
-                <span>Unread</span>
-                <strong>{unreadCount}</strong>
-                <p>{unreadCount > 0 ? "Needs review" : "All clear"}</p>
-              </div>
-
-              <div className="notifications-stat-card">
-                <div className="notifications-stat-icon">
-                  <Clock size={20} />
-                </div>
-                <span>Total</span>
-                <strong>{totalCount}</strong>
-                <p>All activity</p>
-              </div>
-
-              <div className="notifications-stat-card">
-                <div className="notifications-stat-icon">
-                  <CreditCard size={20} />
-                </div>
-                <span>Payments</span>
-                <strong>{paymentCount}</strong>
-                <p>Contribution alerts</p>
-              </div>
-
-              <div className="notifications-stat-card">
-                <div className="notifications-stat-icon">
-                  <AlertCircle size={20} />
-                </div>
-                <span>Actions</span>
-                <strong>{actionCount}</strong>
-                <p>{actionCount > 0 ? "Follow-up needed" : "No urgent action"}</p>
-              </div>
-            </>
-          )}
-        </section>
-
-        <section className="notifications-dashboard-grid">
-          <div className="notifications-panel notifications-feed-panel">
-            <div className="notifications-toolbar">
-              <div className="notifications-search">
-                <Search size={18} />
-                <input
-                  placeholder="Search payments, names, reminders..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-              </div>
-
-              <button>
-                <Filter size={18} />
-                Filter
-              </button>
-            </div>
-
-            <div className="notification-filter-row">
+            <div className="notification-filter-row" aria-label="Notification filters">
               {filters.map((filter) => (
                 <button
                   className={activeFilter === filter ? "active" : ""}
@@ -433,171 +348,142 @@ function Notifications() {
                   onClick={() => setActiveFilter(filter)}
                 >
                   {filter}
+                  {filter === "Unread" && unreadCount > 0 && <span>{unreadCount}</span>}
                 </button>
               ))}
             </div>
+          </div>
 
-            <div className="notifications-panel-heading">
-              <div>
-                <span>Activity Timeline</span>
-                <h3>
-                  {loading
-                    ? "Loading..."
-                    : `${filteredNotifications.length} notification${filteredNotifications.length !== 1 ? "s" : ""}`}
-                </h3>
-              </div>
-              <Bell size={22} />
+          <div className="notifications-list-header">
+            <div>
+              <strong>{activeFilter === "All" ? "All activity" : activeFilter}</strong>
+              <span>
+                {loading
+                  ? "Loading your feed..."
+                  : `${filteredNotifications.length} notification${filteredNotifications.length === 1 ? "" : "s"}`}
+              </span>
             </div>
 
-            <div className="notifications-timeline">
-              {loading &&
-                [1, 2, 3, 4, 5, 6].map((item) => (
-                  <article className="notification-item notification-skeleton-item" key={item}>
-                    <div className="notifications-skeleton-icon notification-skeleton-icon shimmer" />
+            {!loading && unreadCount === 0 && notifications.length > 0 && (
+              <span className="notifications-caught-up">
+                <Check size={15} /> All caught up
+              </span>
+            )}
+          </div>
 
-                    <div className="notification-content">
-                      <div className="notification-title-row">
-                        <div>
-                          <span className="notifications-skeleton-line notifications-skeleton-line-xs shimmer" />
-                          <h4 className="notifications-skeleton-line notifications-skeleton-line-md shimmer" />
-                        </div>
-
-                        <small className="notifications-skeleton-pill shimmer" />
-                      </div>
-
-                      <p className="notifications-skeleton-line notifications-skeleton-line-full shimmer" />
-
-                      <div className="notification-footer">
-                        <time className="notifications-skeleton-line notifications-skeleton-line-xs shimmer" />
-                        <span className="notifications-skeleton-pill shimmer" />
-                      </div>
+          <div className="notifications-feed">
+            {loading && (
+              <div className="notifications-skeleton-stack" aria-label="Loading notifications">
+                {[1, 2, 3, 4, 5].map((item) => (
+                  <article className="notification-row notification-skeleton-row" key={item}>
+                    <div className="notification-skeleton-icon shimmer" />
+                    <div className="notification-skeleton-content">
+                      <span className="notification-skeleton-line short shimmer" />
+                      <span className="notification-skeleton-line title shimmer" />
+                      <span className="notification-skeleton-line full shimmer" />
+                      <span className="notification-skeleton-line time shimmer" />
                     </div>
                   </article>
                 ))}
+              </div>
+            )}
 
-              {!loading && filteredNotifications.length === 0 && (
-                <div className="notifications-empty-state">
+            {!loading && filteredNotifications.length === 0 && (
+              <div className="notifications-empty-state">
+                <div className="notifications-empty-icon">
                   <Bell size={30} />
-                  <h4>No notifications yet</h4>
-                  <p>
-                    When someone contributes, receives a reminder or triggers a wallet update,
-                    it will appear here automatically.
-                  </p>
                 </div>
-              )}
+                <h2>{search || activeFilter !== "All" ? "No matching notifications" : "You're all caught up"}</h2>
+                <p>
+                  {search || activeFilter !== "All"
+                    ? "Try another search term or choose a different notification filter."
+                    : "New contributions, reminders, withdrawals, and system updates will appear here automatically."}
+                </p>
+                {(search || activeFilter !== "All") && (
+                  <button
+                    onClick={() => {
+                      setSearch("");
+                      setActiveFilter("All");
+                    }}
+                  >
+                    Clear filters
+                  </button>
+                )}
+              </div>
+            )}
 
-              {!loading &&
-                filteredNotifications.map((item) => {
-                  const Icon = getIcon(item.type);
-                  const status = getStatus(item);
-                  const typeClass = getTypeClass(item.type);
+            {!loading &&
+              groupedNotifications.map((group) => (
+                <section className="notification-group" key={group.label}>
+                  <div className="notification-group-heading">
+                    <h2>{group.label}</h2>
+                    <span>{group.items.length}</span>
+                  </div>
 
-                  return (
-                    <article
-                      className={`notification-item ${!item.is_read ? "unread" : ""} type-${typeClass}`}
-                      key={item.id}
-                      onClick={() => !item.is_read && handleMarkRead(item.id)}
-                    >
-                      {!item.is_read && <span className="notification-unread-line" />}
+                  <div className="notification-group-list">
+                    {group.items.map((item) => {
+                      const Icon = getIcon(item.type);
+                      const typeClass = getTypeClass(item.type);
 
-                      <div className="notification-icon">
-                        <Icon size={20} />
-                      </div>
+                      return (
+                        <article
+                          className={`notification-row type-${typeClass} ${!item.is_read ? "unread" : "read"}`}
+                          key={item.id}
+                          onClick={() => !item.is_read && handleMarkRead(item.id)}
+                        >
+                          <span className="notification-unread-indicator" aria-hidden="true" />
 
-                      <div className="notification-content">
-                        <div className="notification-title-row">
-                          <div>
-                            <span>{getTypeLabel(item.type)}</span>
-                            <h4>{item.title || "New notification"}</h4>
+                          <div className="notification-icon">
+                            <Icon size={20} />
                           </div>
 
-                          <small className={getStatusClass(status)}>
-                            <i /> {status}
-                          </small>
-                        </div>
+                          <div className="notification-body">
+                            <div className="notification-meta-row">
+                              <span className="notification-type-label">{getTypeLabel(item.type)}</span>
+                              <time>{formatTimeAgo(item.created_at)}</time>
+                            </div>
 
-                        <p>{item.message || "No message provided."}</p>
+                            <h3>{item.title || "New notification"}</h3>
+                            <p>{item.message || "No message provided."}</p>
 
-                        <div className="notification-footer">
-                          <time>{formatTimeAgo(item.created_at)}</time>
+                            <div className="notification-actions">
+                              {!item.is_read ? (
+                                <button
+                                  className="notification-mark-read"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleMarkRead(item.id);
+                                  }}
+                                >
+                                  <Check size={15} />
+                                  Mark as read
+                                </button>
+                              ) : (
+                                <span className="notification-reviewed">
+                                  <Check size={14} /> Reviewed
+                                </span>
+                              )}
 
-                          <div className="notification-footer-actions">
-                            {!item.is_read ? (
                               <button
+                                className="notification-delete-btn"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  handleMarkRead(item.id);
+                                  handleDeleteNotification(item.id);
                                 }}
+                                title="Delete notification"
                               >
-                                Mark Read
-                                <ArrowRight size={15} />
+                                <Trash2 size={15} />
+                                Delete
                               </button>
-                            ) : (
-                              <span className="notification-read-label">Reviewed</span>
-                            )}
-
-                            <button
-                              className="notification-delete-btn"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteNotification(item.id);
-                              }}
-                              title="Delete notification"
-                            >
-                              <Trash2 size={15} />
-                              Delete
-                            </button>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </article>
-                  );
-                })}
-            </div>
+                        </article>
+                      );
+                    })}
+                  </div>
+                </section>
+              ))}
           </div>
-
-          <aside className="notifications-panel notifications-summary-panel">
-            <span className="notifications-badge dark">
-              <Sparkles size={16} />
-              Smart Summary
-            </span>
-
-            <h3>
-              {unreadCount > 0
-                ? "Focus on unread alerts first."
-                : "Your feed is healthy."}
-            </h3>
-
-            <p>
-              {unreadCount > 0
-                ? "Clear unread updates, then follow up on contributors who still need attention."
-                : "Realtime notifications are connected and ready for new event activity."}
-            </p>
-
-            <div className="notifications-check-list">
-              <p>
-                <CheckCircle2 size={16} />
-                Payment alerts connected
-              </p>
-              <p>
-                <CheckCircle2 size={16} />
-                Realtime updates enabled
-              </p>
-              <p>
-                <CheckCircle2 size={16} />
-                Organizer actions ready
-              </p>
-              <p>
-                <ShieldCheck size={16} />
-                Server connection healthy
-              </p>
-            </div>
-
-            <button onClick={handleMarkAllRead} disabled={markingRead || unreadCount === 0}>
-              {markingRead ? "Marking..." : "Clear unread alerts"}
-              <ArrowRight size={17} />
-            </button>
-          </aside>
         </section>
       </section>
     </main>
