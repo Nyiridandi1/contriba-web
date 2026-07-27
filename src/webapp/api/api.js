@@ -288,6 +288,12 @@ export const markNotificationRead = (id) =>
 export const markAllNotificationsRead = () =>
   apiCall("/api/notifications/read-all", "PUT");
 
+export const deleteNotification = (id) =>
+  apiCall(`/api/notifications/${id}`, "DELETE");
+
+export const deleteAllNotifications = () =>
+  apiCall("/api/notifications", "DELETE");
+
 /* =========================
    COMMENTS
 ========================= */
