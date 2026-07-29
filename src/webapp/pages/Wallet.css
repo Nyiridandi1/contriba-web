@@ -135,7 +135,13 @@
   margin-top: 24px;
 }
 
-.wallet-hero-actions button {
+
+.wallet-hero-actions a {
+  text-decoration: none;
+}
+
+.wallet-hero-actions button,
+.wallet-hero-actions a {
   min-height: 50px;
   display: inline-flex;
   align-items: center;
@@ -147,13 +153,15 @@
   cursor: pointer;
 }
 
-.wallet-hero-actions button.light {
+.wallet-hero-actions button.light,
+.wallet-hero-actions a.light {
   border: 0;
   color: #E50914;
   background: white;
 }
 
-.wallet-hero-actions button.glass {
+.wallet-hero-actions button.glass,
+.wallet-hero-actions a.glass {
   color: white;
   background: rgba(255, 255, 255, 0.13);
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -768,13 +776,15 @@
   color: #667085 !important;
 }
 
-.wallet-hero-actions button.light {
+.wallet-hero-actions button.light,
+.wallet-hero-actions a.light {
   color: #ffffff !important;
   background: linear-gradient(135deg, #e50914, #ff3348) !important;
   box-shadow: 0 14px 28px rgba(229, 9, 20, 0.18);
 }
 
-.wallet-hero-actions button.glass {
+.wallet-hero-actions button.glass,
+.wallet-hero-actions a.glass {
   color: #111827 !important;
   background: #ffffff !important;
   border: 1px solid rgba(17, 24, 39, 0.08) !important;
@@ -1114,7 +1124,8 @@ html[data-theme="dark"] .withdraw-amount-card{
     margin-top: 18px !important;
   }
 
-  .wallet-hero-actions button {
+  .wallet-hero-actions button,
+.wallet-hero-actions a {
     width: 100% !important;
     min-width: 0 !important;
     min-height: 46px !important;

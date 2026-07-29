@@ -15,6 +15,7 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { getWallet, getTransactions, withdrawFunds } from "../api/api";
 import AppSidebar from "../components/AppSidebar";
@@ -202,10 +203,10 @@ function Wallet() {
             </p>
 
             <div className="wallet-hero-actions">
-              <button type="button" className="glass">
+              <Link to="/wallet/statement" className="glass">
                 <FileText size={18} />
                 Statement
-              </button>
+              </Link>
 
               <button type="button" className="light" onClick={scrollToWithdraw}>
                 <ArrowDownRight size={18} />

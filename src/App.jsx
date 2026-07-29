@@ -35,6 +35,7 @@ import Dashboard from "./webapp/pages/Dashboard";
 import DashboardEvents from "./webapp/pages/DashboardEvents";
 import Contributors from "./webapp/pages/Contributors";
 import Wallet from "./webapp/pages/Wallet";
+import WalletStatement from "./webapp/pages/WalletStatement";
 import Reports from "./webapp/pages/Reports";
 import Notifications from "./webapp/pages/Notifications";
 import ShareCenter from "./webapp/pages/ShareCenter";
@@ -129,6 +130,7 @@ function App() {
         <Route path="/create-event" element={<CreateEvent />} />
 
         <Route path="/wallet" element={<Wallet />} />
+        <Route path="/wallet/statement" element={<WalletStatement />} />
         <Route path="/contributors" element={<Contributors />} />
         <Route path="/reports" element={<Reports />} />
         <Route path="/notifications" element={<Notifications />} />
