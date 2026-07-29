@@ -1129,4 +1129,347 @@ html[data-theme="dark"] .settings-field select {
     width: 42px !important;
     height: 42px !important;
   }
+}.settings-account-panel {
+  position: relative;
+}
+
+.settings-account-manage-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 16px;
+  border: 1px solid var(--settings-border, #e5e7eb);
+  border-radius: 16px;
+  background: var(--settings-card, #fff);
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+
+.settings-account-manage-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(229, 9, 20, .28);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, .06);
+}
+
+.settings-account-manage-button span {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.settings-account-manage-button strong {
+  font-size: 15px;
+}
+
+.settings-account-manage-button small {
+  color: #7b8494;
+  font-size: 12px;
+}
+
+.settings-account-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  background: rgba(15, 23, 42, .52);
+  backdrop-filter: blur(6px);
+}
+
+.settings-account-modal {
+  width: min(620px, 100%);
+  max-height: min(780px, calc(100vh - 44px));
+  overflow-y: auto;
+  border: 1px solid rgba(229, 9, 20, .10);
+  border-radius: 24px;
+  background: var(--settings-card, #fff);
+  color: inherit;
+  box-shadow: 0 28px 80px rgba(15, 23, 42, .24);
+}
+
+.settings-account-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px 24px 18px;
+  border-bottom: 1px solid var(--settings-border, #e5e7eb);
+}
+
+.settings-account-modal-header span {
+  display: block;
+  margin-bottom: 5px;
+  color: #e50914;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+
+.settings-account-modal-header h2 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.15;
+}
+
+.settings-account-close {
+  display: grid;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border: 1px solid var(--settings-border, #e5e7eb);
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.settings-account-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px 24px 24px;
+}
+
+.settings-account-intro {
+  margin: 0 0 4px;
+  color: #70798a;
+  line-height: 1.6;
+}
+
+.settings-account-choice {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  padding: 16px;
+  border: 1px solid var(--settings-border, #e5e7eb);
+  border-radius: 16px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.settings-account-choice > span {
+  flex: 1;
+}
+
+.settings-account-choice strong,
+.settings-account-choice p {
+  display: block;
+}
+
+.settings-account-choice p {
+  margin: 4px 0 0;
+  color: #7b8494;
+  line-height: 1.45;
+}
+
+.settings-account-choice-danger {
+  margin-top: 4px;
+}
+
+.settings-account-choice-danger strong {
+  color: #b42318;
+}
+
+.settings-account-notice,
+.settings-account-retention,
+.settings-account-delete-warning,
+.settings-account-consequences {
+  display: flex;
+  gap: 12px;
+  padding: 15px 16px;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, .035);
+}
+
+.settings-account-notice svg,
+.settings-account-retention svg,
+.settings-account-delete-warning svg {
+  flex: 0 0 auto;
+}
+
+.settings-account-notice p,
+.settings-account-retention p,
+.settings-account-delete-warning p {
+  margin: 4px 0 0;
+  color: #70798a;
+  line-height: 1.5;
+}
+
+.settings-account-retention {
+  background: rgba(22, 163, 74, .07);
+}
+
+.settings-account-retention a,
+.settings-account-retention button {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #e50914;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.settings-account-delete-warning {
+  background: rgba(229, 9, 20, .07);
+}
+
+.settings-account-delete-warning strong {
+  color: #b42318;
+}
+
+.settings-account-consequences {
+  display: block;
+}
+
+.settings-account-consequences p {
+  margin: 8px 0 0;
+  color: #70798a;
+  line-height: 1.45;
+}
+
+.settings-account-reasons {
+  display: grid;
+  gap: 9px;
+}
+
+.settings-account-reason {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 13px 15px;
+  border: 1px solid var(--settings-border, #e5e7eb);
+  border-radius: 13px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.settings-account-reason.active {
+  border-color: rgba(229, 9, 20, .42);
+  background: rgba(229, 9, 20, .055);
+  color: #e50914;
+  font-weight: 800;
+}
+
+.settings-account-confirm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 3px;
+}
+
+.settings-account-confirm-field > span {
+  font-size: 13px;
+  color: #5f6878;
+}
+
+.settings-account-confirm-field input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 14px;
+  border: 1px solid var(--settings-border, #e5e7eb);
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  outline: none;
+}
+
+.settings-account-confirm-field input:focus {
+  border-color: rgba(229, 9, 20, .5);
+  box-shadow: 0 0 0 3px rgba(229, 9, 20, .08);
+}
+
+.settings-account-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.settings-account-secondary,
+.settings-account-danger-next,
+.settings-account-delete-final,
+.settings-account-primary-link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 17px;
+  border-radius: 12px;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.settings-account-secondary {
+  border: 1px solid var(--settings-border, #e5e7eb);
+  background: transparent;
+  color: inherit;
+}
+
+.settings-account-danger-next,
+.settings-account-primary-link {
+  border: 0;
+  background: #111827;
+  color: #fff;
+}
+
+.settings-account-delete-final {
+  border: 0;
+  background: #e50914;
+  color: #fff;
+}
+
+.settings-account-danger-next:disabled,
+.settings-account-delete-final:disabled {
+  cursor: not-allowed;
+  opacity: .45;
+}
+
+@media (max-width: 640px) {
+  .settings-account-modal-backdrop {
+    align-items: end;
+    padding: 10px;
+  }
+
+  .settings-account-modal {
+    max-height: calc(100vh - 20px);
+    border-radius: 22px;
+  }
+
+  .settings-account-modal-header,
+  .settings-account-modal-body {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .settings-account-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .settings-account-secondary,
+  .settings-account-danger-next,
+  .settings-account-delete-final,
+  .settings-account-primary-link {
+    width: 100%;
+    box-sizing: border-box;
+  }
 }

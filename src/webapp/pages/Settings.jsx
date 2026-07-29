@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  AlertTriangle, Bell, Bot, CheckCircle2, ChevronDown, CreditCard, Globe,
-  KeyRound, LifeBuoy, LockKeyhole, LogOut, Mail, Palette, Phone, Save,
-  ShieldCheck, Sparkles, Trash2, UserRound, WalletCards
+  Bell, Bot, CheckCircle2, ChevronDown, ChevronRight, CreditCard, Globe,
+  KeyRound, LifeBuoy, LockKeyhole, LogOut, Mail, PauseCircle, Palette, Phone, Save,
+  ShieldCheck, Sparkles, Trash2, UserRound, WalletCards, X
 } from "lucide-react";
 
 import AppSidebar from "../components/AppSidebar";
@@ -266,6 +266,10 @@ function Settings() {
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
   const [profileForm, setProfileForm] = useState({ name: "", email: "", phone: "" });
   const [pinForm, setPinForm] = useState({ current: "", next: "", confirm: "" });
+  const [accountModalOpen, setAccountModalOpen] = useState(false);
+  const [accountStep, setAccountStep] = useState("overview");
+  const [leaveReason, setLeaveReason] = useState("");
+  const [deleteConfirmation, setDeleteConfirmation] = useState("");
 
   const currentLanguage = normalizeLanguage(settings.preferences.language || language);
   const t = T[currentLanguage] || T.English;
@@ -374,9 +378,31 @@ function Settings() {
     setSavingKey("");
   }
 
+  function openAccountManagement() {
+    setAccountStep("overview");
+    setLeaveReason("");
+    setDeleteConfirmation("");
+    setAccountModalOpen(true);
+  }
+
+  function closeAccountManagement() {
+    if (savingKey === "delete-account") return;
+    setAccountModalOpen(false);
+    setAccountStep("overview");
+    setLeaveReason("");
+    setDeleteConfirmation("");
+  }
+
+  function continueToDelete() {
+    if (!leaveReason) return showToast("Please tell us why you want to leave");
+    setDeleteConfirmation("");
+    setAccountStep("delete");
+  }
+
   async function handleDeleteAccount() {
-    const typed = window.prompt("Type DELETE to confirm account deletion");
-    if (typed !== "DELETE") return showToast("Account deletion cancelled");
+    if (deleteConfirmation.trim().toUpperCase() !== "DELETE") {
+      return showToast("Type DELETE to confirm permanent account deletion");
+    }
 
     setSavingKey("delete-account");
     const result = await deleteSettingsAccount("DELETE");
@@ -673,15 +699,159 @@ function Settings() {
                 </div>
               </section>
 
-              <section className="settings-panel settings-danger-panel">
-                <div className="settings-panel-heading"><div><span>{t.danger}</span><h3>{t.deleteAccount}</h3></div><AlertTriangle size={22} /></div>
-                <p className="settings-logout-copy">Account deletion disables your organizer profile. Use this only when you are sure.</p>
-                <button type="button" className="settings-delete-button" onClick={handleDeleteAccount} disabled={savingKey === "delete-account"}><Trash2 size={18} />{savingKey === "delete-account" ? "Deleting..." : t.deleteAccount}</button>
+              <section className="settings-panel settings-account-panel">
+                <div className="settings-panel-heading">
+                  <div><span>Account</span><h3>Account management</h3></div>
+                  <UserRound size={22} />
+                </div>
+                <p className="settings-logout-copy">Manage account access, temporary deactivation and permanent account deletion from one protected place.</p>
+                <button type="button" className="settings-account-manage-button" onClick={openAccountManagement}>
+                  <UserRound size={18} />
+                  <span><strong>Manage account</strong><small>Deactivation and account closure options</small></span>
+                  <ChevronRight size={18} />
+                </button>
               </section>
             </section>
           </>
         )}
       </section>
+
+
+      {accountModalOpen && (
+        <div className="settings-account-modal-backdrop" role="presentation" onMouseDown={(e) => {
+          if (e.target === e.currentTarget) closeAccountManagement();
+        }}>
+          <section className="settings-account-modal" role="dialog" aria-modal="true" aria-labelledby="account-management-title">
+            <div className="settings-account-modal-header">
+              <div>
+                <span>ACCOUNT MANAGEMENT</span>
+                <h2 id="account-management-title">
+                  {accountStep === "overview" && "Manage your account"}
+                  {accountStep === "reason" && "Before you leave"}
+                  {accountStep === "deactivate" && "Deactivate account"}
+                  {accountStep === "delete" && "Permanently delete account"}
+                </h2>
+              </div>
+              <button type="button" className="settings-account-close" onClick={closeAccountManagement} aria-label="Close account management">
+                <X size={20} />
+              </button>
+            </div>
+
+            {accountStep === "overview" && (
+              <div className="settings-account-modal-body">
+                <p className="settings-account-intro">Choose what you want to do. Permanent deletion is intentionally kept as the final option.</p>
+
+                <button type="button" className="settings-account-choice" onClick={() => setAccountStep("deactivate")}>
+                  <div className="settings-option-icon"><PauseCircle size={19} /></div>
+                  <span><strong>Deactivate account</strong><p>Temporarily step away while keeping the option to return later.</p></span>
+                  <ChevronRight size={18} />
+                </button>
+
+                <button type="button" className="settings-account-choice settings-account-choice-danger" onClick={() => setAccountStep("reason")}>
+                  <div className="settings-option-icon"><Trash2 size={19} /></div>
+                  <span><strong>Permanently delete account</strong><p>Start the protected account deletion process.</p></span>
+                  <ChevronRight size={18} />
+                </button>
+              </div>
+            )}
+
+            {accountStep === "deactivate" && (
+              <div className="settings-account-modal-body">
+                <div className="settings-account-notice">
+                  <PauseCircle size={22} />
+                  <div><strong>Temporary deactivation</strong><p>This option is designed for organizers who want a break without permanently deleting their account and history.</p></div>
+                </div>
+                <p className="settings-account-intro">Your current backend does not expose a deactivation endpoint yet, so this button is deliberately not wired to fake a destructive action. Your existing account and deletion logic remain untouched.</p>
+                <div className="settings-account-modal-actions">
+                  <button type="button" className="settings-account-secondary" onClick={() => setAccountStep("overview")}>Back</button>
+                  <a className="settings-account-primary-link" href="mailto:support@contriba.online?subject=Contriba%20Account%20Deactivation">Request deactivation</a>
+                </div>
+              </div>
+            )}
+
+            {accountStep === "reason" && (
+              <div className="settings-account-modal-body">
+                <p className="settings-account-intro">We use this only to understand what we could do better. Select the closest reason.</p>
+                <div className="settings-account-reasons">
+                  {["Taking a break", "Not using Contriba", "Missing a feature", "Technical problem", "Other"].map((reason) => (
+                    <button
+                      type="button"
+                      key={reason}
+                      className={`settings-account-reason ${leaveReason === reason ? "active" : ""}`}
+                      onClick={() => setLeaveReason(reason)}
+                    >
+                      <span>{reason}</span>
+                      {leaveReason === reason && <CheckCircle2 size={18} />}
+                    </button>
+                  ))}
+                </div>
+
+                {(leaveReason === "Missing a feature" || leaveReason === "Technical problem") && (
+                  <div className="settings-account-retention">
+                    <LifeBuoy size={20} />
+                    <div><strong>We may be able to help first.</strong><p>Contact support before deleting and we can look at the issue with you.</p><a href="mailto:support@contriba.online">Contact support</a></div>
+                  </div>
+                )}
+
+                {leaveReason === "Taking a break" && (
+                  <div className="settings-account-retention">
+                    <PauseCircle size={20} />
+                    <div><strong>You do not have to delete everything.</strong><p>You can request temporary deactivation instead and keep the option to return.</p><button type="button" onClick={() => setAccountStep("deactivate")}>Choose deactivation</button></div>
+                  </div>
+                )}
+
+                <div className="settings-account-modal-actions">
+                  <button type="button" className="settings-account-secondary" onClick={() => setAccountStep("overview")}>Back</button>
+                  <button type="button" className="settings-account-danger-next" onClick={continueToDelete} disabled={!leaveReason}>Continue</button>
+                </div>
+              </div>
+            )}
+
+            {accountStep === "delete" && (
+              <div className="settings-account-modal-body">
+                <div className="settings-account-delete-warning">
+                  <Trash2 size={22} />
+                  <div>
+                    <strong>This is the permanent option.</strong>
+                    <p>Your organizer account will be sent through Contriba's existing deletion endpoint. You will be signed out if deletion succeeds.</p>
+                  </div>
+                </div>
+
+                <div className="settings-account-consequences">
+                  <strong>Before continuing:</strong>
+                  <p>• You may lose access to your organizer profile and account.</p>
+                  <p>• Your events and organizer-related access may no longer be available to you.</p>
+                  <p>• This action should only be used when you are certain you no longer want the account.</p>
+                </div>
+
+                <label className="settings-account-confirm-field">
+                  <span>Type <strong>DELETE</strong> to confirm</span>
+                  <input
+                    type="text"
+                    value={deleteConfirmation}
+                    onChange={(e) => setDeleteConfirmation(e.target.value)}
+                    placeholder="DELETE"
+                    autoComplete="off"
+                  />
+                </label>
+
+                <div className="settings-account-modal-actions">
+                  <button type="button" className="settings-account-secondary" onClick={() => setAccountStep("reason")} disabled={savingKey === "delete-account"}>Back</button>
+                  <button
+                    type="button"
+                    className="settings-account-delete-final"
+                    onClick={handleDeleteAccount}
+                    disabled={savingKey === "delete-account" || deleteConfirmation.trim().toUpperCase() !== "DELETE"}
+                  >
+                    <Trash2 size={17} />
+                    {savingKey === "delete-account" ? "Deleting..." : "Permanently delete account"}
+                  </button>
+                </div>
+              </div>
+            )}
+          </section>
+        </div>
+      )}
 
       {toast && <div className="settings-toast">{toast}</div>}
     </main>
