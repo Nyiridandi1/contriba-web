@@ -1342,3 +1342,124 @@ html[data-theme="dark"] .withdraw-amount-card{
     justify-content: center !important;
   }
 }
+
+/* ==========================================================
+   WALLET — PROFESSIONAL WITHDRAWAL FEEDBACK
+   Frontend-only polish. Existing wallet/payment logic untouched.
+========================================================== */
+
+.wallet-withdraw-success-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 34px;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 12px 0 14px;
+  padding: 15px;
+  border: 1px solid rgba(15, 159, 99, 0.16);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at top right, rgba(15, 159, 99, 0.08), transparent 40%),
+    #f7fcf9;
+  box-shadow: 0 12px 28px rgba(15, 159, 99, 0.06);
+}
+
+.wallet-withdraw-success-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  color: #0f9f63;
+  background: rgba(15, 159, 99, 0.1);
+}
+
+.wallet-withdraw-success-copy {
+  min-width: 0;
+}
+
+.wallet-withdraw-success-copy > span {
+  display: block;
+  color: #0f9f63;
+  font-size: 11px;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.wallet-withdraw-success-copy > strong {
+  display: block;
+  margin: 4px 0 3px;
+  color: #151722;
+  font-size: 20px;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+}
+
+.wallet-withdraw-success-copy p {
+  margin: 0;
+  color: #4f5968;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.wallet-withdraw-success-copy small {
+  display: block;
+  margin-top: 7px;
+  color: #7b8493;
+  font-size: 11px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.wallet-withdraw-success-close {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #7b8493;
+  cursor: pointer;
+}
+
+.wallet-withdraw-success-close:hover {
+  background: rgba(15, 159, 99, 0.08);
+  color: #0f9f63;
+}
+
+html[data-theme="dark"] .wallet-withdraw-success-card {
+  background:
+    radial-gradient(circle at top right, rgba(15, 159, 99, 0.12), transparent 42%),
+    #18211e !important;
+  border-color: rgba(15, 159, 99, 0.2) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] .wallet-withdraw-success-copy > strong {
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .wallet-withdraw-success-copy p,
+html[data-theme="dark"] .wallet-withdraw-success-copy small {
+  color: #a8b0bc !important;
+}
+
+@media (max-width: 768px) {
+  .wallet-withdraw-success-card {
+    grid-template-columns: 40px minmax(0, 1fr) 32px;
+    padding: 13px;
+    border-radius: 16px;
+  }
+
+  .wallet-withdraw-success-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 13px;
+  }
+
+  .wallet-withdraw-success-copy > strong {
+    font-size: 18px;
+  }
+}

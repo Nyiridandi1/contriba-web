@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   Sparkles,
   WalletCards,
+  X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -38,6 +39,42 @@ function formatTimeAgo(value) {
   return `${days} days ago`;
 }
 
+function maskDestination(value) {
+  if (!value) return "";
+  const text = String(value).replace(/\s+/g, "");
+  if (text.length <= 4) return text;
+  return `${text.slice(0, 4)}•••${text.slice(-3)}`;
+}
+
+function getMethodLabel(method) {
+  const value = String(method || "").toLowerCase();
+
+  if (value === "mtn") return "MTN MoMo";
+  if (value === "airtel") return "Airtel Money";
+  if (value === "bank") return "Bank Account";
+
+  return "Mobile Money";
+}
+
+function readWithdrawalMeta() {
+  try {
+    return JSON.parse(sessionStorage.getItem("contriba_wallet_withdrawals") || "{}");
+  } catch {
+    return {};
+  }
+}
+
+function saveWithdrawalMeta(reference, data) {
+  if (!reference) return;
+
+  const current = readWithdrawalMeta();
+  current[reference] = data;
+  sessionStorage.setItem(
+    "contriba_wallet_withdrawals",
+    JSON.stringify(current)
+  );
+}
+
 function Wallet() {
   const [wallet, setWallet] = useState(null);
   const [transactions, setTransactions] = useState([]);
@@ -47,6 +84,7 @@ function Wallet() {
   const [withdrawPhone, setWithdrawPhone] = useState("");
   const [withdrawMessage, setWithdrawMessage] = useState("");
   const [selectedMethod, setSelectedMethod] = useState("mtn");
+  const [withdrawSuccess, setWithdrawSuccess] = useState(null);
 
   const balance = Number(wallet?.balance || 0);
   const totalWithdrawn = transactions
@@ -113,11 +151,28 @@ function Wallet() {
     });
 
     if (result.success) {
-      setWithdrawMessage("✅ Withdrawal initiated. Check your mobile money account.");
+      const reference =
+        result.transaction_ref ||
+        result.transaction?.reference ||
+        result.reference ||
+        "";
+
+      const successData = {
+        amount: Number(withdrawAmount),
+        phone: withdrawPhone,
+        method: selectedMethod,
+        reference,
+        status: result.transaction?.status || "pending",
+      };
+
+      saveWithdrawalMeta(reference, successData);
+      setWithdrawSuccess(successData);
+      setWithdrawMessage("");
       setWithdrawAmount("");
       setWithdrawPhone("");
       await loadWallet();
     } else {
+      setWithdrawSuccess(null);
       setWithdrawMessage(result.message || "Withdrawal failed. Try again.");
     }
 
@@ -286,8 +341,42 @@ function Wallet() {
               </button>
             </div>
 
+            {withdrawSuccess && (
+              <div className="wallet-withdraw-success-card">
+                <div className="wallet-withdraw-success-icon">
+                  <CheckCircle2 size={22} />
+                </div>
+
+                <div className="wallet-withdraw-success-copy">
+                  <span>Withdrawal request sent</span>
+                  <strong>{formatMoney(withdrawSuccess.amount)}</strong>
+                  <p>
+                    {getMethodLabel(withdrawSuccess.method)}
+                    {withdrawSuccess.phone
+                      ? ` • ${maskDestination(withdrawSuccess.phone)}`
+                      : ""}
+                  </p>
+
+                  {withdrawSuccess.reference && (
+                    <small>
+                      Reference: {withdrawSuccess.reference}
+                    </small>
+                  )}
+                </div>
+
+                <button
+                  type="button"
+                  className="wallet-withdraw-success-close"
+                  onClick={() => setWithdrawSuccess(null)}
+                  aria-label="Dismiss withdrawal message"
+                >
+                  <X size={17} />
+                </button>
+              </div>
+            )}
+
             {withdrawMessage && (
-              <p className={withdrawMessage.includes("✅") ? "wallet-message success" : "wallet-message error"}>
+              <p className="wallet-message error">
                 {withdrawMessage}
               </p>
             )}
@@ -364,19 +453,58 @@ function Wallet() {
               </div>
             )}
 
-            {!loading && transactions.slice(0, 10).map((item, index) => (
-              <div className="withdraw-row" key={item.id || index}>
-                <div>
-                  <strong>{item.type === "withdrawal" || item.type === "out" ? "Withdrawal" : "Deposit"}</strong>
-                  <span>{item.phone || item.destination || "Mobile Money"}</span>
+            {!loading && transactions.slice(0, 10).map((item, index) => {
+              const savedMeta = readWithdrawalMeta()[item.reference] || {};
+              const isWithdrawal =
+                item.type === "withdrawal" || item.type === "out";
+
+              const method =
+                item.payment_method ||
+                item.method ||
+                item.provider ||
+                savedMeta.method ||
+                "";
+
+              const destination =
+                item.phone ||
+                item.phone_number ||
+                item.destination ||
+                item.sender_phone ||
+                savedMeta.phone ||
+                "";
+
+              const senderName = item.sender_name || "";
+
+              return (
+                <div className="withdraw-row" key={item.id || index}>
+                  <div>
+                    <strong>{isWithdrawal ? "Withdrawal" : "Deposit"}</strong>
+                    <span>
+                      {getMethodLabel(method)}
+                      {destination ? ` • ${maskDestination(destination)}` : ""}
+                      {!isWithdrawal && senderName ? ` • ${senderName}` : ""}
+                    </span>
+                  </div>
+
+                  <strong>{formatMoney(item.amount)}</strong>
+                  <span>{formatTimeAgo(item.created_at)}</span>
+
+                  <small
+                    className={
+                      item.status === "success" || item.status === "completed"
+                        ? "completed"
+                        : "processing"
+                    }
+                  >
+                    {item.status === "success" || item.status === "completed"
+                      ? "Completed"
+                      : item.status === "pending"
+                        ? "Processing"
+                        : item.status}
+                  </small>
                 </div>
-                <strong>{formatMoney(item.amount)}</strong>
-                <span>{formatTimeAgo(item.created_at)}</span>
-                <small className={item.status === "success" || item.status === "completed" ? "completed" : "processing"}>
-                  {item.status === "success" || item.status === "completed" ? "Completed" : item.status === "pending" ? "Processing" : item.status}
-                </small>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       </section>
