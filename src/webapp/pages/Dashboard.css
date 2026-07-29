@@ -1193,4 +1193,47 @@ html[data-theme="dark"] .dashboard-page .wallet-balance strong {
   .dashboard-stat-card strong {
     font-size: 26px !important;
   }
+}.create-steps button {
+  height: 42px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  background: #fafafa;
+  font-size: 13px;
+  font-weight: 950;
+  font-family: inherit;
+  cursor: pointer;
+  transition: 0.25s ease;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.create-steps button.active {
+  color: #ffffff;
+  background: linear-gradient(135deg, #E50914, #E50914);
+  box-shadow: 0 14px 32px rgba(224, 0, 0, 0.2);
+}
+
+.create-steps button:focus {
+  outline: none;
+}
+
+@media (max-width: 760px) {
+  .create-steps button {
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 520px) {
+  .create-steps button {
+    flex: 0 0 auto !important;
+    height: 38px !important;
+    padding: 0 13px !important;
+    border-radius: 13px !important;
+    font-size: 11px !important;
+  }
 }
