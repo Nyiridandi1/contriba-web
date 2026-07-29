@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft,
@@ -111,6 +111,29 @@ function CreateEvent() {
   const { id } = useParams();
 
   const isEditMode = Boolean(id);
+
+  const [activeSection, setActiveSection] = useState("details");
+
+  const detailsRef = useRef(null);
+  const financeRef = useRef(null);
+  const photosRef = useRef(null);
+  const publishRef = useRef(null);
+
+  function scrollToSection(section) {
+    const sections = {
+      details: detailsRef,
+      finance: financeRef,
+      photos: photosRef,
+      publish: publishRef,
+    };
+
+    setActiveSection(section);
+
+    sections[section]?.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
 
   const [eventType, setEventType] = useState("wedding");
   const [title, setTitle] = useState("");
@@ -333,15 +356,42 @@ function CreateEvent() {
         </section>
 
         <div className="create-steps">
-          <span className="active">01 Details</span>
-          <span>02 Finance</span>
-          <span>03 Photos</span>
-          <span>04 Publish</span>
+          <button
+            type="button"
+            className={activeSection === "details" ? "active" : ""}
+            onClick={() => scrollToSection("details")}
+          >
+            Details
+          </button>
+
+          <button
+            type="button"
+            className={activeSection === "finance" ? "active" : ""}
+            onClick={() => scrollToSection("finance")}
+          >
+            Finance
+          </button>
+
+          <button
+            type="button"
+            className={activeSection === "photos" ? "active" : ""}
+            onClick={() => scrollToSection("photos")}
+          >
+            Photos
+          </button>
+
+          <button
+            type="button"
+            className={activeSection === "publish" ? "active" : ""}
+            onClick={() => scrollToSection("publish")}
+          >
+            Publish
+          </button>
         </div>
 
         <section className="create-layout">
           <div className="create-main">
-            <div className="create-card">
+            <div className="create-card" ref={detailsRef} style={{ scrollMarginTop: "120px" }}>
               <div className="create-card-heading">
                 <span>01</span>
                 <div>
@@ -419,7 +469,7 @@ function CreateEvent() {
               </button>
             </div>
 
-            <div className="create-card">
+            <div className="create-card" ref={financeRef} style={{ scrollMarginTop: "120px" }}>
               <div className="create-card-heading">
                 <span>02</span>
                 <div>
@@ -497,7 +547,7 @@ function CreateEvent() {
               </div>
             </div>
 
-            <div className="create-card">
+            <div className="create-card" ref={photosRef} style={{ scrollMarginTop: "120px" }}>
               <div className="create-card-heading">
                 <span>03</span>
                 <div>
@@ -592,7 +642,7 @@ function CreateEvent() {
               </div>
             </div>
 
-            <div className="publish-card">
+            <div className="publish-card" ref={publishRef} style={{ scrollMarginTop: "120px" }}>
               <span>
                 {isEditMode ? "Ready to update" : "Ready to publish"}
               </span>
