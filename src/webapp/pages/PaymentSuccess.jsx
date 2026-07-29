@@ -22,6 +22,21 @@ function formatMoney(value) {
   return `RWF ${Number(value || 0).toLocaleString()}`;
 }
 
+function calculateWalletCredit(amount, method = "mtn") {
+  const numericAmount = Number(amount || 0);
+  const cashinFeeRate = method === "airtel" ? 0.025 : 0.035;
+  const paypackCashinFee = Math.ceil(numericAmount * cashinFeeRate);
+  const afterCashin = Math.max(numericAmount - paypackCashinFee, 0);
+  const contribaFee = Math.floor(afterCashin * 0.01);
+  const walletCredit = Math.max(afterCashin - contribaFee, 0);
+
+  return {
+    paypackCashinFee,
+    contribaFee,
+    walletCredit,
+  };
+}
+
 function readSuccessData() {
   const raw =
     sessionStorage.getItem("contriba_payment_success") ||
@@ -54,13 +69,17 @@ function PaymentSuccess() {
   const payment = readSuccessData();
 
   const amount = Number(payment?.amount || 0);
-  const fee = Number(payment?.fee || Math.round(amount * 0.01));
-  const ownerReceives = Number(payment?.ownerReceives || amount - fee);
-
-  const eventTitle = payment?.event?.title || "Selected Event";
   const method = payment?.selectedMethod || payment?.paymentMethod || "mtn";
   const methodLabel = payment?.selectedMethodLabel || getMethodLabel(method);
   const methodLogo = getMethodLogo(method);
+
+  const {
+    paypackCashinFee,
+    contribaFee,
+    walletCredit,
+  } = calculateWalletCredit(amount, method);
+
+  const eventTitle = payment?.event?.title || "Selected Event";
   const phone = payment?.phone || "Phone not available";
   const transactionRef =
     payment?.transaction_ref ||
@@ -98,8 +117,9 @@ function PaymentSuccess() {
           <h1>Thank you for your contribution.</h1>
 
           <p>
-            Your payment has been received successfully. The event owner will be
-            notified and your contribution is now part of the event support.
+            Your payment has been received successfully. The event owner has
+            been notified and the available amount has been added to their
+            Contriba Wallet for later withdrawal.
           </p>
 
           <div className="success-amount-box">
@@ -148,23 +168,23 @@ function PaymentSuccess() {
 
           <div className="receipt-list">
             <div>
-              <span>Amount</span>
+              <span>Amount Paid</span>
               <strong>{formatMoney(amount)}</strong>
             </div>
 
             <div>
-              <span>Platform Fee (1%)</span>
-              <strong className="red">- {formatMoney(fee)}</strong>
+              <span>Paypack Cash-in Fee</span>
+              <strong className="red">- {formatMoney(paypackCashinFee)}</strong>
             </div>
 
             <div>
-              <span>Total Paid</span>
-              <strong>{formatMoney(amount)}</strong>
+              <span>Contriba Fee (1%)</span>
+              <strong className="red">- {formatMoney(contribaFee)}</strong>
             </div>
 
             <div>
-              <span>Owner Receives</span>
-              <strong className="green">{formatMoney(ownerReceives)}</strong>
+              <span>Organizer Wallet Credit</span>
+              <strong className="green">{formatMoney(walletCredit)}</strong>
             </div>
           </div>
 

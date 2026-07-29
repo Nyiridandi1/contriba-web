@@ -50,10 +50,10 @@ function Wallet() {
 
   const balance = Number(wallet?.balance || 0);
   const totalWithdrawn = transactions
-    .filter((t) => t.type === "withdrawal" && t.status === "success")
+    .filter((t) => (t.type === "withdrawal" || t.type === "out") && (t.status === "success" || t.status === "completed"))
     .reduce((sum, t) => sum + Number(t.amount || 0), 0);
   const pendingBalance = transactions
-    .filter((t) => t.status === "pending")
+    .filter((t) => t.type === "deposit" && t.status === "pending")
     .reduce((sum, t) => sum + Number(t.amount || 0), 0);
 
   async function loadWallet() {
@@ -86,8 +86,8 @@ function Wallet() {
   }
 
   async function handleWithdraw() {
-    if (!withdrawAmount || Number(withdrawAmount) < 500) {
-      setWithdrawMessage("Minimum withdrawal is RWF 500.");
+    if (!withdrawAmount || Number(withdrawAmount) < 5000) {
+      setWithdrawMessage("Minimum withdrawal is RWF 5,000.");
       return;
     }
     if (!withdrawPhone) {
@@ -227,7 +227,7 @@ function Wallet() {
             <div className="withdraw-amount-card">
               <span>Available balance</span>
               <strong>{formatMoney(balance)}</strong>
-              <p>Estimated arrival: 2 minutes for mobile money.</p>
+              <p>Minimum withdrawal: RWF 5,000. Mobile money arrival depends on Paypack processing.</p>
             </div>
 
             <div className="wallet-form-fields">
@@ -367,13 +367,13 @@ function Wallet() {
             {!loading && transactions.slice(0, 10).map((item, index) => (
               <div className="withdraw-row" key={item.id || index}>
                 <div>
-                  <strong>{item.type === "withdrawal" ? "Withdrawal" : "Deposit"}</strong>
+                  <strong>{item.type === "withdrawal" || item.type === "out" ? "Withdrawal" : "Deposit"}</strong>
                   <span>{item.phone || item.destination || "Mobile Money"}</span>
                 </div>
                 <strong>{formatMoney(item.amount)}</strong>
                 <span>{formatTimeAgo(item.created_at)}</span>
                 <small className={item.status === "success" || item.status === "completed" ? "completed" : "processing"}>
-                  {item.status === "success" ? "Completed" : item.status === "pending" ? "Processing" : item.status}
+                  {item.status === "success" || item.status === "completed" ? "Completed" : item.status === "pending" ? "Processing" : item.status}
                 </small>
               </div>
             ))}

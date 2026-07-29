@@ -103,8 +103,19 @@ function Contribute() {
     return normalizeEvent(event);
   }, [event]);
 
-  const fee = useMemo(() => Math.round(amount * 0.01), [amount]);
-  const ownerReceives = useMemo(() => Math.max(amount - fee, 0), [amount, fee]);
+  const paymentBreakdown = useMemo(() => {
+    const cashinFeeRate = paymentMethod === "airtel" ? 0.025 : 0.035;
+    const paypackCashinFee = Math.ceil(amount * cashinFeeRate);
+    const afterCashin = Math.max(amount - paypackCashinFee, 0);
+    const contribaFee = Math.floor(afterCashin * 0.01);
+    const walletCredit = Math.max(afterCashin - contribaFee, 0);
+
+    return {
+      paypackCashinFee,
+      contribaFee,
+      walletCredit,
+    };
+  }, [amount, paymentMethod]);
 
   const cleanPhone = phone.replace(/[^\d]/g, "");
 
@@ -181,8 +192,9 @@ function Contribute() {
       event: normalizedEvent,
       contribution: result.contribution,
       amount,
-      fee,
-      ownerReceives,
+      paypackCashinFee: paymentBreakdown.paypackCashinFee,
+      contribaFee: paymentBreakdown.contribaFee,
+      walletCredit: paymentBreakdown.walletCredit,
       phone,
       name: publicContribution ? name.trim() : "Anonymous",
       message,
@@ -487,13 +499,18 @@ function Contribute() {
               </div>
 
               <div className="summary-line">
-                <span>Contriba fee (1%)</span>
-                <strong>- {formatMoney(fee)}</strong>
+                <span>Paypack cash-in fee</span>
+                <strong>- {formatMoney(paymentBreakdown.paypackCashinFee)}</strong>
               </div>
 
               <div className="summary-line">
-                <span>Organizer receives</span>
-                <strong className="green">{formatMoney(ownerReceives)}</strong>
+                <span>Contriba fee (1%)</span>
+                <strong>- {formatMoney(paymentBreakdown.contribaFee)}</strong>
+              </div>
+
+              <div className="summary-line">
+                <span>Organizer wallet credit</span>
+                <strong className="green">{formatMoney(paymentBreakdown.walletCredit)}</strong>
               </div>
 
               <div className="summary-divider"></div>
@@ -508,7 +525,7 @@ function Contribute() {
 
                 <div>
                   <WalletCards size={17} />
-                  {normalizedEvent.ownerPhone}
+                  Contriba Wallet
                 </div>
               </div>
 

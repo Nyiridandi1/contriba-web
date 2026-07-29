@@ -78,8 +78,11 @@ function PaymentConfirm() {
   }, [id, navigate]);
 
   const amount = Number(checkout?.amount || 0);
-  const fee = Number(checkout?.fee || Math.round(amount * 0.01));
-  const ownerReceives = Number(checkout?.ownerReceives || amount - fee);
+  const cashinFeeRate = selectedMethod === "airtel" ? 0.025 : 0.035;
+  const paypackCashinFee = Math.ceil(amount * cashinFeeRate);
+  const afterCashin = Math.max(amount - paypackCashinFee, 0);
+  const contribaFee = Math.floor(afterCashin * 0.01);
+  const walletCredit = Math.max(afterCashin - contribaFee, 0);
 
   const selectedMethodLabel =
     paymentMethods.find((method) => method.id === selectedMethod)?.label ||
@@ -311,8 +314,13 @@ function PaymentConfirm() {
               </div>
 
               <div>
-                <span>Platform Fee (1%)</span>
-                <strong className="red">- {formatMoney(fee)}</strong>
+                <span>Paypack Cash-in Fee</span>
+                <strong className="red">- {formatMoney(paypackCashinFee)}</strong>
+              </div>
+
+              <div>
+                <span>Contriba Fee (1%)</span>
+                <strong className="red">- {formatMoney(contribaFee)}</strong>
               </div>
 
               <div>
@@ -321,8 +329,8 @@ function PaymentConfirm() {
               </div>
 
               <div>
-                <span>Owner Receives</span>
-                <strong className="green">{formatMoney(ownerReceives)}</strong>
+                <span>Organizer Wallet Credit</span>
+                <strong className="green">{formatMoney(walletCredit)}</strong>
               </div>
             </div>
 
@@ -368,8 +376,8 @@ function PaymentConfirm() {
                 </div>
 
                 <div>
-                  <span>Owner receives</span>
-                  <strong className="green">{formatMoney(ownerReceives)}</strong>
+                  <span>Wallet credit</span>
+                  <strong className="green">{formatMoney(walletCredit)}</strong>
                 </div>
 
                 {transactionRef && (
