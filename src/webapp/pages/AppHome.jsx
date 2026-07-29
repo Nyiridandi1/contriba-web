@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import { getEvents } from "../api/api";
+import { getEvents, getNotifications } from "../api/api";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../../context/LanguageContext.jsx";
 import { translations } from "../../i18n/translations.js";
@@ -270,6 +270,7 @@ function AppHome() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
+  const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
@@ -287,6 +288,36 @@ function AppHome() {
       })),
     [language]
   );
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setUnreadNotificationCount(0);
+      return undefined;
+    }
+
+    let isMounted = true;
+
+    async function loadUnreadNotifications() {
+      const result = await getNotifications();
+
+      if (isMounted && result?.success) {
+        setUnreadNotificationCount(Number(result.unread_count || 0));
+      }
+    }
+
+    loadUnreadNotifications();
+
+    const handleWindowFocus = () => {
+      loadUnreadNotifications();
+    };
+
+    window.addEventListener("focus", handleWindowFocus);
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener("focus", handleWindowFocus);
+    };
+  }, [isAuthenticated]);
 
   useEffect(() => {
     async function loadEvents() {
@@ -420,8 +451,36 @@ function AppHome() {
               to={isAuthenticated ? "/notifications" : "/login"}
               className="app-home-icon-action"
               aria-label={t("notifications", "Notifications")}
+              style={{ position: "relative" }}
             >
               <Bell size={18} />
+
+              {isAuthenticated && unreadNotificationCount > 0 && (
+                <span
+                  aria-label={`${unreadNotificationCount} unread notifications`}
+                  style={{
+                    position: "absolute",
+                    top: "-6px",
+                    right: "-6px",
+                    minWidth: "18px",
+                    height: "18px",
+                    padding: "0 5px",
+                    borderRadius: "999px",
+                    background: "#e50914",
+                    color: "#ffffff",
+                    border: "2px solid #ffffff",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "10px",
+                    fontWeight: 800,
+                    lineHeight: 1,
+                    boxSizing: "border-box",
+                  }}
+                >
+                  {unreadNotificationCount > 99 ? "99+" : unreadNotificationCount}
+                </span>
+              )}
             </Link>
 
             {isAuthenticated && (
