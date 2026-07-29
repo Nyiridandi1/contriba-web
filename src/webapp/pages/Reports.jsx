@@ -28,6 +28,7 @@ import {
   getShareOverview,
 } from "../api/api";
 import AppSidebar from "../components/AppSidebar";
+import { timeAgo } from "../utils/time";
 import "./Reports.css";
 
 function formatMoney(value) {
@@ -40,27 +41,6 @@ function formatMoney(value) {
 function formatMoneyFull(value) {
   return `RWF ${Number(value || 0).toLocaleString()}`;
 }
-function formatTimeAgo(value) {
-  if (!value) return "Recently";
-
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "Recently";
-
-  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
-  if (seconds < 60) return "Just now";
-
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes} min ago`;
-
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
-
-  const days = Math.floor(hours / 24);
-  if (days === 1) return "Yesterday";
-
-  return `${days} days ago`;
-}
-
 function downloadTextFile(filename, content, type = "text/plain") {
   const blob = new Blob([content], { type });
   const url = URL.createObjectURL(blob);
@@ -780,7 +760,7 @@ Thank you for your contribution.
                       <strong>
                         {item.is_anonymous ? "Anonymous" : item.contributor_name || "Guest"}
                       </strong>
-                      <span>{formatTimeAgo(item.created_at)}</span>
+                      <span>{timeAgo(item.created_at)}</span>
                     </div>
 
                     <strong>{formatMoneyFull(item.amount)}</strong>

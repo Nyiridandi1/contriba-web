@@ -25,6 +25,7 @@ import {
 } from "../api/api";
 
 import AppSidebar from "../components/AppSidebar";
+import { timeAgo } from "../utils/time";
 import "./Notifications.css";
 
 // Backend/realtime logic stays active for this page.
@@ -87,28 +88,7 @@ function getTypeClass(type) {
 }
 
 function formatTimeAgo(value) {
-  if (!value) return "Recently";
-
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "Recently";
-
-  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
-  if (seconds < 60) return "Just now";
-
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes} min${minutes > 1 ? "s" : ""} ago`;
-
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
-
-  const days = Math.floor(hours / 24);
-  if (days < 7) return `${days} day${days > 1 ? "s" : ""} ago`;
-
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: date.getFullYear() !== new Date().getFullYear() ? "numeric" : undefined,
-  });
+  return timeAgo(value);
 }
 
 function startOfDay(date) {

@@ -20,8 +20,9 @@ import {
 } from "lucide-react";
 
 import AppSidebar from "../components/AppSidebar";
-import { formatDateTime, formatMoney } from "./contributors/contributorHelpers";
+import { formatMoney } from "./contributors/contributorHelpers";
 import { useContributors } from "./contributors/useContributors";
+import { timeAgo } from "../utils/time";
 import "./Contributors.css";
 
 function Contributors() {
@@ -255,12 +256,12 @@ function Contributors() {
 
                     <div className="contributors-amount">
                       <strong>{person.amount}</strong>
-                      <span>{formatDateTime(person.time)}</span>
+                      <span>{timeAgo(person.time)}</span>
                     </div>
 
                     <div className="contributors-method">
                       <span>{person.method}</span>
-                      <small>{formatDateTime(person.date)}</small>
+                      <small>{timeAgo(person.date)}</small>
                     </div>
 
                     <small
@@ -544,7 +545,7 @@ function Contributors() {
                     <div>
                       <strong>{item.title}</strong>
                       <p>{item.detail}</p>
-                      <small>{formatDateTime(item.time)}</small>
+                      <small>{timeAgo(item.time)}</small>
                     </div>
                   </div>
                 ))}
