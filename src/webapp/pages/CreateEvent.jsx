@@ -14,6 +14,7 @@ import {
   ImagePlus,
   LockKeyhole,
   MapPin,
+  Minus,
   PartyPopper,
   Phone,
   Plus,
@@ -140,6 +141,7 @@ function CreateEvent() {
   const [date, setDate] = useState("");
   const [location, setLocation] = useState("");
   const [goalAmount, setGoalAmount] = useState("");
+  const [goalMode, setGoalMode] = useState("public");
   const [message, setMessage] = useState("");
   const [privacy, setPrivacy] = useState("public");
   const [phone, setPhone] = useState("");
@@ -184,11 +186,12 @@ function CreateEvent() {
       setTitle(eventData.title || "");
       setDate(eventData.date ? String(eventData.date).slice(0, 10) : "");
       setLocation(eventData.location || "");
-      setGoalAmount(
-        eventData.goal_amount || eventData.goalAmount
-          ? String(eventData.goal_amount || eventData.goalAmount)
-          : ""
+      const existingGoal = Number(
+        eventData.goal_amount || eventData.goalAmount || 0
       );
+
+      setGoalMode(existingGoal > 0 ? "public" : "none");
+      setGoalAmount(existingGoal > 0 ? String(existingGoal) : "");
       setMessage(eventData.description || "");
       setPrivacy(eventData.is_private ? "private" : "public");
       setPhone(eventData.owner_phone || "");
@@ -211,17 +214,17 @@ function CreateEvent() {
     let score = 0;
     if (title) score += 25;
     if (date) score += 20;
-    if (goalAmount) score += 20;
+    if (goalMode === "none" || Number(goalAmount) > 0) score += 20;
     if (phone) score += 20;
     if (photos.some(Boolean)) score += 15;
     return score;
-  }, [title, date, goalAmount, phone, photos]);
+  }, [title, date, goalAmount, goalMode, phone, photos]);
 
   const canSubmit =
     title.trim().length >= 3 &&
     date &&
     location.trim().length >= 2 &&
-    Number(goalAmount) > 0 &&
+    (goalMode === "none" || Number(goalAmount) > 0) &&
     formatPhone(phone).length >= 9 &&
     !loading &&
     !loadingEvent;
@@ -272,7 +275,9 @@ function CreateEvent() {
 
     if (!canSubmit) {
       setFormMessage(
-        "Please complete title, date, location, goal amount and receiver phone."
+        goalMode === "public"
+          ? "Please complete title, date, location, goal amount and receiver phone."
+          : "Please complete title, date, location and receiver phone."
       );
       return;
     }
@@ -293,7 +298,7 @@ function CreateEvent() {
         date,
         location: location.trim(),
         description: message.trim() || suggestions[eventType],
-        goal_amount: Number(goalAmount),
+        goal_amount: goalMode === "public" ? Number(goalAmount) : 0,
         owner_phone: formatPhone(phone),
         owner_payment_method: paymentMethod,
         cover_image: uploadedPhotoUrls[0],
@@ -478,17 +483,53 @@ function CreateEvent() {
                 </div>
               </div>
 
-              <label>Goal Amount</label>
-              <div className="amount-box">
-                <span>RWF</span>
-                <input
-                  value={goalAmount}
-                  onChange={(event) =>
-                    setGoalAmount(event.target.value.replace(/[^\d]/g, ""))
-                  }
-                  placeholder="5,000,000"
-                />
+              <label>Fundraising Goal</label>
+              <div className="privacy-grid">
+                <button
+                  type="button"
+                  className={goalMode === "public" ? "active green" : ""}
+                  onClick={() => setGoalMode("public")}
+                >
+                  <Globe2 size={20} />
+                  <span>
+                    <strong>Public Goal</strong>
+                    Show the fundraising target and progress to contributors.
+                  </span>
+                  {goalMode === "public" && <Check size={17} />}
+                </button>
+
+                <button
+                  type="button"
+                  className={goalMode === "none" ? "active green" : ""}
+                  onClick={() => {
+                    setGoalMode("none");
+                    setGoalAmount("");
+                  }}
+                >
+                  <Minus size={20} />
+                  <span>
+                    <strong>No Goal</strong>
+                    Collect contributions without displaying a target amount.
+                  </span>
+                  {goalMode === "none" && <Check size={17} />}
+                </button>
               </div>
+
+              {goalMode === "public" && (
+                <>
+                  <label>Goal Amount</label>
+                  <div className="amount-box">
+                    <span>RWF</span>
+                    <input
+                      value={goalAmount}
+                      onChange={(event) =>
+                        setGoalAmount(event.target.value.replace(/[^\d]/g, ""))
+                      }
+                      placeholder="5,000,000"
+                    />
+                  </div>
+                </>
+              )}
 
               <label>Your Phone Number</label>
               <div className="create-input-icon">
@@ -627,10 +668,12 @@ function CreateEvent() {
                   {previewLocation}
                 </p>
 
-                <div className="preview-goal">
-                  <span>Goal</span>
-                  <strong>RWF {Number(previewGoal).toLocaleString()}</strong>
-                </div>
+                {goalMode === "public" && (
+                  <div className="preview-goal">
+                    <span>Goal</span>
+                    <strong>RWF {Number(previewGoal).toLocaleString()}</strong>
+                  </div>
+                )}
 
                 <div className="preview-tags">
                   <span className={privacy === "public" ? "green" : "red"}>
@@ -666,9 +709,13 @@ function CreateEvent() {
                   Event date
                 </p>
 
-                <p className={goalAmount ? "done" : ""}>
+                <p
+                  className={
+                    goalMode === "none" || Number(goalAmount) > 0 ? "done" : ""
+                  }
+                >
                   <Check size={15} />
-                  Goal amount
+                  {goalMode === "none" ? "No goal selected" : "Goal amount"}
                 </p>
 
                 <p className={phone ? "done" : ""}>
