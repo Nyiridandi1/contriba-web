@@ -21,6 +21,7 @@ import { Link } from "react-router-dom";
 import { getUser } from "../api/api";
 import { useLanguage } from "../../context/LanguageContext.jsx";
 import { translations } from "../../i18n/translations.js";
+import contribaLogo from "../../assets/contriba-logo.png";
 
 import "./AppSidebar.css";
 
@@ -187,12 +188,6 @@ function AppSidebar({ active = "home" }) {
         key: "share",
       },
       {
-        label: t("profile", "Profile"),
-        icon: UserRound,
-        path: "/register",
-        key: "profile",
-      },
-      {
         label: t("settings", "Settings"),
         icon: Settings,
         path: "/register",
@@ -354,19 +349,17 @@ function AppSidebar({ active = "home" }) {
             className="app-sidebar-brand"
             aria-label="Contriba home"
           >
-            <span className="app-sidebar-brand-full">
-              Contriba
-            </span>
+            <img
+              src={contribaLogo}
+              alt="Contriba"
+              className="app-sidebar-brand-logo"
+            />
 
             <span className="app-sidebar-brand-subtitle">
               {t(
                 "contribute_easily",
                 "Contribute easily"
               )}
-            </span>
-
-            <span className="app-sidebar-brand-mini">
-              CO
             </span>
           </Link>
         </div>
@@ -430,6 +423,17 @@ function AppSidebar({ active = "home" }) {
           </span>
         </Link>
 
+        {!isOrganizer && !collapsed && (
+          <div className="app-sidebar-auth-actions">
+            <Link
+              to="/login"
+              className="app-sidebar-login"
+            >
+              {t("login", "Login")}
+            </Link>
+          </div>
+        )}
+
         <div className="app-sidebar-footer">
           <p>© 2026 Contriba</p>
 
@@ -454,7 +458,11 @@ function AppSidebar({ active = "home" }) {
           to="/home"
           className="mobile-topbar-brand"
         >
-          <span>Contriba</span>
+          <img
+            src={contribaLogo}
+            alt="Contriba"
+            className="mobile-brand-logo"
+          />
         </Link>
 
         <div className="mobile-topbar-actions">
@@ -534,7 +542,11 @@ function AppSidebar({ active = "home" }) {
             className="mobile-drawer-brand"
             onClick={() => setDrawerOpen(false)}
           >
-            <span>Contriba</span>
+            <img
+              src={contribaLogo}
+              alt="Contriba"
+              className="mobile-brand-logo"
+            />
           </Link>
 
           <button
@@ -623,6 +635,18 @@ function AppSidebar({ active = "home" }) {
                 "Create Account"
               )}
         </Link>
+
+        {!isOrganizer && (
+          <div className="mobile-drawer-auth-actions">
+            <Link
+              to="/login"
+              className="mobile-drawer-login"
+              onClick={() => setDrawerOpen(false)}
+            >
+              {t("login", "Login")}
+            </Link>
+          </div>
+        )}
       </div>
 
       <nav
