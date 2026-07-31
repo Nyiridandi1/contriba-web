@@ -93,7 +93,7 @@ function Login() {
         return;
       }
 
-      navigate("/dashboard", {
+      navigate("/home", {
         replace: true,
       });
     } catch (error) {
