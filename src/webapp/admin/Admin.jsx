@@ -3,6 +3,7 @@ import {
   Activity,
   AlertCircle,
   BarChart3,
+  Bell,
   CalendarDays,
   CheckCircle2,
   Clock3,
