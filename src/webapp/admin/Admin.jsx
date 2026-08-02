@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import {
+  Activity,
   AlertCircle,
   BarChart3,
   CalendarDays,
@@ -55,46 +56,74 @@ const FILTERS = [
 const MODULES = [
   {
     title: "Reported Events",
-    description:
-      "Review suspicious, misleading, duplicate, impersonated, or abusive events.",
+    description: "Review fake, suspicious, copied, impersonated, misleading, or abusive events.",
     icon: Flag,
-    badge: "Coming soon",
+    badge: "Trust & Safety",
+  },
+  {
+    title: "User Reports",
+    description: "Review complaints against organizers, contributors, and suspicious accounts.",
+    icon: ShieldCheck,
+    badge: "Trust & Safety",
+  },
+  {
+    title: "Suspended Accounts",
+    description: "Manage restricted accounts, suspension reasons, and account restoration.",
+    icon: UserRound,
+    badge: "Account Safety",
+  },
+  {
+    title: "Blacklist Management",
+    description: "Manage blocked accounts, identities, phone numbers, and repeat fraud signals.",
+    icon: XCircle,
+    badge: "Protection",
+  },
+  {
+    title: "Notifications & Communication",
+    description: "Broadcast to everyone, organizers, contributors, or one selected user.",
+    icon: Bell,
+    badge: "Communication",
   },
   {
     title: "User Management",
-    description:
-      "Manage user access, account status, roles, and organizer activity.",
+    description: "Search users, review roles, suspend or reactivate, and inspect user history.",
     icon: UsersRound,
-    badge: "Coming soon",
+    badge: "Operations",
   },
   {
     title: "Event Management",
-    description:
-      "Review events, visibility, featured placement, and moderation status.",
+    description: "Feature, hide, restore, delete, and inspect platform events and analytics.",
     icon: CalendarDays,
-    badge: "Coming soon",
+    badge: "Moderation",
   },
   {
-    title: "Wallet & Withdrawals",
-    description:
-      "Review balances, payouts, cash-out activity, and payment issues.",
+    title: "Financial Operations",
+    description: "Monitor withdrawals, wallets, contributions, refunds, and transactions.",
     icon: WalletCards,
-    badge: "Coming soon",
+    badge: "Finance",
   },
   {
     title: "Platform Analytics",
-    description:
-      "Track growth, contributions, events, users, and trust activity.",
+    description: "Track daily users, monthly growth, donations, active events, and KYC completion.",
     icon: BarChart3,
-    badge: "Coming soon",
+    badge: "Insights",
   },
   {
     title: "Platform Settings",
-    description:
-      "Manage platform controls, trust rules, moderation, and system settings.",
+    description: "Manage banners, categories, countries, maintenance mode, flags, and announcements.",
     icon: Settings,
-    badge: "Coming soon",
+    badge: "Configuration",
   },
+];
+
+const ACTIVITY_TIMELINE_PREVIEW = [
+  ["10:32 AM", "Created account", "A new Contriba profile was created."],
+  ["10:35 AM", "Verified email", "The account email address was confirmed."],
+  ["11:02 AM", "Created first event", "The organizer published their first event."],
+  ["11:45 AM", "Received first contribution", "The event received RWF 5,000."],
+  ["12:10 PM", "Submitted KYC", "National ID documents were sent for review."],
+  ["12:42 PM", "KYC approved", "The Verified Organizer badge was awarded."],
+  ["2:15 PM", "Received withdrawal", "A wallet withdrawal was completed."],
 ];
 
 function formatDate(value) {
@@ -1209,6 +1238,34 @@ function Admin() {
                 </article>
               );
             })}
+          </div>
+        </section>
+
+        <section className="admin-activity-section admin-panel">
+          <div className="admin-section-heading">
+            <div>
+              <span>User Investigation</span>
+              <h2>Activity Timeline</h2>
+            </div>
+
+            <Activity size={24} />
+          </div>
+
+          <p className="admin-activity-intro">
+            This complete timeline design is ready for real user activity data from the backend.
+          </p>
+
+          <div className="admin-activity-timeline">
+            {ACTIVITY_TIMELINE_PREVIEW.map(([time, title, description]) => (
+              <article key={`${time}-${title}`}>
+                <time>{time}</time>
+                <div className="admin-activity-dot" />
+                <div>
+                  <strong>{title}</strong>
+                  <p>{description}</p>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
       </section>
