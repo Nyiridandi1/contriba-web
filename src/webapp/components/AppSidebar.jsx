@@ -9,6 +9,7 @@ import {
   Plus,
   Settings,
   Share2,
+  ShieldCheck,
   UserRound,
   UsersRound,
   WalletCards,
@@ -18,12 +19,15 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { getUser } from "../api/api";
+import { getToken, getUser } from "../api/api";
 import { useLanguage } from "../../context/LanguageContext.jsx";
 import { translations } from "../../i18n/translations.js";
 import contribaLogo from "../../assets/contriba-logo.png";
 
 import "./AppSidebar.css";
+
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 function getText(language, key, fallback) {
   return (
@@ -53,6 +57,7 @@ function AppSidebar({ active = "home" }) {
   const { language } = useLanguage();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const [collapsed, setCollapsed] = useState(() => {
     if (typeof window === "undefined") return false;
@@ -70,6 +75,44 @@ function AppSidebar({ active = "home" }) {
   const currentUser = getUser();
   const isOrganizer = Boolean(currentUser);
   const initials = getUserInitials(currentUser);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function verifyAdminAccess() {
+      const token = getToken();
+
+      if (!token || !currentUser) {
+        if (!cancelled) setIsAdmin(false);
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/api/admin/kyc/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!cancelled) {
+          setIsAdmin(response.ok);
+        }
+      } catch {
+        if (!cancelled) {
+          setIsAdmin(false);
+        }
+      }
+    }
+
+    verifyAdminAccess();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [currentUser?.id]);
 
   const publicNavItems = useMemo(
     () => [
@@ -139,8 +182,18 @@ function AppSidebar({ active = "home" }) {
         path: "/settings",
         key: "settings",
       },
+      ...(isAdmin
+        ? [
+            {
+              label: t("admin", "Admin"),
+              icon: ShieldCheck,
+              path: "/admin",
+              key: "admin",
+            },
+          ]
+        : []),
     ],
-    [language]
+    [language, isAdmin]
   );
 
   const guestNavItems = useMemo(
@@ -582,11 +635,16 @@ function AppSidebar({ active = "home" }) {
               </strong>
 
               <small>
-                {currentUser.phone ||
-                  t(
-                    "organizer_workspace",
-                    "Organizer workspace"
-                  )}
+                {isAdmin
+                  ? t(
+                      "admin_workspace",
+                      "Administrator workspace"
+                    )
+                  : currentUser.phone ||
+                    t(
+                      "organizer_workspace",
+                      "Organizer workspace"
+                    )}
               </small>
             </div>
           </div>

@@ -1208,10 +1208,12 @@ function EventDetails() {
               </div>
             </div>
 
-            <div className="verified-line">
-              <ShieldCheck size={15} />
-              Verified Organizer
-            </div>
+            {event?.creator?.kyc_status === "verified" && (
+  <div className="verified-line">
+    <ShieldCheck size={15} />
+    Verified Organizer
+  </div>
+)}
 
             <div className="organizer-stats">
               <div>

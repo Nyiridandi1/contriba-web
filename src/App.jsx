@@ -42,6 +42,8 @@ import ShareCenter from "./webapp/pages/ShareCenter";
 import Profile from "./webapp/pages/Profile";
 import Settings from "./webapp/pages/Settings";
 
+import Admin from "./webapp/admin/Admin";
+
 function App() {
   const [loading, setLoading] = useState(true);
 
@@ -130,13 +132,33 @@ function App() {
         <Route path="/create-event" element={<CreateEvent />} />
 
         <Route path="/wallet" element={<Wallet />} />
-        <Route path="/wallet/statement" element={<WalletStatement />} />
-        <Route path="/contributors" element={<Contributors />} />
+
+        <Route
+          path="/wallet/statement"
+          element={<WalletStatement />}
+        />
+
+        <Route
+          path="/contributors"
+          element={<Contributors />}
+        />
+
         <Route path="/reports" element={<Reports />} />
-        <Route path="/notifications" element={<Notifications />} />
+
+        <Route
+          path="/notifications"
+          element={<Notifications />}
+        />
+
         <Route path="/share" element={<ShareCenter />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
+
+        {/* =====================================================
+            ADMIN CENTER
+        ====================================================== */}
+
+        <Route path="/admin" element={<Admin />} />
 
         <Route
           path="/share-card/:eventId"

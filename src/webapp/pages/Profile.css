@@ -1398,4 +1398,572 @@ html[data-theme="dark"] .completion-fill{
   .profile-stat-card {
     padding: 16px !important;
   }
+}/* =========================================================
+   KYC / IDENTITY VERIFICATION
+   Added to the existing Profile.css without changing current
+   profile, avatar, logout, dark-mode or responsive behavior.
+========================================================= */
+
+.profile-content-grid-kyc {
+  grid-template-columns: minmax(0, 1.55fr) minmax(320px, 0.75fr) !important;
+  align-items: start;
+}
+
+.profile-kyc-panel {
+  min-width: 0;
+}
+
+.kyc-status-loading {
+  min-height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 22px;
+  color: #667085;
+  background: #f7f8fb;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.spin {
+  animation: kycSpin 0.85s linear infinite;
+}
+
+@keyframes kycSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.kyc-alert {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 13px 14px;
+  border-radius: 18px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.kyc-alert.error {
+  color: #b42318;
+  background: #fff1f0;
+  border: 1px solid #ffccc7;
+}
+
+.kyc-alert button {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 11px;
+  border: 0;
+  border-radius: 999px;
+  color: #b42318;
+  background: white;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.kyc-status-card {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  margin-top: 16px;
+  padding: 18px;
+  border-radius: 24px;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  background: #f7f8fb;
+}
+
+.kyc-status-card.verified {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.kyc-status-card.pending {
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+
+.kyc-status-card.rejected {
+  background: #fff1f0;
+  border-color: #ffccc7;
+}
+
+.kyc-status-icon {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  color: #e50914;
+  background: rgba(229, 9, 20, 0.08);
+}
+
+.kyc-status-card.verified .kyc-status-icon {
+  color: #0f9f63;
+  background: rgba(15, 159, 99, 0.1);
+}
+
+.kyc-status-card.pending .kyc-status-icon {
+  color: #b7791f;
+  background: rgba(183, 121, 31, 0.12);
+}
+
+.kyc-status-card.rejected .kyc-status-icon {
+  color: #b42318;
+  background: rgba(180, 35, 24, 0.1);
+}
+
+.kyc-status-copy {
+  min-width: 0;
+}
+
+.kyc-status-copy strong {
+  display: block;
+  color: #111827;
+  font-size: 16px;
+  font-weight: 950;
+}
+
+.kyc-status-copy small {
+  display: block;
+  margin-top: 5px;
+  color: #667085;
+  font-size: 12px;
+  line-height: 1.55;
+  font-weight: 700;
+}
+
+.kyc-status-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.kyc-status-meta span {
+  padding: 6px 9px;
+  border-radius: 999px;
+  color: #475467;
+  background: rgba(255, 255, 255, 0.8);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.kyc-status-badge {
+  width: fit-content;
+  padding: 8px 11px;
+  border-radius: 999px;
+  color: #475467;
+  background: #eef1f5;
+  font-size: 11px;
+  font-weight: 950;
+  white-space: nowrap;
+}
+
+.kyc-status-badge.verified {
+  color: #0f9f63;
+  background: rgba(15, 159, 99, 0.1);
+}
+
+.kyc-status-badge.pending {
+  color: #9a6700;
+  background: rgba(255, 214, 10, 0.18);
+}
+
+.kyc-status-badge.rejected {
+  color: #b42318;
+  background: rgba(180, 35, 24, 0.1);
+}
+
+.kyc-form {
+  margin-top: 18px;
+  padding: 20px;
+  border-radius: 26px;
+  border: 1px solid rgba(229, 9, 20, 0.1);
+  background:
+    radial-gradient(circle at top right, rgba(229, 9, 20, 0.06), transparent 34%),
+    #ffffff;
+}
+
+.kyc-form-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.kyc-form-heading > div > span {
+  color: #e50914;
+  font-size: 11px;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.kyc-form-heading h4 {
+  margin: 5px 0 0;
+  color: #111827;
+  font-size: 22px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.kyc-form-heading svg {
+  color: #e50914;
+}
+
+.kyc-form-intro {
+  margin: 14px 0 0;
+  color: #667085;
+  font-size: 12px;
+  line-height: 1.65;
+  font-weight: 700;
+}
+
+.kyc-readonly-grid,
+.kyc-fields-grid,
+.kyc-upload-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.kyc-readonly-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.kyc-readonly-grid > div {
+  min-width: 0;
+  padding: 13px 14px;
+  border-radius: 18px;
+  background: #f7f8fb;
+  border: 1px solid rgba(17, 24, 39, 0.07);
+}
+
+.kyc-readonly-grid small {
+  display: block;
+  color: #667085;
+  font-size: 10px;
+  font-weight: 850;
+}
+
+.kyc-readonly-grid strong {
+  display: block;
+  margin-top: 5px;
+  color: #111827;
+  font-size: 13px;
+  font-weight: 950;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kyc-fields-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.kyc-fields-grid label {
+  display: grid;
+  gap: 7px;
+}
+
+.kyc-fields-grid label > span {
+  color: #344054;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.kyc-fields-grid input {
+  width: 100%;
+  min-width: 0;
+  height: 48px;
+  padding: 0 13px;
+  border: 1px solid rgba(17, 24, 39, 0.1);
+  border-radius: 15px;
+  outline: none;
+  color: #111827;
+  background: white;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.kyc-fields-grid input:focus {
+  border-color: rgba(229, 9, 20, 0.6);
+  box-shadow: 0 0 0 4px rgba(229, 9, 20, 0.07);
+}
+
+.kyc-upload-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.kyc-upload-box {
+  min-width: 0;
+  padding: 15px;
+  border-radius: 20px;
+  border: 1px dashed rgba(229, 9, 20, 0.28);
+  background: rgba(229, 9, 20, 0.025);
+}
+
+.kyc-upload-copy {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+
+.kyc-upload-icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  color: #e50914;
+  background: rgba(229, 9, 20, 0.08);
+}
+
+.kyc-upload-copy strong {
+  display: block;
+  color: #111827;
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.kyc-upload-copy small {
+  display: block;
+  margin-top: 3px;
+  color: #667085;
+  font-size: 10px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+.kyc-preview,
+.kyc-empty-preview {
+  width: 100%;
+  height: 150px;
+  margin-top: 12px;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #f2f4f7;
+}
+
+.kyc-preview {
+  position: relative;
+}
+
+.kyc-preview img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.kyc-preview span {
+  position: absolute;
+  left: 9px;
+  right: 9px;
+  bottom: 9px;
+  padding: 7px 9px;
+  overflow: hidden;
+  border-radius: 999px;
+  color: white;
+  background: rgba(17, 24, 39, 0.76);
+  font-size: 10px;
+  font-weight: 850;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.kyc-empty-preview {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  color: #98a2b3;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.kyc-select-btn,
+.kyc-submit-btn {
+  border: 0;
+  cursor: pointer;
+}
+
+.kyc-select-btn {
+  width: 100%;
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+  border-radius: 14px;
+  color: #e50914;
+  background: white;
+  border: 1px solid rgba(229, 9, 20, 0.15);
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.kyc-form-message,
+.kyc-privacy-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 14px;
+  padding: 12px 13px;
+  border-radius: 16px;
+  font-size: 11px;
+  line-height: 1.5;
+  font-weight: 800;
+}
+
+.kyc-form-message.error {
+  color: #b42318;
+  background: #fff1f0;
+  border: 1px solid #ffccc7;
+}
+
+.kyc-form-message.success {
+  color: #087443;
+  background: #ecfdf3;
+  border: 1px solid #abefc6;
+}
+
+.kyc-privacy-note {
+  color: #475467;
+  background: #f7f8fb;
+  border: 1px solid rgba(17, 24, 39, 0.07);
+}
+
+.kyc-privacy-note svg {
+  flex: 0 0 auto;
+  color: #e50914;
+}
+
+.kyc-submit-btn {
+  width: 100%;
+  min-height: 50px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 14px;
+  border-radius: 16px;
+  color: white;
+  background: linear-gradient(135deg, #e50914, #ff3348);
+  box-shadow: 0 16px 34px rgba(229, 9, 20, 0.18);
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.kyc-submit-btn:disabled {
+  cursor: wait;
+  opacity: 0.68;
+}
+
+/* KYC dark mode */
+html[data-theme="dark"] .kyc-status-loading,
+html[data-theme="dark"] .kyc-status-card,
+html[data-theme="dark"] .kyc-form,
+html[data-theme="dark"] .kyc-readonly-grid > div,
+html[data-theme="dark"] .kyc-fields-grid input,
+html[data-theme="dark"] .kyc-upload-box,
+html[data-theme="dark"] .kyc-empty-preview,
+html[data-theme="dark"] .kyc-select-btn,
+html[data-theme="dark"] .kyc-privacy-note {
+  background: #202028 !important;
+  border-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+html[data-theme="dark"] .kyc-status-card.verified {
+  background: rgba(15, 159, 99, 0.1) !important;
+}
+
+html[data-theme="dark"] .kyc-status-card.pending {
+  background: rgba(183, 121, 31, 0.12) !important;
+}
+
+html[data-theme="dark"] .kyc-status-card.rejected,
+html[data-theme="dark"] .kyc-alert.error,
+html[data-theme="dark"] .kyc-form-message.error {
+  background: rgba(180, 35, 24, 0.12) !important;
+}
+
+html[data-theme="dark"] .kyc-form-message.success {
+  background: rgba(15, 159, 99, 0.12) !important;
+}
+
+html[data-theme="dark"] .kyc-status-copy strong,
+html[data-theme="dark"] .kyc-form-heading h4,
+html[data-theme="dark"] .kyc-readonly-grid strong,
+html[data-theme="dark"] .kyc-upload-copy strong,
+html[data-theme="dark"] .kyc-fields-grid input {
+  color: white !important;
+}
+
+html[data-theme="dark"] .kyc-status-copy small,
+html[data-theme="dark"] .kyc-form-intro,
+html[data-theme="dark"] .kyc-readonly-grid small,
+html[data-theme="dark"] .kyc-upload-copy small,
+html[data-theme="dark"] .kyc-fields-grid label > span,
+html[data-theme="dark"] .kyc-privacy-note {
+  color: #9ca3af !important;
+}
+
+@media (max-width: 1100px) {
+  .profile-content-grid-kyc {
+    grid-template-columns: 1fr !important;
+  }
+
+  .kyc-readonly-grid,
+  .kyc-fields-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-content-grid-kyc,
+  .kyc-readonly-grid,
+  .kyc-fields-grid,
+  .kyc-upload-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .kyc-status-card {
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+
+  .kyc-status-badge {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .kyc-alert {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .kyc-alert button {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .kyc-form {
+    padding: 16px;
+    border-radius: 22px;
+  }
+
+  .kyc-preview,
+  .kyc-empty-preview {
+    height: 180px;
+  }
 }
