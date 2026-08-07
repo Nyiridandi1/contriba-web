@@ -117,6 +117,7 @@ function normalizeEvent(event) {
     rawDate: event.date,
     raised: Number(event.total_raised || 0),
     target: Number(event.goal_amount || 0),
+    showRaisedAmount: event.show_raised_amount !== false,
     contributors: Number(event.total_contributors || 0),
     daysLeft: formatDaysLeft(event.date),
     organizer: event.creator?.name || "Organizer",
@@ -1129,29 +1130,46 @@ function EventDetails() {
 
         <aside className="event-details-sidebar">
           <div className="event-sticky-card">
-            <div className="event-raised-box">
-              <span>Raised so far</span>
+            {normalizedEvent.showRaisedAmount ? (
+              <>
+                <div className="event-raised-box">
+                  <span>Raised so far</span>
 
-              <strong>
-                RWF{" "}
-                {formatMoney(
-                  normalizedEvent.raised
-                )}
-              </strong>
+                  <strong>
+                    RWF{" "}
+                    {formatMoney(
+                      normalizedEvent.raised
+                    )}
+                  </strong>
 
-              <p>
-                of RWF{" "}
-                {formatMoney(
-                  normalizedEvent.target
-                )}{" "}
-                goal
-              </p>
-            </div>
+                  <p>
+                    of RWF{" "}
+                    {formatMoney(
+                      normalizedEvent.target
+                    )}{" "}
+                    goal
+                  </p>
+                </div>
 
-            <EventProgress
-              raised={normalizedEvent.raised}
-              target={normalizedEvent.target}
-            />
+                <EventProgress
+                  raised={normalizedEvent.raised}
+                  target={normalizedEvent.target}
+                />
+              </>
+            ) : normalizedEvent.target > 0 ? (
+              <div className="event-raised-box">
+                <span>Fundraising goal</span>
+
+                <strong>
+                  RWF{" "}
+                  {formatMoney(
+                    normalizedEvent.target
+                  )}
+                </strong>
+
+                <p>Raised amount is private</p>
+              </div>
+            ) : null}
 
             <div className="event-stats-grid">
               <div>

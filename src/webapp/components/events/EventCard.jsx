@@ -76,7 +76,13 @@ function EventCard({ event }) {
           </span>
         </div>
 
-        <EventProgress raised={event.raised} target={event.target} />
+        {event.showRaisedAmount !== false ? (
+          <EventProgress raised={event.raised} target={event.target} />
+        ) : event.target > 0 ? (
+          <div className="event-card-funded">
+            Goal: RWF {Number(event.target || 0).toLocaleString()}
+          </div>
+        ) : null}
 
         <Link to={`/events/${event.id}`} className="event-card-button">
           {pickText(language, "view_details", "View Details")}

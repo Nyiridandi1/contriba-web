@@ -142,6 +142,7 @@ function CreateEvent() {
   const [location, setLocation] = useState("");
   const [goalAmount, setGoalAmount] = useState("");
   const [goalMode, setGoalMode] = useState("public");
+  const [showRaisedAmount, setShowRaisedAmount] = useState(true);
   const [message, setMessage] = useState("");
   const [privacy, setPrivacy] = useState("public");
   const [phone, setPhone] = useState("");
@@ -192,6 +193,7 @@ function CreateEvent() {
 
       setGoalMode(existingGoal > 0 ? "public" : "none");
       setGoalAmount(existingGoal > 0 ? String(existingGoal) : "");
+      setShowRaisedAmount(eventData.show_raised_amount !== false);
       setMessage(eventData.description || "");
       setPrivacy(eventData.is_private ? "private" : "public");
       setPhone(eventData.owner_phone || "");
@@ -306,6 +308,7 @@ function CreateEvent() {
         photo3_url: uploadedPhotoUrls[2],
         photo4_url: uploadedPhotoUrls[3],
         is_private: privacy === "private",
+        show_raised_amount: showRaisedAmount,
       };
 
       const result = isEditMode
@@ -531,6 +534,35 @@ function CreateEvent() {
                 </>
               )}
 
+              <label>Raised Amount Visibility</label>
+              <div className="privacy-grid">
+                <button
+                  type="button"
+                  className={showRaisedAmount ? "active green" : ""}
+                  onClick={() => setShowRaisedAmount(true)}
+                >
+                  <Globe2 size={20} />
+                  <span>
+                    <strong>Show Raised Amount</strong>
+                    Visitors can see how much this event has raised.
+                  </span>
+                  {showRaisedAmount && <Check size={17} />}
+                </button>
+
+                <button
+                  type="button"
+                  className={!showRaisedAmount ? "active red" : ""}
+                  onClick={() => setShowRaisedAmount(false)}
+                >
+                  <LockKeyhole size={20} />
+                  <span>
+                    <strong>Hide Raised Amount</strong>
+                    Visitors can contribute, but the total raised stays private.
+                  </span>
+                  {!showRaisedAmount && <Check size={17} />}
+                </button>
+              </div>
+
               <label>Your Phone Number</label>
               <div className="create-input-icon">
                 <Phone size={18} />
@@ -681,6 +713,10 @@ function CreateEvent() {
                   </span>
 
                   <span>{selectedPayment?.label}</span>
+
+                  <span className={showRaisedAmount ? "green" : "red"}>
+                    {showRaisedAmount ? "Raised Amount Visible" : "Raised Amount Hidden"}
+                  </span>
                 </div>
               </div>
             </div>

@@ -145,6 +145,9 @@ function normalizeEvent(event) {
 
     progress,
 
+    showRaisedAmount:
+      event.show_raised_amount !== false,
+
     contributors:
       number(
         event.total_contributors ||
@@ -227,7 +230,7 @@ function SharePreview({
       <div className="social-preview-photo">
         <img
           src={event.image}
-          alt=""
+          alt={event.title}
         />
 
         <div className="social-preview-photo-shade" />
@@ -283,49 +286,71 @@ function SharePreview({
           </div>
         </div>
 
-        <div className="social-preview-funding">
-          <div className="social-preview-funding-row">
-            <div>
-              <small>
-                RAISED
-              </small>
+        {event.showRaisedAmount ? (
+          <div className="social-preview-funding">
+            <div className="social-preview-funding-row">
+              <div>
+                <small>
+                  RAISED
+                </small>
 
-              <strong>
-                {formatMoney(
-                  event.raised
+                <strong>
+                  {formatMoney(
+                    event.raised
+                  )}
+                </strong>
+              </div>
+
+              <div className="social-preview-progress-value">
+                {event.progress.toFixed(
+                  1
                 )}
-              </strong>
+                %
+              </div>
             </div>
 
-            <div className="social-preview-progress-value">
-              {event.progress.toFixed(
-                1
+            <div className="social-preview-progress">
+              <div
+                className="social-preview-progress-fill"
+                style={{
+                  width: `${Math.max(
+                    event.progress,
+                    event.progress > 0
+                      ? 1.5
+                      : 0
+                  )}%`,
+                }}
+              />
+            </div>
+
+            <div className="social-preview-goal">
+              Goal:{" "}
+              {formatMoney(
+                event.target
               )}
-              %
             </div>
           </div>
+        ) : (
+          <div className="social-preview-funding">
+            <div className="social-preview-funding-row">
+              <div>
+                <small>
+                  FUNDRAISING GOAL
+                </small>
 
-          <div className="social-preview-progress">
-            <div
-              className="social-preview-progress-fill"
-              style={{
-                width: `${Math.max(
-                  event.progress,
-                  event.progress > 0
-                    ? 1.5
-                    : 0
-                )}%`,
-              }}
-            />
-          </div>
+                <strong>
+                  {formatMoney(
+                    event.target
+                  )}
+                </strong>
+              </div>
+            </div>
 
-          <div className="social-preview-goal">
-            Goal:{" "}
-            {formatMoney(
-              event.target
-            )}
+            <div className="social-preview-goal">
+              Raised amount is private
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="social-preview-button">
           Contribute Now

@@ -250,6 +250,7 @@ function normalizeEvent(event, t) {
     location: event.location || t("rwanda", "Rwanda"),
     raised: Number(event.total_raised || 0),
     target: Number(event.goal_amount || 0),
+    showRaisedAmount: event.show_raised_amount !== false,
     contributors: Number(event.total_contributors || 0),
     daysLeft: formatDaysLeft(event.date, t),
     rawDateStatus: formatDaysLeft(event.date, getHomeText.bind(null, "English")),
