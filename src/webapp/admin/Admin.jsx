@@ -955,17 +955,7 @@ function Admin() {
                   <button
                     type="submit"
                     className="approve"
-                    disabled={
-                      withdrawLoading ||
-                      Number(
-                        platformWallet?.available_balance ||
-                          0
-                      ) <
-                        Number(
-                          platformWallet?.minimum_withdrawal ||
-                            5000
-                        )
-                    }
+                    disabled={withdrawLoading}
                   >
                     {withdrawLoading ? (
                       <Loader2
@@ -1179,30 +1169,8 @@ function Admin() {
                   setWithdrawMessage("");
                   setWithdrawOpen(true);
                 }}
-                disabled={
-                  walletLoading ||
-                  Number(
-                    platformWallet?.available_balance || 0
-                  ) <
-                    Number(
-                      platformWallet?.minimum_withdrawal ||
-                        5000
-                    )
-                }
-                title={
-                  Number(
-                    platformWallet?.available_balance || 0
-                  ) <
-                  Number(
-                    platformWallet?.minimum_withdrawal ||
-                      5000
-                  )
-                    ? `Minimum withdrawal is ${formatMoney(
-                        platformWallet?.minimum_withdrawal ||
-                          5000
-                      )}`
-                    : "Withdraw Contriba platform profit"
-                }
+                disabled={walletLoading}
+                title="Open Contriba platform profit withdrawal"
               >
                 <Banknote size={17} />
                 Withdraw Profit
