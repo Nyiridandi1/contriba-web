@@ -57,6 +57,100 @@ const FILTERS = [
   },
 ];
 
+const ADMIN_SECTIONS = [
+  {
+    key: "overview",
+    label: "Overview",
+    icon: LayoutDashboard,
+  },
+  {
+    key: "kyc",
+    label: "KYC & Verification",
+    icon: ShieldCheck,
+  },
+  {
+    key: "finance",
+    label: "Finance",
+    icon: WalletCards,
+  },
+  {
+    key: "users",
+    label: "Users",
+    icon: UsersRound,
+  },
+  {
+    key: "safety",
+    label: "Events & Safety",
+    icon: Flag,
+  },
+  {
+    key: "communications",
+    label: "Communications",
+    icon: Bell,
+  },
+  {
+    key: "analytics",
+    label: "Analytics",
+    icon: BarChart3,
+  },
+  {
+    key: "activity",
+    label: "Activity",
+    icon: Activity,
+  },
+  {
+    key: "platform-settings",
+    label: "Platform Settings",
+    icon: Settings,
+  },
+];
+
+const MODULE_SECTION = {
+  "Reported Events": "safety",
+  "User Reports": "users",
+  "Suspended Accounts": "users",
+  "Blacklist Management": "users",
+  "Notifications & Communication": "communications",
+  "User Management": "users",
+  "Event Management": "safety",
+  "Financial Operations": "finance",
+  "Platform Analytics": "analytics",
+  "Platform Settings": "platform-settings",
+};
+
+const SECTION_DETAILS = {
+  users: {
+    eyebrow: "Account Operations",
+    title: "Users & Trust",
+    description:
+      "Manage users, reports, suspensions, blacklists, and account safety from one workspace.",
+  },
+  safety: {
+    eyebrow: "Trust & Safety",
+    title: "Events & Safety",
+    description:
+      "Review reported events, moderate platform content, and protect contributors from suspicious activity.",
+  },
+  communications: {
+    eyebrow: "Communication",
+    title: "Notifications & Communication",
+    description:
+      "Prepare administrator broadcasts and targeted communication for Contriba users.",
+  },
+  analytics: {
+    eyebrow: "Insights",
+    title: "Platform Analytics",
+    description:
+      "Keep platform growth, contribution, event, revenue, and KYC metrics organized in one analytics workspace.",
+  },
+  "platform-settings": {
+    eyebrow: "Configuration",
+    title: "Platform Settings",
+    description:
+      "Keep operational settings such as categories, countries, banners, flags, and maintenance controls together.",
+  },
+};
+
 const MODULES = [
   {
     title: "Reported Events",
@@ -120,15 +214,6 @@ const MODULES = [
   },
 ];
 
-const ACTIVITY_TIMELINE_PREVIEW = [
-  ["10:32 AM", "Created account", "A new Contriba profile was created."],
-  ["10:35 AM", "Verified email", "The account email address was confirmed."],
-  ["11:02 AM", "Created first event", "The organizer published their first event."],
-  ["11:45 AM", "Received first contribution", "The event received RWF 5,000."],
-  ["12:10 PM", "Submitted KYC", "National ID documents were sent for review."],
-  ["12:42 PM", "KYC approved", "The Verified Organizer badge was awarded."],
-  ["2:15 PM", "Received withdrawal", "A wallet withdrawal was completed."],
-];
 
 function formatDate(value) {
   if (!value) return "Not available";
@@ -331,6 +416,8 @@ function Admin() {
     useState(false);
   const [accessMessage, setAccessMessage] =
     useState("");
+  const [activeSection, setActiveSection] =
+    useState("overview");
 
   const [admin, setAdmin] = useState(null);
 
@@ -1078,39 +1165,152 @@ function Admin() {
           </div>
         </header>
 
-        <section className="admin-summary-grid">
-          <article className="admin-summary-card">
-            <div className="admin-summary-icon">
-              <FileSearch size={22} />
+        <section className="admin-panel">
+          <div className="admin-section-heading">
+            <div>
+              <span>Admin Workspace</span>
+              <h2>Operations Navigation</h2>
             </div>
-            <span>Loaded submissions</span>
-            <strong>{counts.total}</strong>
-          </article>
+            <LayoutDashboard size={24} />
+          </div>
 
-          <article className="admin-summary-card">
-            <div className="admin-summary-icon pending">
-              <Clock3 size={22} />
-            </div>
-            <span>Pending review</span>
-            <strong>{counts.pending}</strong>
-          </article>
+          <div className="admin-filters">
+            {ADMIN_SECTIONS.map((item) => {
+              const Icon = item.icon;
 
-          <article className="admin-summary-card">
-            <div className="admin-summary-icon verified">
-              <CheckCircle2 size={22} />
-            </div>
-            <span>Verified</span>
-            <strong>{counts.verified}</strong>
-          </article>
-
-          <article className="admin-summary-card">
-            <div className="admin-summary-icon rejected">
-              <XCircle size={22} />
-            </div>
-            <span>Rejected</span>
-            <strong>{counts.rejected}</strong>
-          </article>
+              return (
+                <button
+                  key={item.key}
+                  type="button"
+                  className={
+                    activeSection === item.key
+                      ? "active"
+                      : ""
+                  }
+                  onClick={() =>
+                    setActiveSection(item.key)
+                  }
+                >
+                  <Icon size={15} />
+                  {item.label}
+                </button>
+              );
+            })}
+          </div>
         </section>
+
+        {activeSection === "overview" && (
+          <>
+            <section
+              className="admin-summary-grid"
+              style={{ marginTop: 20 }}
+            >
+              <article className="admin-summary-card">
+                <div className="admin-summary-icon pending">
+                  <Clock3 size={22} />
+                </div>
+                <span>Pending KYC</span>
+                <strong>{counts.pending}</strong>
+              </article>
+
+              <article className="admin-summary-card">
+                <div className="admin-summary-icon verified">
+                  <WalletCards size={22} />
+                </div>
+                <span>Platform balance</span>
+                <strong>
+                  {formatMoney(
+                    platformWallet?.available_balance
+                  )}
+                </strong>
+              </article>
+
+              <article className="admin-summary-card">
+                <div className="admin-summary-icon">
+                  <Banknote size={22} />
+                </div>
+                <span>Fees today</span>
+                <strong>
+                  {formatMoney(
+                    platformWallet?.fees_today
+                  )}
+                </strong>
+              </article>
+
+              <article className="admin-summary-card">
+                <div className="admin-summary-icon">
+                  <TrendingUp size={22} />
+                </div>
+                <span>Total fees earned</span>
+                <strong>
+                  {formatMoney(
+                    platformWallet?.total_fees_earned
+                  )}
+                </strong>
+              </article>
+            </section>
+
+            <section
+              className="admin-panel admin-modules-section"
+            >
+              <div className="admin-section-heading">
+                <div>
+                  <span>Command Center</span>
+                  <h2>Management Workspaces</h2>
+                </div>
+
+                <LayoutDashboard size={24} />
+              </div>
+
+              <div className="admin-modules-grid">
+                {MODULES.map((module) => {
+                  const Icon = module.icon;
+                  const destination =
+                    MODULE_SECTION[module.title];
+
+                  return (
+                    <article
+                      className="admin-module-card"
+                      key={module.title}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() =>
+                        destination &&
+                        setActiveSection(destination)
+                      }
+                      onKeyDown={(event) => {
+                        if (
+                          destination &&
+                          (event.key === "Enter" ||
+                            event.key === " ")
+                        ) {
+                          event.preventDefault();
+                          setActiveSection(destination);
+                        }
+                      }}
+                      style={{
+                        cursor: destination
+                          ? "pointer"
+                          : "default",
+                      }}
+                    >
+                      <div className="admin-module-icon">
+                        <Icon size={22} />
+                      </div>
+
+                      <div>
+                        <strong>{module.title}</strong>
+                        <p>{module.description}</p>
+                      </div>
+
+                      <span>{module.badge}</span>
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+          </>
+        )}
 
         {message && (
           <div
@@ -1132,7 +1332,8 @@ function Admin() {
           </div>
         )}
 
-        <section className="admin-panel admin-platform-wallet-panel">
+        {activeSection === "finance" && (
+          <section className="admin-panel admin-platform-wallet-panel">
           <div className="admin-panel-header">
             <div>
               <span>Financial Operations</span>
@@ -1353,9 +1554,11 @@ function Admin() {
               </span>
             </div>
           </div>
-        </section>
+          </section>
+        )}
 
-        <section className="admin-panel admin-kyc-panel">
+        {activeSection === "kyc" && (
+          <section className="admin-panel admin-kyc-panel">
           <div className="admin-panel-header">
             <div>
               <span>Identity Verification</span>
@@ -1744,70 +1947,116 @@ function Admin() {
               )}
             </div>
           </div>
-        </section>
+          </section>
+        )}
 
-        <section className="admin-modules-section">
-          <div className="admin-section-heading">
-            <div>
-              <span>Platform Operations</span>
-              <h2>Management Modules</h2>
+        {[
+          "users",
+          "safety",
+          "communications",
+          "analytics",
+          "platform-settings",
+        ].includes(activeSection) && (
+          <section className="admin-panel">
+            <div className="admin-section-heading">
+              <div>
+                <span>
+                  {SECTION_DETAILS[activeSection]?.eyebrow}
+                </span>
+                <h2>
+                  {SECTION_DETAILS[activeSection]?.title}
+                </h2>
+              </div>
+
+              {activeSection === "users" && (
+                <UsersRound size={24} />
+              )}
+              {activeSection === "safety" && (
+                <Flag size={24} />
+              )}
+              {activeSection === "communications" && (
+                <Bell size={24} />
+              )}
+              {activeSection === "analytics" && (
+                <BarChart3 size={24} />
+              )}
+              {activeSection === "platform-settings" && (
+                <Settings size={24} />
+              )}
             </div>
 
-            <LayoutDashboard size={24} />
-          </div>
+            <p className="admin-activity-intro">
+              {SECTION_DETAILS[activeSection]?.description}
+            </p>
 
-          <div className="admin-modules-grid">
-            {MODULES.map((module) => {
-              const Icon = module.icon;
+            <div className="admin-modules-grid">
+              {MODULES.filter(
+                (module) =>
+                  MODULE_SECTION[module.title] ===
+                  activeSection
+              ).map((module) => {
+                const Icon = module.icon;
 
-              return (
-                <article
-                  className="admin-module-card"
-                  key={module.title}
-                >
-                  <div className="admin-module-icon">
-                    <Icon size={22} />
-                  </div>
+                return (
+                  <article
+                    className="admin-module-card"
+                    key={module.title}
+                  >
+                    <div className="admin-module-icon">
+                      <Icon size={22} />
+                    </div>
 
-                  <div>
-                    <strong>{module.title}</strong>
-                    <p>{module.description}</p>
-                  </div>
+                    <div>
+                      <strong>{module.title}</strong>
+                      <p>{module.description}</p>
+                    </div>
 
-                  <span>{module.badge}</span>
-                </article>
-              );
-            })}
-          </div>
-        </section>
-
-        <section className="admin-activity-section admin-panel">
-          <div className="admin-section-heading">
-            <div>
-              <span>User Investigation</span>
-              <h2>Activity Timeline</h2>
+                    <span>{module.badge}</span>
+                  </article>
+                );
+              })}
             </div>
 
-            <Activity size={24} />
-          </div>
+            <div className="admin-self-review-note">
+              <ShieldCheck size={18} />
+              <div>
+                <strong>
+                  Workspace organized and ready
+                </strong>
+                <span>
+                  This section is separated from KYC and
+                  Finance so future backend tools can be
+                  added here without making the Admin
+                  overview crowded again.
+                </span>
+              </div>
+            </div>
+          </section>
+        )}
 
-          <p className="admin-activity-intro">
-            This complete timeline design is ready for real user activity data from the backend.
-          </p>
+        {activeSection === "activity" && (
+          <section className="admin-panel">
+            <div className="admin-section-heading">
+              <div>
+                <span>Audit & Investigation</span>
+                <h2>Activity & Audit Trail</h2>
+              </div>
 
-          <div className="admin-activity-timeline">
-            {ACTIVITY_TIMELINE_PREVIEW.map(([time, title, description]) => (
-              <article key={`${time}-${title}`}>
-                <time>{time}</time>
-                <div className="admin-activity-dot" />
-                <div>
-                  <strong>{title}</strong>
-                  <p>{description}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
+              <Activity size={24} />
+            </div>
+
+            <div className="admin-empty-state">
+              <Activity size={34} />
+              <strong>No live audit feed connected yet</strong>
+              <p>
+                Static demonstration events have been
+                removed. This workspace is reserved for
+                real administrator and user activity from
+                the backend audit log.
+              </p>
+            </div>
+          </section>
+        )}
       </section>
     </main>
   );
