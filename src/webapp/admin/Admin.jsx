@@ -343,6 +343,19 @@ function Admin() {
   const [walletMessage, setWalletMessage] =
     useState("");
 
+  const [withdrawOpen, setWithdrawOpen] =
+    useState(false);
+  const [withdrawAmount, setWithdrawAmount] =
+    useState("");
+  const [withdrawPhone, setWithdrawPhone] =
+    useState("");
+  const [withdrawMethod, setWithdrawMethod] =
+    useState("mtn");
+  const [withdrawLoading, setWithdrawLoading] =
+    useState(false);
+  const [withdrawMessage, setWithdrawMessage] =
+    useState("");
+
   const [submissions, setSubmissions] =
     useState([]);
   const [selectedId, setSelectedId] =
@@ -421,6 +434,88 @@ function Admin() {
       result.recent_transactions || []
     );
     setWalletLoading(false);
+  }
+
+  async function handlePlatformWithdrawal(event) {
+    event.preventDefault();
+
+    if (withdrawLoading) return;
+
+    const amount = Number(withdrawAmount);
+    const minimum = Number(
+      platformWallet?.minimum_withdrawal || 5000
+    );
+    const available = Number(
+      platformWallet?.available_balance || 0
+    );
+
+    setWithdrawMessage("");
+
+    if (!Number.isInteger(amount) || amount <= 0) {
+      setWithdrawMessage(
+        "Enter a valid whole-number withdrawal amount."
+      );
+      return;
+    }
+
+    if (amount < minimum) {
+      setWithdrawMessage(
+        `Minimum withdrawal is ${formatMoney(minimum)}.`
+      );
+      return;
+    }
+
+    if (amount > available) {
+      setWithdrawMessage(
+        "Withdrawal amount is higher than the available platform balance."
+      );
+      return;
+    }
+
+    if (!withdrawPhone.trim()) {
+      setWithdrawMessage(
+        "Enter the Rwanda mobile money number that should receive the withdrawal."
+      );
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `Withdraw ${formatMoney(amount)} from Contriba's platform wallet to ${withdrawPhone.trim()} via ${withdrawMethod.toUpperCase()}?`
+    );
+
+    if (!confirmed) return;
+
+    setWithdrawLoading(true);
+
+    const result = await apiRequest(
+      "/api/admin/wallet/withdraw",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          amount,
+          phone: withdrawPhone.trim(),
+          method: withdrawMethod,
+        }),
+      }
+    );
+
+    setWithdrawLoading(false);
+
+    if (!result.success) {
+      setWithdrawMessage(
+        result.message ||
+          "Could not process the platform withdrawal."
+      );
+      return;
+    }
+
+    setWithdrawMessage(
+      result.message ||
+        "Platform withdrawal initiated successfully."
+    );
+    setWithdrawAmount("");
+
+    await loadPlatformWallet();
   }
 
   async function loadSubmissions(
@@ -708,6 +803,186 @@ function Admin() {
       <AppSidebar active="admin" />
 
       <section className="admin-main">
+        {withdrawOpen && (
+          <div
+            className="admin-modal-overlay"
+            onClick={() => {
+              if (!withdrawLoading) {
+                setWithdrawOpen(false);
+              }
+            }}
+          >
+            <div
+              className="admin-modal"
+              onClick={(event) =>
+                event.stopPropagation()
+              }
+            >
+              <div className="admin-modal-header">
+                <div>
+                  <span>Platform Wallet</span>
+                  <h3>Withdraw Contriba Profit</h3>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setWithdrawOpen(false)
+                  }
+                  disabled={withdrawLoading}
+                  aria-label="Close withdrawal form"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              <p>
+                Withdraw only Contriba platform-fee
+                profit. Organizer wallet balances are
+                not used by this withdrawal.
+              </p>
+
+              <div className="admin-detail-info-grid">
+                <div>
+                  <small>Available balance</small>
+                  <strong>
+                    {formatMoney(
+                      platformWallet?.available_balance
+                    )}
+                  </strong>
+                </div>
+
+                <div>
+                  <small>Minimum withdrawal</small>
+                  <strong>
+                    {formatMoney(
+                      platformWallet?.minimum_withdrawal ||
+                        5000
+                    )}
+                  </strong>
+                </div>
+              </div>
+
+              {withdrawMessage && (
+                <div className="admin-message">
+                  <AlertCircle size={18} />
+                  <span>{withdrawMessage}</span>
+                </div>
+              )}
+
+              <form
+                onSubmit={handlePlatformWithdrawal}
+              >
+                <label className="admin-search">
+                  <Banknote size={17} />
+                  <input
+                    type="number"
+                    min={
+                      platformWallet?.minimum_withdrawal ||
+                      5000
+                    }
+                    step="1"
+                    value={withdrawAmount}
+                    onChange={(event) =>
+                      setWithdrawAmount(
+                        event.target.value
+                      )
+                    }
+                    placeholder="Withdrawal amount (RWF)"
+                    disabled={withdrawLoading}
+                  />
+                </label>
+
+                <label className="admin-search">
+                  <WalletCards size={17} />
+                  <input
+                    type="tel"
+                    value={withdrawPhone}
+                    onChange={(event) =>
+                      setWithdrawPhone(
+                        event.target.value
+                      )
+                    }
+                    placeholder="Mobile money number e.g. 078..."
+                    disabled={withdrawLoading}
+                  />
+                </label>
+
+                <div className="admin-filters">
+                  <button
+                    type="button"
+                    className={
+                      withdrawMethod === "mtn"
+                        ? "active"
+                        : ""
+                    }
+                    onClick={() =>
+                      setWithdrawMethod("mtn")
+                    }
+                    disabled={withdrawLoading}
+                  >
+                    MTN MoMo
+                  </button>
+
+                  <button
+                    type="button"
+                    className={
+                      withdrawMethod === "airtel"
+                        ? "active"
+                        : ""
+                    }
+                    onClick={() =>
+                      setWithdrawMethod("airtel")
+                    }
+                    disabled={withdrawLoading}
+                  >
+                    Airtel Money
+                  </button>
+                </div>
+
+                <div className="admin-modal-actions">
+                  <button
+                    type="button"
+                    className="secondary"
+                    onClick={() =>
+                      setWithdrawOpen(false)
+                    }
+                    disabled={withdrawLoading}
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    type="submit"
+                    className="approve"
+                    disabled={
+                      withdrawLoading ||
+                      Number(
+                        platformWallet?.available_balance ||
+                          0
+                      ) <
+                        Number(
+                          platformWallet?.minimum_withdrawal ||
+                            5000
+                        )
+                    }
+                  >
+                    {withdrawLoading ? (
+                      <Loader2
+                        className="admin-spin"
+                        size={17}
+                      />
+                    ) : (
+                      <Banknote size={17} />
+                    )}
+                    Withdraw Profit
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
         {rejectOpen && (
           <div
             className="admin-modal-overlay"
@@ -879,22 +1154,60 @@ function Admin() {
               </p>
             </div>
 
-            <button
-              type="button"
-              className="admin-refresh-btn"
-              onClick={loadPlatformWallet}
-              disabled={walletLoading}
-            >
-              {walletLoading ? (
-                <Loader2
-                  className="admin-spin"
-                  size={17}
-                />
-              ) : (
-                <RefreshCw size={17} />
-              )}
-              Refresh Wallet
-            </button>
+            <div className="admin-modal-actions">
+              <button
+                type="button"
+                className="secondary"
+                onClick={loadPlatformWallet}
+                disabled={walletLoading}
+              >
+                {walletLoading ? (
+                  <Loader2
+                    className="admin-spin"
+                    size={17}
+                  />
+                ) : (
+                  <RefreshCw size={17} />
+                )}
+                Refresh Wallet
+              </button>
+
+              <button
+                type="button"
+                className="approve"
+                onClick={() => {
+                  setWithdrawMessage("");
+                  setWithdrawOpen(true);
+                }}
+                disabled={
+                  walletLoading ||
+                  Number(
+                    platformWallet?.available_balance || 0
+                  ) <
+                    Number(
+                      platformWallet?.minimum_withdrawal ||
+                        5000
+                    )
+                }
+                title={
+                  Number(
+                    platformWallet?.available_balance || 0
+                  ) <
+                  Number(
+                    platformWallet?.minimum_withdrawal ||
+                      5000
+                  )
+                    ? `Minimum withdrawal is ${formatMoney(
+                        platformWallet?.minimum_withdrawal ||
+                          5000
+                      )}`
+                    : "Withdraw Contriba platform profit"
+                }
+              >
+                <Banknote size={17} />
+                Withdraw Profit
+              </button>
+            </div>
           </div>
 
           {walletMessage && (
@@ -1065,9 +1378,10 @@ function Admin() {
               </strong>
               <span>
                 This wallet displays only Contriba
-                platform-fee revenue. Withdrawals are
-                intentionally disabled until the
-                read-only wallet is fully verified.
+                platform-fee revenue. Admin withdrawals
+                use the protected platform wallet
+                cash-out flow and never debit organizer
+                wallet balances.
               </span>
             </div>
           </div>
