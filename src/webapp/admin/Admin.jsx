@@ -3,6 +3,7 @@ import {
   Activity,
   AlertCircle,
   BarChart3,
+  Banknote,
   Bell,
   CalendarDays,
   CheckCircle2,
@@ -13,10 +14,12 @@ import {
   Image as ImageIcon,
   LayoutDashboard,
   Loader2,
+  ReceiptText,
   RefreshCw,
   Search,
   Settings,
   ShieldCheck,
+  TrendingUp,
   UserRound,
   UsersRound,
   WalletCards,
@@ -143,6 +146,14 @@ function formatDate(value) {
     hour: "2-digit",
     minute: "2-digit",
   }).format(date);
+}
+
+function formatMoney(value) {
+  const amount = Number(value || 0);
+
+  return `RWF ${Math.round(
+    Number.isFinite(amount) ? amount : 0
+  ).toLocaleString("en-US")}`;
 }
 
 function maskId(value) {
@@ -322,6 +333,16 @@ function Admin() {
     useState("");
 
   const [admin, setAdmin] = useState(null);
+
+  const [platformWallet, setPlatformWallet] =
+    useState(null);
+  const [walletTransactions, setWalletTransactions] =
+    useState([]);
+  const [walletLoading, setWalletLoading] =
+    useState(false);
+  const [walletMessage, setWalletMessage] =
+    useState("");
+
   const [submissions, setSubmissions] =
     useState([]);
   const [selectedId, setSelectedId] =
@@ -368,8 +389,38 @@ function Admin() {
     setAuthorized(true);
     setAdmin(meResult.admin || null);
 
-    await loadSubmissions(filter, true);
+    await Promise.all([
+      loadSubmissions(filter, true),
+      loadPlatformWallet(),
+    ]);
+
     setLoading(false);
+  }
+
+  async function loadPlatformWallet() {
+    setWalletLoading(true);
+    setWalletMessage("");
+
+    const result = await apiRequest(
+      "/api/admin/wallet"
+    );
+
+    if (!result.success) {
+      setPlatformWallet(null);
+      setWalletTransactions([]);
+      setWalletMessage(
+        result.message ||
+          "Could not load the platform wallet."
+      );
+      setWalletLoading(false);
+      return;
+    }
+
+    setPlatformWallet(result.wallet || null);
+    setWalletTransactions(
+      result.recent_transactions || []
+    );
+    setWalletLoading(false);
   }
 
   async function loadSubmissions(
@@ -815,6 +866,212 @@ function Admin() {
             <span>{message}</span>
           </div>
         )}
+
+        <section className="admin-panel admin-platform-wallet-panel">
+          <div className="admin-panel-header">
+            <div>
+              <span>Financial Operations</span>
+              <h2>Contriba Platform Wallet</h2>
+              <p>
+                Platform-fee profit is tracked separately
+                from organizer wallets and contribution
+                balances.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              className="admin-refresh-btn"
+              onClick={loadPlatformWallet}
+              disabled={walletLoading}
+            >
+              {walletLoading ? (
+                <Loader2
+                  className="admin-spin"
+                  size={17}
+                />
+              ) : (
+                <RefreshCw size={17} />
+              )}
+              Refresh Wallet
+            </button>
+          </div>
+
+          {walletMessage && (
+            <div className="admin-message">
+              <AlertCircle size={18} />
+              <span>{walletMessage}</span>
+            </div>
+          )}
+
+          <section className="admin-summary-grid">
+            <article className="admin-summary-card">
+              <div className="admin-summary-icon verified">
+                <WalletCards size={22} />
+              </div>
+              <span>Available balance</span>
+              <strong>
+                {walletLoading && !platformWallet
+                  ? "..."
+                  : formatMoney(
+                      platformWallet?.available_balance
+                    )}
+              </strong>
+            </article>
+
+            <article className="admin-summary-card">
+              <div className="admin-summary-icon">
+                <TrendingUp size={22} />
+              </div>
+              <span>Total fees earned</span>
+              <strong>
+                {walletLoading && !platformWallet
+                  ? "..."
+                  : formatMoney(
+                      platformWallet?.total_fees_earned
+                    )}
+              </strong>
+            </article>
+
+            <article className="admin-summary-card">
+              <div className="admin-summary-icon pending">
+                <Banknote size={22} />
+              </div>
+              <span>Fees today</span>
+              <strong>
+                {walletLoading && !platformWallet
+                  ? "..."
+                  : formatMoney(
+                      platformWallet?.fees_today
+                    )}
+              </strong>
+            </article>
+
+            <article className="admin-summary-card">
+              <div className="admin-summary-icon">
+                <CalendarDays size={22} />
+              </div>
+              <span>Fees this month</span>
+              <strong>
+                {walletLoading && !platformWallet
+                  ? "..."
+                  : formatMoney(
+                      platformWallet?.fees_this_month
+                    )}
+              </strong>
+            </article>
+
+            <article className="admin-summary-card">
+              <div className="admin-summary-icon rejected">
+                <ReceiptText size={22} />
+              </div>
+              <span>Total withdrawn</span>
+              <strong>
+                {walletLoading && !platformWallet
+                  ? "..."
+                  : formatMoney(
+                      platformWallet?.total_withdrawn
+                    )}
+              </strong>
+            </article>
+          </section>
+
+          <div className="admin-section-heading">
+            <div>
+              <span>Platform Fee Ledger</span>
+              <h2>Recent Fee Transactions</h2>
+            </div>
+
+            <ReceiptText size={24} />
+          </div>
+
+          {walletLoading && walletTransactions.length === 0 ? (
+            <div className="admin-detail-loading">
+              <Loader2
+                className="admin-spin"
+                size={26}
+              />
+              Loading platform wallet...
+            </div>
+          ) : walletTransactions.length === 0 ? (
+            <div className="admin-empty-state">
+              <ReceiptText size={34} />
+              <strong>No platform transactions yet</strong>
+              <p>
+                Successful Contriba platform fees will
+                appear here automatically.
+              </p>
+            </div>
+          ) : (
+            <div className="admin-review-list">
+              {walletTransactions.map((transaction) => (
+                <article
+                  className="admin-review-row"
+                  key={transaction.id}
+                >
+                  <div className="admin-review-avatar">
+                    <Banknote size={19} />
+                  </div>
+
+                  <div className="admin-review-row-copy">
+                    <strong>
+                      {transaction.type === "platform_fee"
+                        ? "Platform fee"
+                        : transaction.type ||
+                          "Platform transaction"}
+                    </strong>
+
+                    <span>
+                      {transaction.event?.title ||
+                        transaction.description ||
+                        "Contriba platform revenue"}
+                    </span>
+
+                    <small>
+                      {formatDate(
+                        transaction.created_at
+                      )}
+                      {transaction.reference
+                        ? ` • ${transaction.reference}`
+                        : ""}
+                    </small>
+                  </div>
+
+                  <div>
+                    <strong>
+                      {formatMoney(transaction.amount)}
+                    </strong>
+                    <ReviewStatus
+                      status={
+                        transaction.status === "success"
+                          ? "verified"
+                          : transaction.status === "failed"
+                            ? "rejected"
+                            : "pending"
+                      }
+                    />
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+
+          <div className="admin-self-review-note">
+            <ShieldCheck size={18} />
+
+            <div>
+              <strong>
+                Organizer money remains separate
+              </strong>
+              <span>
+                This wallet displays only Contriba
+                platform-fee revenue. Withdrawals are
+                intentionally disabled until the
+                read-only wallet is fully verified.
+              </span>
+            </div>
+          </div>
+        </section>
 
         <section className="admin-panel admin-kyc-panel">
           <div className="admin-panel-header">
